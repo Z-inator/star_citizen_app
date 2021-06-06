@@ -80,40 +80,7 @@ class _FilterBackdropState extends State<FilterBackdrop>
       ],
     );
   }
-
-  var appBar = AppBar(
-    brightness: Brightness.light,
-    elevation: 0.0,
-    titleSpacing: 0.0,
-    // TODO: Replace leading menu icon with IconButton (104)
-    // TODO: Remove leading property (104)
-    // TODO: Create title with _BackdropTitle parameter (104)
-    leading: IconButton(
-        icon: Icon(Icons.menu), onPressed: _toggleBackdropLayerVisibility),
-    title: Text('SHRINE'),
-    actions: <Widget>[
-      // TODO: Add shortcut to login screen from trailing icons (104)
-      IconButton(
-        icon: Icon(
-          Icons.search,
-          semanticLabel: 'search',
-        ),
-        onPressed: () {
-          // TODO: Add open login (104)
-        },
-      ),
-      IconButton(
-        icon: Icon(
-          Icons.tune,
-          semanticLabel: 'filter',
-        ),
-        onPressed: () {
-          // TODO: Add open login (104)
-        },
-      ),
-    ],
-    backwardsCompatibility: false,
-  );
+  
 
   @override
   Widget build(BuildContext context) {
@@ -123,6 +90,7 @@ class _FilterBackdropState extends State<FilterBackdrop>
       titleSpacing: 0.0,
       // TODO: Replace leading menu icon with IconButton (104)
       // TODO: Remove leading property (104)
+      automaticallyImplyLeading: false,
       // TODO: Create title with _BackdropTitle parameter (104)
       leading: IconButton(
           icon: Icon(Icons.menu), onPressed: _toggleBackdropLayerVisibility),
@@ -171,6 +139,50 @@ class FrontLayer extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [Expanded(child: child)],
+      ),
+    );
+  }
+}
+
+
+class StatsDashboard extends StatelessWidget {
+  const StatsDashboard({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          ListTile(
+            title: Text('Build Name'),
+          ),
+          ListTile(
+            title: Text('Weapons'),
+          ),
+          ListTile(
+            title: Text('Turrets'),
+          ),
+          ListTile(
+            title: Text('Missiles'),
+          ),
+          ListTile(
+            title: Text('EMPS'),
+          ),
+          ListTile(
+            title: Text('Shields'),
+          ),
+          ListTile(
+            title: Text('Power'),
+          ),
+          ListTile(
+            title: Text('Cooling'),
+          ),
+          ListTile(
+            title: Text('EM/IR'),
+          ),
+
+          
+        ],
       ),
     );
   }
