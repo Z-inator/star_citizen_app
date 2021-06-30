@@ -42,18 +42,17 @@ class BackdropTitle extends StatelessWidget {
       required this.onPress,
       required this.frontTitle,
       required this.backTitle,
-      required Animation<double> listenable})
-      : _listenable = listenable,
-        super(key: key, listenable: listenable);
+      required this.listenable})
+      : super(key: key);
 
   final void Function() onPress;
   final Widget frontTitle;
   final Widget backTitle;
-  final Animation<double> _listenable;
+  final Animation<double> listenable;
 
   @override
   Widget build(BuildContext context) {
-    final Animation<double> animation = _listenable;
+    final Animation<double> animation = listenable;
     return Row(
       children: [
         SizedBox(
@@ -234,9 +233,9 @@ class StatsDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        mainAxisSize: MainAxisSize.max,
+      child: ListView(
+        physics: ClampingScrollPhysics(),
+        reverse: true,
         children: [
           ListTile(
             title: Text('Build Name'),

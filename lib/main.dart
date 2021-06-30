@@ -15,8 +15,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.cyan,
       ),
       home: Backdrop(
-        frontLayer: ComponentSelection(),
-        backLayer: StatsDashboard(),
+        frontLayer: StatsDashboard(),
+        backLayer: ComponentSelection(),
         frontTitle: Text('Ship Name', style: Theme.of(context).primaryTextTheme.headline6),
         backTitle: Text('BUILD', style: Theme.of(context).primaryTextTheme.headline6),
       ),
