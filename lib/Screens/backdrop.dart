@@ -23,7 +23,7 @@ class FrontLayer extends StatelessWidget {
             behavior: HitTestBehavior.opaque,
             onTap: onTap,
             child: Container(
-              height: 46.0,
+              height: 24.0,
               alignment: AlignmentDirectional.centerStart,
             ),
           ),
@@ -36,14 +36,15 @@ class FrontLayer extends StatelessWidget {
   }
 }
 
-class BackdropTitle extends StatelessWidget {
+class BackdropTitle extends AnimatedWidget {
   const BackdropTitle(
       {Key? key,
       required this.onPress,
       required this.frontTitle,
       required this.backTitle,
-      required this.listenable})
-      : super(key: key);
+      required Animation<double> listenable})
+      : listenable = listenable,
+        super(key: key, listenable: listenable);
 
   final void Function() onPress;
   final Widget frontTitle;
@@ -54,11 +55,12 @@ class BackdropTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     final Animation<double> animation = listenable;
     return Row(
-      children: [
+
+      children: [        
         SizedBox(
           width: 72.0,
           child: IconButton(
-            padding: EdgeInsets.only(left: 8),
+            padding: EdgeInsets.only(right: 8),
             onPressed: this.onPress,
             icon: Stack(
               children: [
@@ -67,22 +69,14 @@ class BackdropTitle extends StatelessWidget {
                           parent: ReverseAnimation(animation),
                           curve: Interval(0.5, 1.0))
                       .value,
-                  child: FractionalTranslation(
-                      translation: Tween<Offset>(
-                              begin: Offset.zero, end: Offset(0.5, 0.0))
-                          .evaluate(animation),
-                      child: Icon(Icons.tune_rounded)),
+                  child: Icon(Icons.build_rounded),
                 ),
                 Opacity(
                   opacity: CurvedAnimation(
-                          parent: ReverseAnimation(animation),
+                          parent: animation,
                           curve: Interval(0.5, 1.0))
                       .value,
-                  child: FractionalTranslation(
-                      translation: Tween<Offset>(
-                              begin: Offset.zero, end: Offset(-0.25, 0.0))
-                          .evaluate(animation),
-                      child: Icon(Icons.build_rounded)),
+                  child: Icon(Icons.tune_rounded),
                 ),
               ],
             ),
@@ -95,22 +89,14 @@ class BackdropTitle extends StatelessWidget {
                       parent: ReverseAnimation(animation),
                       curve: Interval(0.5, 1.0))
                   .value,
-              child: FractionalTranslation(
-                  translation:
-                      Tween<Offset>(begin: Offset.zero, end: Offset(0.5, 0.0))
-                          .evaluate(animation),
-                  child: backTitle),
+              child: backTitle,
             ),
             Opacity(
               opacity: CurvedAnimation(
-                      parent: ReverseAnimation(animation),
+                      parent: animation,
                       curve: Interval(0.5, 1.0))
                   .value,
-              child: FractionalTranslation(
-                  translation:
-                      Tween<Offset>(begin: Offset.zero, end: Offset(-0.25, 0.0))
-                          .evaluate(animation),
-                  child: frontTitle),
+              child: frontTitle,
             ),
           ],
         ),
@@ -194,9 +180,6 @@ class _BackdropState extends State<Backdrop>
 
   PreferredSizeWidget buildAppBar(BuildContext context) {
     return AppBar(
-      brightness: Brightness.light,
-      elevation: 0.0,
-      titleSpacing: 0.0,
       title: BackdropTitle(
         listenable: controller.view,
         onPress: toggleBackdropLayerVisibility,
@@ -222,93 +205,6 @@ class _BackdropState extends State<Backdrop>
         body: LayoutBuilder(
           builder: buildStack,
         ),
-      ),
-    );
-  }
-}
-
-class StatsDashboard extends StatelessWidget {
-  const StatsDashboard({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: ListView(
-        physics: ClampingScrollPhysics(),
-        reverse: true,
-        children: [
-          ListTile(
-            title: Text('Build Name'),
-          ),
-          ListTile(
-            title: Text('Weapons'),
-          ),
-          ListTile(
-            title: Text('Turrets'),
-          ),
-          ListTile(
-            title: Text('Missiles'),
-          ),
-          ListTile(
-            title: Text('EMPS'),
-          ),
-          ListTile(
-            title: Text('Shields'),
-          ),
-          ListTile(
-            title: Text('Power'),
-          ),
-          ListTile(
-            title: Text('Cooling'),
-          ),
-          ListTile(
-            title: Text('EM/IR'),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ComponentSelection extends StatelessWidget {
-  const ComponentSelection({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.blue.shade700,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          ListTile(
-            title: Text('Build Name'),
-          ),
-          ListTile(
-            title: Text('Weapons'),
-          ),
-          ListTile(
-            title: Text('Turrets'),
-          ),
-          ListTile(
-            title: Text('Missiles'),
-          ),
-          ListTile(
-            title: Text('EMPS'),
-          ),
-          ListTile(
-            title: Text('Shields'),
-          ),
-          ListTile(
-            title: Text('Power'),
-          ),
-          ListTile(
-            title: Text('Cooling'),
-          ),
-          ListTile(
-            title: Text('EM/IR'),
-          ),
-        ],
       ),
     );
   }
