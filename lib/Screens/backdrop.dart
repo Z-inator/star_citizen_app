@@ -1,13 +1,127 @@
 import 'package:flutter/material.dart';
-import 'package:star_citizen_app/contants.dart';
 
-class FilterBackdrop extends StatefulWidget {
-  final Widget frontLayer;
-  final Widget backLayer;
+import '../constants.dart';
+
+class FrontLayer extends StatelessWidget {
+  const FrontLayer({Key? key, required this.onTap, required this.child})
+      : super(key: key);
+
+  final VoidCallback onTap;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      elevation: 16.0,
+      shape: BeveledRectangleBorder(
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(46.0)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: onTap,
+            child: Container(
+              height: 46.0,
+              alignment: AlignmentDirectional.centerStart,
+            ),
+          ),
+          Expanded(
+            child: child,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BackdropTitle extends StatelessWidget {
+  const BackdropTitle(
+      {Key? key,
+      required this.onPress,
+      required this.frontTitle,
+      required this.backTitle,
+      required Animation<double> listenable})
+      : _listenable = listenable,
+        super(key: key, listenable: listenable);
+
+  final void Function() onPress;
   final Widget frontTitle;
   final Widget backTitle;
-  var currentCategory;
-  FilterBackdrop(
+  final Animation<double> _listenable;
+
+  @override
+  Widget build(BuildContext context) {
+    final Animation<double> animation = _listenable;
+    return Row(
+      children: [
+        SizedBox(
+          width: 72.0,
+          child: IconButton(
+            padding: EdgeInsets.only(left: 8),
+            onPressed: this.onPress,
+            icon: Stack(
+              children: [
+                Opacity(
+                  opacity: CurvedAnimation(
+                          parent: ReverseAnimation(animation),
+                          curve: Interval(0.5, 1.0))
+                      .value,
+                  child: FractionalTranslation(
+                      translation: Tween<Offset>(
+                              begin: Offset.zero, end: Offset(0.5, 0.0))
+                          .evaluate(animation),
+                      child: Icon(Icons.tune_rounded)),
+                ),
+                Opacity(
+                  opacity: CurvedAnimation(
+                          parent: ReverseAnimation(animation),
+                          curve: Interval(0.5, 1.0))
+                      .value,
+                  child: FractionalTranslation(
+                      translation: Tween<Offset>(
+                              begin: Offset.zero, end: Offset(-0.25, 0.0))
+                          .evaluate(animation),
+                      child: Icon(Icons.build_rounded)),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Stack(
+          children: [
+            Opacity(
+              opacity: CurvedAnimation(
+                      parent: ReverseAnimation(animation),
+                      curve: Interval(0.5, 1.0))
+                  .value,
+              child: FractionalTranslation(
+                  translation:
+                      Tween<Offset>(begin: Offset.zero, end: Offset(0.5, 0.0))
+                          .evaluate(animation),
+                  child: backTitle),
+            ),
+            Opacity(
+              opacity: CurvedAnimation(
+                      parent: ReverseAnimation(animation),
+                      curve: Interval(0.5, 1.0))
+                  .value,
+              child: FractionalTranslation(
+                  translation:
+                      Tween<Offset>(begin: Offset.zero, end: Offset(-0.25, 0.0))
+                          .evaluate(animation),
+                  child: frontTitle),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class Backdrop extends StatefulWidget {
+  Backdrop(
       {Key? key,
       required this.frontLayer,
       required this.backLayer,
@@ -15,135 +129,104 @@ class FilterBackdrop extends StatefulWidget {
       required this.backTitle})
       : super(key: key);
 
+  final Widget frontLayer;
+  final Widget backLayer;
+  final Widget frontTitle;
+  final Widget backTitle;
+
   @override
-  _FilterBackdropState createState() => _FilterBackdropState();
+  _BackdropState createState() => _BackdropState();
 }
 
-class _FilterBackdropState extends State<FilterBackdrop>
+class _BackdropState extends State<Backdrop>
     with SingleTickerProviderStateMixin {
-  final GlobalKey _backdropKey = GlobalKey(debugLabel: 'Backdrop');
-
-  late AnimationController _controller;
+  final GlobalKey backdropKey = GlobalKey(debugLabel: 'Backdrop');
+  late AnimationController controller;
 
   @override
   void initState() {
-    super.initState();
-    _controller = AnimationController(
+    controller = AnimationController(
         duration: Duration(milliseconds: 300), value: 1.0, vsync: this);
+    super.initState();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    controller.dispose();
     super.dispose();
   }
 
-  @override
-  void didUpdateWidget(FilterBackdrop old) {
-    super.didUpdateWidget(old);
-    if (widget.currentCategory != old.currentCategory) {
-      _toggleBackdropLayerVisibility();
-    } else if (!_frontLayerVisible) {
-      _controller.fling(velocity: kFlingVelocity);
-    }
-  }
-
-  bool get _frontLayerVisible {
-    final AnimationStatus status = _controller.status;
+  bool get frontLayerVisible {
+    final AnimationStatus status = controller.status;
     return status == AnimationStatus.completed ||
         status == AnimationStatus.forward;
   }
 
-  void _toggleBackdropLayerVisibility() {
-    _controller.fling(
-        velocity: _frontLayerVisible ? -kFlingVelocity : kFlingVelocity);
+  void toggleBackdropLayerVisibility() {
+    controller.fling(
+        velocity: frontLayerVisible ? -kFlingVelocity : kFlingVelocity);
   }
 
-  Widget _buildStack(BuildContext context, BoxConstraints constraints) {
-    const double layerTitleHeight = 48.0;
+  Widget buildStack(BuildContext context, BoxConstraints constraints) {
+    double layerTileHeight = 48.0;
     final Size layerSize = constraints.biggest;
-    final double layerTop = layerSize.height - layerTitleHeight;
+    final double layerTop = layerSize.height - layerTileHeight;
 
     Animation<RelativeRect> layerAnimation = RelativeRectTween(
-      begin: RelativeRect.fromLTRB(
-          0.0, layerTop, 0.0, layerTop - layerSize.height),
-      end: RelativeRect.fromLTRB(0.0, 0.0, 0.0, 0.0),
-    ).animate(_controller.view);
+            begin: RelativeRect.fromLTRB(
+                0.0, layerTop, 0.0, layerTop - layerSize.height),
+            end: RelativeRect.fromLTRB(0.0, 0.0, 0.0, 0.0))
+        .animate(controller.view);
 
     return Stack(
-      key: _backdropKey,
+      key: backdropKey,
       children: <Widget>[
-        ExcludeSemantics(
-            child: widget.backLayer, excluding: _frontLayerVisible),
+        widget.backLayer,
         PositionedTransition(
-            rect: layerAnimation, child: FrontLayer(child: widget.frontLayer))
+          rect: layerAnimation,
+          child: FrontLayer(
+            onTap: toggleBackdropLayerVisibility,
+            child: widget.frontLayer,
+          ),
+        ),
       ],
     );
   }
-  
 
-  @override
-  Widget build(BuildContext context) {
-    var appBar = AppBar(
+  PreferredSizeWidget buildAppBar(BuildContext context) {
+    return AppBar(
       brightness: Brightness.light,
       elevation: 0.0,
       titleSpacing: 0.0,
-      // TODO: Replace leading menu icon with IconButton (104)
-      // TODO: Remove leading property (104)
-      automaticallyImplyLeading: false,
-      // TODO: Create title with _BackdropTitle parameter (104)
-      leading: IconButton(
-          icon: Icon(Icons.menu), onPressed: _toggleBackdropLayerVisibility),
-      title: Text('SHRINE'),
+      title: BackdropTitle(
+        listenable: controller.view,
+        onPress: toggleBackdropLayerVisibility,
+        frontTitle: widget.frontTitle,
+        backTitle: widget.backTitle,
+      ),
       actions: <Widget>[
-        // TODO: Add shortcut to login screen from trailing icons (104)
         IconButton(
           icon: Icon(
-            Icons.search,
-            semanticLabel: 'search',
+            Icons.menu_rounded,
           ),
-          onPressed: () {
-            // TODO: Add open login (104)
-          },
-        ),
-        IconButton(
-          icon: Icon(
-            Icons.tune,
-            semanticLabel: 'filter',
-          ),
-          onPressed: () {
-            // TODO: Add open login (104)
-          },
+          onPressed: () {},
         ),
       ],
-      backwardsCompatibility: false,
-    );
-    return Scaffold(
-      appBar: appBar,
-      body: LayoutBuilder(builder: _buildStack),
     );
   }
-}
-
-class FrontLayer extends StatelessWidget {
-  const FrontLayer({Key? key, required this.child}) : super(key: key);
-
-  final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      elevation: 16,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [Expanded(child: child)],
+    return SafeArea(
+      child: Scaffold(
+        appBar: buildAppBar(context),
+        body: LayoutBuilder(
+          builder: buildStack,
+        ),
       ),
     );
   }
 }
-
 
 class StatsDashboard extends StatelessWidget {
   const StatsDashboard({Key? key}) : super(key: key);
@@ -152,6 +235,8 @@ class StatsDashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisSize: MainAxisSize.max,
         children: [
           ListTile(
             title: Text('Build Name'),
@@ -180,8 +265,50 @@ class StatsDashboard extends StatelessWidget {
           ListTile(
             title: Text('EM/IR'),
           ),
+        ],
+      ),
+    );
+  }
+}
 
-          
+class ComponentSelection extends StatelessWidget {
+  const ComponentSelection({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.blue.shade700,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          ListTile(
+            title: Text('Build Name'),
+          ),
+          ListTile(
+            title: Text('Weapons'),
+          ),
+          ListTile(
+            title: Text('Turrets'),
+          ),
+          ListTile(
+            title: Text('Missiles'),
+          ),
+          ListTile(
+            title: Text('EMPS'),
+          ),
+          ListTile(
+            title: Text('Shields'),
+          ),
+          ListTile(
+            title: Text('Power'),
+          ),
+          ListTile(
+            title: Text('Cooling'),
+          ),
+          ListTile(
+            title: Text('EM/IR'),
+          ),
         ],
       ),
     );

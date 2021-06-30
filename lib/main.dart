@@ -14,7 +14,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.cyan,
       ),
-      home: FilterBackdrop(frontLayer: frontLayer, backLayer: backLayer, frontTitle: frontTitle, backTitle: backTitle),
+      home: Backdrop(
+        frontLayer: ComponentSelection(),
+        backLayer: StatsDashboard(),
+        frontTitle: Text('Ship Name', style: Theme.of(context).primaryTextTheme.headline6),
+        backTitle: Text('BUILD', style: Theme.of(context).primaryTextTheme.headline6),
+      ),
     );
   }
 }
