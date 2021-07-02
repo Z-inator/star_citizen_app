@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: buildAppTheme(),
       home: Backdrop(
         frontLayer: StatsDashboard(),
-        backLayer: ComponentSelection(),
+        backLayer: ComponentSelectionList(),
         frontTitle: Text('Ship Name',
             style: Theme.of(context).primaryTextTheme.headline6),
         backTitle:
