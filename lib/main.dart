@@ -66,7 +66,7 @@ ThemeData buildAppTheme() {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           padding: EdgeInsets.symmetric(horizontal: 2),
-          textStyle: base.textTheme.caption!.copyWith(fontSize: 10),
+          textStyle: base.textTheme.caption!.copyWith(fontSize: 12),
           primary: base.textTheme.caption!.color,
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           minimumSize: Size.zero
