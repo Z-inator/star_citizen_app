@@ -8,3 +8,21 @@ const Color kSecondaryCyan = Color(0xFF42EDF8);
 const Color kSecondaryCyanVariant = Color(0xFF02F0DB);
 const Color kOnSecondaryCyan = Color(0xFF0C2838);
 Color kSurface = Colors.grey.shade800;
+
+class BeveledRectanglePainter extends CustomPainter {
+  BeveledRectanglePainter({required this.color});
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final shapeBounds = Rect.fromLTRB(0, 0, size.width, size.height);
+    final paint = Paint()..color = color;
+    canvas.drawRect(shapeBounds, paint);
+  }
+
+  @override
+  bool shouldRepaint(BeveledRectanglePainter oldDelegate) => false;
+
+  @override
+  bool shouldRebuildSemantics(BeveledRectanglePainter oldDelegate) => false;
+}

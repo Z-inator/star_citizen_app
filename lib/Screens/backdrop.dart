@@ -199,11 +199,15 @@ class _BackdropState extends State<Backdrop>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: buildAppBar(context),
-        body: LayoutBuilder(
-          builder: buildStack,
+    return Container(
+      color: Theme.of(context).colorScheme.background,
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Theme.of(context).colorScheme.background,
+          appBar: buildAppBar(context),
+          body: LayoutBuilder(
+            builder: buildStack,
+          ),
         ),
       ),
     );
