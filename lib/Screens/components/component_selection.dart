@@ -7,10 +7,13 @@ class ComponentSelectionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+
       child: ListView.builder(
+          padding: EdgeInsets.fromLTRB(0, 25, 0, 50),
+          itemCount: components.length,
           itemBuilder: (context, index) => ComponentTile(
               componentTitle: ListTile(
-                title: Text(components[index]),
+                title: Text(components[index], style: Theme.of(context).textTheme.headline6),
               ),
               componentItems: weapons,
     )));
