@@ -56,9 +56,7 @@ ThemeData buildAppTheme() {
           style: OutlinedButton.styleFrom(
               padding: EdgeInsets.all(4),
               side: BorderSide(color: kSecondaryCyan),
-              shape: BeveledRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(4.0)),
-              ),
+              shape: buildBeveledRectangleBorder(kSecondaryCyan, kSmallBevel, kSmallBevelWidth),
               textStyle: base.textTheme.subtitle1!.copyWith(fontSize: 16.0),
               primary: base.textTheme.subtitle1!.color,
               // onSurface: base.textTheme.subtitle1!.color,
@@ -71,7 +69,7 @@ ThemeData buildAppTheme() {
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           minimumSize: Size.zero
         )
-      )
+      ),
   );
 }
 
