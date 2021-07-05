@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
 
-List<String> components = [
-  'Weapons',
-  'Turrets',
-  'Missiles',
-  'EMPS',
-  'QEDS',
-  'Utilities',
-  'Shields',
-  'Power Plants',
-  'Coolers',
-  'Quantum Drive',
-  'Radars',
-  'Thrusters',
-];
+class ComponentTitle extends StatelessWidget {
+  const ComponentTitle({Key? key, required this.title}) : super(key: key);
 
-List<String> weapons = ['Revenant', 'Revenant'];
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: ListTile(
+        title: Text(title, style: Theme.of(context).textTheme.headline6),
+      ),
+    );
+  }
+}
 
 class ComponentTile extends StatelessWidget {
   const ComponentTile(
-      {Key? key, required this.componentTitle, required this.componentItems})
+      {Key? key, required this.componentTitle, required this.componentBlock})
       : super(key: key);
 
   final Widget componentTitle;
-  final List<String> componentItems;
+
+  final List<Widget> componentBlock;
 
   @override
   Widget build(BuildContext context) {
@@ -33,28 +32,28 @@ class ComponentTile extends StatelessWidget {
           color: Theme.of(context).colorScheme.background,
           borderOnForeground: true,
           shape: BeveledRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(8.0)),
-            side: BorderSide(
-              color: Theme.of(context).colorScheme.primaryVariant,
-              width: 2.0
-            )
-          ),
+              borderRadius: BorderRadius.all(Radius.circular(8.0)),
+              side: BorderSide(
+                  color: Theme.of(context).colorScheme.primaryVariant,
+                  width: 2.0)),
           child:
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch, 
-                children: [
-                  componentTitle,
-                  ListView(
-                    shrinkWrap: true,
-                    children: componentItems.map((name) => ComponentTable()).toList(),
-                  )
-                ]),
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            componentTitle,
+            Column(
+              children: componentBlock,
+            )
+          ]),
         ));
   }
 }
 
 class ComponentTable extends StatelessWidget {
-  const ComponentTable({Key? key}) : super(key: key);
+  const ComponentTable(
+      {Key? key, required this.componentItem, required this.componentSize})
+      : super(key: key);
+
+  final String componentItem;
+  final String componentSize;
 
   @override
   Widget build(BuildContext context) {
@@ -64,13 +63,13 @@ class ComponentTable extends StatelessWidget {
         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
         children: [
           TableRow(children: [
-            ComponentSize(),
+            ComponentSize(size: componentSize),
             Container(
               height: 2.0,
               width: 20.0,
               color: Theme.of(context).colorScheme.secondary,
             ),
-            ComponentItem()
+            ComponentItem(item: componentItem, type: ' - Ballistic Gatling',)
           ]),
           TableRow(children: [
             buildPowerAndCooler(),
@@ -93,61 +92,16 @@ class ComponentTable extends StatelessWidget {
   }
 }
 
-class ComponentRow extends StatelessWidget {
-  const ComponentRow({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          ComponentSize(),
-          // Expanded(
-          //   flex: 1,
-          //   child: ComponentSize()),
-          Container(
-            height: 2.0,
-            width: 20.0,
-            color: Theme.of(context).colorScheme.secondary,
-          ),
-          Expanded(child: ComponentItem()),
-          // Expanded(
-          //   flex: 3,
-          //   child: ComponentItem())
-        ],
-      ),
-    );
-  }
-}
-
-class DetailRow extends StatelessWidget {
-  const DetailRow({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          buildPowerAndCooler(),
-          buildPowerButton(context),
-          buildPowerAndCooler()
-        ],
-      ),
-    );
-  }
-}
-
 class ComponentSize extends StatelessWidget {
-  const ComponentSize({Key? key}) : super(key: key);
+  const ComponentSize({Key? key, required this.size}) : super(key: key);
+
+  final String size;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: OutlinedButton(
-        child: Text('Gimbal S4'),
+        child: Text(size),
         onPressed: () {},
       ),
     );
@@ -155,7 +109,10 @@ class ComponentSize extends StatelessWidget {
 }
 
 class ComponentItem extends StatelessWidget {
-  const ComponentItem({Key? key}) : super(key: key);
+  const ComponentItem({Key? key, required this.item, required this.type}) : super(key: key);
+
+  final String item;
+  final String type;
 
   @override
   Widget build(BuildContext context) {
@@ -165,15 +122,12 @@ class ComponentItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Text('Revenant'), 
+            RichText(text: TextSpan(text: item, style: Theme.of(context).textTheme.subtitle1, children: [TextSpan(text: type, style: Theme.of(context).textTheme.caption)])),
             Text('972dps')
           ],
         ),
-        //   ListTile(
-        //     title: Text('Revenant'),
-        // trailing: Text('672dps'),
-        //   ),
-        onPressed: () {},
+        onPressed: () {}, // TODO: onPrewssed activates selection menu
+        onLongPress: () {}, // TODO: onLongPress activates the info panel
       ),
     );
   }

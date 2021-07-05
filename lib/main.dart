@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:star_citizen_app/Screens/backdrop.dart';
 import 'package:star_citizen_app/constants.dart';
 
-import 'Screens/components/component_selection.dart';
-import 'Screens/components/stats_dashboard.dart';
+import 'Screens/widgets/component_selection.dart';
+import 'Screens/widgets/stats_dashboard.dart';
 
 void main() {
   runApp(MyApp());
