@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:star_citizen_app/constants.dart';
 
 Map<String, String> statItem = {
@@ -13,16 +14,34 @@ Map<String, String> statItem = {
   'IR': '4308 958 180 1417 3600'
 };
 
-
-
-class StatsDashboard extends StatelessWidget {
+class StatsDashboard extends StatefulWidget {
   StatsDashboard({Key? key}) : super(key: key);
 
-  List<Widget> buildStatRows () {
+  @override
+  _StatsDashboardState createState() => _StatsDashboardState();
+}
+
+class _StatsDashboardState extends State<StatsDashboard> {
+  late ScrollController scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  List<Widget> buildStatRows() {
     List<Widget> statRows = [];
     statItem.forEach((key, value) {
       Map<String, String> currentItem = {key: value};
-      statRows.add(StatDashboardRows(icon: Icon(Icons.data_usage_sharp), stats: currentItem));
+      statRows.add(StatDashboardRows(
+          icon: Icon(Icons.data_usage_sharp), stats: currentItem));
     });
     return statRows;
   }
@@ -53,7 +72,8 @@ class StatsDashboard extends StatelessWidget {
             ),
             Expanded(
               child: ListView(
-                padding: EdgeInsets.fromLTRB(10, 25, 10, 20),
+                controller: scrollController,
+                padding: EdgeInsets.fromLTRB(10, 25, 10, 40),
                 physics: ClampingScrollPhysics(),
                 children: [
                   OutlinedButton.icon(
@@ -85,7 +105,8 @@ class StatsDashboard extends StatelessWidget {
                   Column(
                     children: buildStatRows(),
                   ),
-                  StatsDashboardFilters()
+                  StatsDashboardFilters(scrollController: scrollController),
+                  // SizedBox(height: 20.0)
                 ],
               ),
             ),
@@ -139,245 +160,229 @@ class StatDashboardRows extends StatelessWidget {
     );
   }
 
-  Widget buildWeaponStat (List<String> statList) {
+  Widget buildWeaponStat(List<String> statList) {
     return ListTile(
       leading: icon,
       title: RichText(
         text: TextSpan(
-          text: statList[0],
-          style: statList[0] != '0'
-              ? themeData.textTheme.headline4
-              : themeData.textTheme.headline4!.copyWith(color: kGreyOnSurface),
-          children: [
-            TextSpan(
-              text: 'dps  ',
-              style: themeData.textTheme.caption!.copyWith(color: themeData.colorScheme.secondary)
-            ),
-            TextSpan(
-              text: statList[1],
-              style: statList[1] != '0'
-                  ? themeData.textTheme.headline6
-                  : themeData.textTheme.headline6!.copyWith(color: kGreyOnSurface),
-            ),
-            TextSpan(
-              text: 'alpha',
-              style: themeData.textTheme.caption!.copyWith(color: themeData.colorScheme.secondary)
-            ),
-          ]
-        ),
+            text: statList[0],
+            style: statList[0] != '0'
+                ? themeData.textTheme.headline4
+                : themeData.textTheme.headline4!
+                    .copyWith(color: kGreyOnSurface),
+            children: [
+              TextSpan(
+                  text: 'dps  ',
+                  style: themeData.textTheme.caption!
+                      .copyWith(color: themeData.colorScheme.secondary)),
+              TextSpan(
+                text: statList[1],
+                style: statList[1] != '0'
+                    ? themeData.textTheme.headline6
+                    : themeData.textTheme.headline6!
+                        .copyWith(color: kGreyOnSurface),
+              ),
+              TextSpan(
+                  text: 'alpha',
+                  style: themeData.textTheme.caption!
+                      .copyWith(color: themeData.colorScheme.secondary)),
+            ]),
       ),
     );
   }
 
-  Widget buildMissileStat (List<String> statList) {
+  Widget buildMissileStat(List<String> statList) {
     return ListTile(
       leading: icon,
       title: RichText(
         text: TextSpan(
-          text: statList[0],
-          style: statList[0] != '0'
-              ? themeData.textTheme.headline4
-              : themeData.textTheme.headline4!.copyWith(color: kGreyOnSurface),
-          children: [
-            TextSpan(
-              text: 'dmg',
-              style: themeData.textTheme.caption!.copyWith(color: themeData.colorScheme.secondary)
-            ),
-          ]
-        ),
+            text: statList[0],
+            style: statList[0] != '0'
+                ? themeData.textTheme.headline4
+                : themeData.textTheme.headline4!
+                    .copyWith(color: kGreyOnSurface),
+            children: [
+              TextSpan(
+                  text: 'dmg',
+                  style: themeData.textTheme.caption!
+                      .copyWith(color: themeData.colorScheme.secondary)),
+            ]),
       ),
     );
   }
 
-  Widget buildEMPStat (List<String> statList) {
+  Widget buildEMPStat(List<String> statList) {
     return ListTile(
       leading: icon,
       title: RichText(
         text: TextSpan(
-          text: statList[0],
-          style: statList[0] != '0'
-              ? themeData.textTheme.headline4
-              : themeData.textTheme.headline4!.copyWith(color: kGreyOnSurface),
-          children: [
-            TextSpan(
-              text: 'dmg',
-              style: themeData.textTheme.caption!.copyWith(color: themeData.colorScheme.secondary)
-            ),
-          ]
-        ),
+            text: statList[0],
+            style: statList[0] != '0'
+                ? themeData.textTheme.headline4
+                : themeData.textTheme.headline4!
+                    .copyWith(color: kGreyOnSurface),
+            children: [
+              TextSpan(
+                  text: 'dmg',
+                  style: themeData.textTheme.caption!
+                      .copyWith(color: themeData.colorScheme.secondary)),
+            ]),
       ),
     );
   }
 
-  Widget buildShieldStat (List<String> statList) {
+  Widget buildShieldStat(List<String> statList) {
     return ListTile(
       leading: icon,
       title: RichText(
         text: TextSpan(
-          text: statList[0],
-          style: statList[0] != '0'
-              ? themeData.textTheme.headline4
-              : themeData.textTheme.headline4!.copyWith(color: kGreyOnSurface),
-          children: [
-            TextSpan(
-              text: 'hp  ',
-              style: themeData.textTheme.caption!.copyWith(color: themeData.colorScheme.secondary)
-            ),
-            TextSpan(
-              text: statList[1],
-              style: statList[1] != '0'
-                  ? themeData.textTheme.headline6
-                  : themeData.textTheme.headline6!.copyWith(color: kGreyOnSurface),
-            ),
-            TextSpan(
-              text: 'hp/s',
-              style: themeData.textTheme.caption!.copyWith(color: themeData.colorScheme.secondary)
-            ),
-          ]
-        ),
+            text: statList[0],
+            style: statList[0] != '0'
+                ? themeData.textTheme.headline4
+                : themeData.textTheme.headline4!
+                    .copyWith(color: kGreyOnSurface),
+            children: [
+              TextSpan(
+                  text: 'hp  ',
+                  style: themeData.textTheme.caption!
+                      .copyWith(color: themeData.colorScheme.secondary)),
+              TextSpan(
+                text: statList[1],
+                style: statList[1] != '0'
+                    ? themeData.textTheme.headline6
+                    : themeData.textTheme.headline6!
+                        .copyWith(color: kGreyOnSurface),
+              ),
+              TextSpan(
+                  text: 'hp/s',
+                  style: themeData.textTheme.caption!
+                      .copyWith(color: themeData.colorScheme.secondary)),
+            ]),
       ),
       subtitle: RichText(
-        text: TextSpan(
-          text: 'Full Charge in ',
-          children: [
-            TextSpan(
-              text: '${statList[2]}s',
-              style: themeData.textTheme.bodyText2!.copyWith(color: themeData.colorScheme.secondary)
-            )
-          ]
-          )),
+          text: TextSpan(text: 'Full Charge in ', children: [
+        TextSpan(
+            text: '${statList[2]}s',
+            style: themeData.textTheme.bodyText2!
+                .copyWith(color: themeData.colorScheme.secondary))
+      ])),
     );
   }
 
-  Widget buildPowerStat (List<String> statList) {
+  Widget buildPowerStat(List<String> statList) {
     return ListTile(
       leading: icon,
       title: RichText(
         text: TextSpan(
-          text: statList[0],
-          style: statList[0] != '0'
-              ? themeData.textTheme.headline4
-              : themeData.textTheme.headline4!.copyWith(color: kGreyOnSurface),
-          children: [
-            TextSpan(
-              text: '/${statList[1]}',
-              style: statList[1] != '0'
-                  ? themeData.textTheme.subtitle1!.copyWith(color: themeData.colorScheme.secondary)
-                  : themeData.textTheme.headline4!.copyWith(color: kGreyOnSurface),
-            ),
-            TextSpan(
-              text: 'pwr/s',
-              style: themeData.textTheme.caption!.copyWith(color: themeData.colorScheme.secondary)
-            ),
-          ]
-        ),
+            text: statList[0],
+            style: statList[0] != '0'
+                ? themeData.textTheme.headline4
+                : themeData.textTheme.headline4!
+                    .copyWith(color: kGreyOnSurface),
+            children: [
+              TextSpan(
+                text: '/${statList[1]}',
+                style: statList[1] != '0'
+                    ? themeData.textTheme.subtitle1!
+                        .copyWith(color: themeData.colorScheme.secondary)
+                    : themeData.textTheme.headline4!
+                        .copyWith(color: kGreyOnSurface),
+              ),
+              TextSpan(
+                  text: 'pwr/s',
+                  style: themeData.textTheme.caption!
+                      .copyWith(color: themeData.colorScheme.secondary)),
+            ]),
       ),
     );
   }
 
-  Widget buildCoolerStat (List<String> statList) {
+  Widget buildCoolerStat(List<String> statList) {
     return ListTile(
       leading: icon,
       title: RichText(
         text: TextSpan(
-          text: statList[0],
-          style: statList[0] != '0'
-              ? themeData.textTheme.headline4
-              : themeData.textTheme.headline4!.copyWith(color: kGreyOnSurface),
-          children: [
-            TextSpan(
-              text: 'K/${statList[1]}',
-              style: statList[1] != '0'
-                  ? themeData.textTheme.subtitle1!.copyWith(color: themeData.colorScheme.secondary)
-                  : themeData.textTheme.headline4!.copyWith(color: kGreyOnSurface),
-            ),
-            TextSpan(
-              text: 'Kcooling/s',
-              style: themeData.textTheme.caption!.copyWith(color: themeData.colorScheme.secondary)
-            ),
-          ]
-        ),
+            text: statList[0],
+            style: statList[0] != '0'
+                ? themeData.textTheme.headline4
+                : themeData.textTheme.headline4!
+                    .copyWith(color: kGreyOnSurface),
+            children: [
+              TextSpan(
+                text: 'K/${statList[1]}',
+                style: statList[1] != '0'
+                    ? themeData.textTheme.subtitle1!
+                        .copyWith(color: themeData.colorScheme.secondary)
+                    : themeData.textTheme.headline4!
+                        .copyWith(color: kGreyOnSurface),
+              ),
+              TextSpan(
+                  text: 'Kcooling/s',
+                  style: themeData.textTheme.caption!
+                      .copyWith(color: themeData.colorScheme.secondary)),
+            ]),
       ),
     );
   }
 
-  Widget buildEMStat (List<String> statList) {
+  Widget buildEMStat(List<String> statList) {
     return ListTile(
-      leading: icon,
-      title: Text(
-        statList[0],
-        style: statList[0] != '0'
-            ? themeData.textTheme.headline4
-            : themeData.textTheme.headline4!.copyWith(color: kGreyOnSurface)
-      )
-    );
+        leading: icon,
+        title: Text(statList[0],
+            style: statList[0] != '0'
+                ? themeData.textTheme.headline4
+                : themeData.textTheme.headline4!
+                    .copyWith(color: kGreyOnSurface)));
   }
 
-  Widget buildIRStat (List<String> statList) {
+  Widget buildIRStat(List<String> statList) {
     return ListTile(
-      leading: icon,
-      title: Text(statList[0],
+        leading: icon,
+        title: Text(
+          statList[0],
           style: statList[0] != '0'
               ? themeData.textTheme.headline4
-              : themeData.textTheme.headline4!.copyWith(color: kGreyOnSurface),),
-      subtitle: Row(
-        children: [
-          RichText(
-            text: TextSpan(
-              children: [
-                WidgetSpan(
-                  child: Icon(Icons.data_usage_sharp)
-                ),
-                TextSpan(text: statList[1]),
-              ]
-            )
-          ),
-          RichText(
-            text: TextSpan(
-              children: [
-                WidgetSpan(
-                  child: Icon(Icons.data_usage_sharp)
-                ),
-                TextSpan(text: statList[2]),
-              ]
-            )
-          ),
-          RichText(
-            text: TextSpan(
-              children: [
-                WidgetSpan(
-                  child: Icon(Icons.data_usage_sharp)
-                ),
-                TextSpan(text: statList[3]),
-              ]
-            )
-          ),
-          RichText(
-            text: TextSpan(
-              children: [
-                WidgetSpan(
-                  child: Icon(Icons.data_usage_sharp)
-                ),
-                TextSpan(text: statList[4]),
-              ]
-            )
-          )
-        ],
-      )
-    );
+              : themeData.textTheme.headline4!.copyWith(color: kGreyOnSurface),
+        ),
+        subtitle: Row(
+          children: [
+            RichText(
+                text: TextSpan(children: [
+              WidgetSpan(child: Icon(Icons.data_usage_sharp)),
+              TextSpan(text: statList[1]),
+            ])),
+            RichText(
+                text: TextSpan(children: [
+              WidgetSpan(child: Icon(Icons.data_usage_sharp)),
+              TextSpan(text: statList[2]),
+            ])),
+            RichText(
+                text: TextSpan(children: [
+              WidgetSpan(child: Icon(Icons.data_usage_sharp)),
+              TextSpan(text: statList[3]),
+            ])),
+            RichText(
+                text: TextSpan(children: [
+              WidgetSpan(child: Icon(Icons.data_usage_sharp)),
+              TextSpan(text: statList[4]),
+            ]))
+          ],
+        ));
   }
 }
 
-
 class StatsDashboardFilters extends StatefulWidget {
-  StatsDashboardFilters({Key? key}) : super(key: key);
+  StatsDashboardFilters({Key? key, required this.scrollController})
+      : super(key: key);
+
+  final ScrollController scrollController;
 
   @override
   _StatsDashboardFiltersState createState() => _StatsDashboardFiltersState();
 }
 
 class _StatsDashboardFiltersState extends State<StatsDashboardFilters> {
-  
+  final GlobalKey expansionTileKey = GlobalKey();
 
   bool weaponsFiring = true;
   bool mining = true;
@@ -385,6 +390,15 @@ class _StatsDashboardFiltersState extends State<StatsDashboardFilters> {
   bool turretsFiring = true;
   bool empsCharging = true;
   bool maneuvering = true;
+
+  void scrollToSelectedContent(GlobalKey expansionTileKey) {
+    final keyContext = expansionTileKey.currentContext;
+    if (keyContext != null) {
+      Future.delayed(Duration(milliseconds: 200)).then((value) =>
+          Scrollable.ensureVisible(keyContext,
+              duration: Duration(milliseconds: 200)));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -397,6 +411,21 @@ class _StatsDashboardFiltersState extends State<StatsDashboardFilters> {
             kGreyOnSurface, kMediumBevel, kMediumBevelWidth),
         child: ExpansionTile(
           title: Text('SIMULATION'),
+          collapsedIconColor: Theme.of(context).colorScheme.onPrimary,
+          textColor: Theme.of(context).colorScheme.onPrimary,
+          iconColor: Theme.of(context).colorScheme.onPrimary,
+          key: expansionTileKey,
+          onExpansionChanged: (isExpanded) {
+            if (isExpanded) {
+              scrollToSelectedContent(expansionTileKey);
+              // Future.delayed(Duration(milliseconds: 200))
+              //     .then((value) => widget.scrollController.animateTo(
+              //             widget.scrollController.position.maxScrollExtent,
+              //             duration: Duration(milliseconds: 400),
+              //             curve: Curves.easeInOut));
+
+            }
+          },
           children: [
             SwitchListTile(
                 value: weaponsFiring,
@@ -463,7 +492,8 @@ class _StatsDashboardFiltersState extends State<StatsDashboardFilters> {
                   setState(() {
                     maneuvering = value;
                   });
-                })
+                }),
+            // ListTile()
           ],
         ),
       ),
