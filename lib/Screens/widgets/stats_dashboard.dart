@@ -60,6 +60,7 @@ class _StatsDashboardState extends State<StatsDashboard> {
         primary: Theme.of(context).textTheme.subtitle1!.color,
       ))),
       child: Container(
+        padding: EdgeInsets.all(10.0),
         child: Column(
           children: [
             ListTile(
@@ -71,43 +72,46 @@ class _StatsDashboardState extends State<StatsDashboard> {
               trailing: Icon(Icons.flight_sharp),
             ),
             Expanded(
-              child: ListView(
-                controller: scrollController,
-                padding: EdgeInsets.fromLTRB(10, 25, 10, 40),
-                physics: ClampingScrollPhysics(),
-                children: [
-                  OutlinedButton.icon(
-                      onPressed: () {},
-                      icon: Icon(Icons.flight_sharp,
-                          color: Theme.of(context).colorScheme.secondary),
-                      label: Text('Select Ship or Vehicle')),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      OutlinedButton.icon(
-                          onPressed: () {},
-                          icon: Icon(Icons.info_sharp,
-                              color: Theme.of(context).colorScheme.secondary),
-                          label: Text('Ship Info')),
-                      OutlinedButton.icon(
-                          onPressed: () {},
-                          icon: Icon(Icons.save_sharp,
-                              color: Theme.of(context).colorScheme.secondary),
-                          label: Text('Save')),
-                      OutlinedButton.icon(
-                          onPressed: () {},
-                          icon: Icon(Icons.share_sharp,
-                              color: Theme.of(context).colorScheme.secondary),
-                          label: Text('Share'))
-                    ],
-                  ),
-                  Column(
-                    children: buildStatRows(),
-                  ),
-                  StatsDashboardFilters(scrollController: scrollController),
-                  // SizedBox(height: 20.0)
-                ],
+              child: Material(
+                borderOnForeground: true,
+                shape: buildBeveledRectangleBorder(kGreyOnSurface, kLargeBevel, kLargeBevelWidth),
+                child: ListView(
+                  controller: scrollController,
+                  padding: EdgeInsets.all(25.0),
+                  physics: ClampingScrollPhysics(),
+                  children: [
+                    OutlinedButton.icon(
+                        onPressed: () {},
+                        icon: Icon(Icons.flight_sharp,
+                            color: Theme.of(context).colorScheme.secondary),
+                        label: Text('Select Ship or Vehicle')),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        OutlinedButton.icon(
+                            onPressed: () {},
+                            icon: Icon(Icons.info_sharp,
+                                color: Theme.of(context).colorScheme.secondary),
+                            label: Text('Ship Info')),
+                        OutlinedButton.icon(
+                            onPressed: () {},
+                            icon: Icon(Icons.save_sharp,
+                                color: Theme.of(context).colorScheme.secondary),
+                            label: Text('Save')),
+                        OutlinedButton.icon(
+                            onPressed: () {},
+                            icon: Icon(Icons.share_sharp,
+                                color: Theme.of(context).colorScheme.secondary),
+                            label: Text('Share'))
+                      ],
+                    ),
+                    Column(
+                      children: buildStatRows(),
+                    ),
+                    StatsDashboardFilters(scrollController: scrollController),
+                  ],
+                ),
               ),
             ),
           ],
@@ -394,9 +398,12 @@ class _StatsDashboardFiltersState extends State<StatsDashboardFilters> {
   void scrollToSelectedContent(GlobalKey expansionTileKey) {
     final keyContext = expansionTileKey.currentContext;
     if (keyContext != null) {
-      Future.delayed(Duration(milliseconds: 200)).then((value) =>
+      // Feels kind of hacky but the ListView doesn't properly scroll without 
+      // the expansion finishing and I didn't find a solution to add a listener
+      // to the animation.
+      Future.delayed(Duration(milliseconds: 220)).then((value) =>   
           Scrollable.ensureVisible(keyContext,
-              duration: Duration(milliseconds: 200)));
+              duration: Duration(milliseconds: 300)));
     }
   }
 
@@ -404,7 +411,7 @@ class _StatsDashboardFiltersState extends State<StatsDashboardFilters> {
   Widget build(BuildContext context) {
     Color switchColor = Theme.of(context).colorScheme.secondary;
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10.0),
+      margin: EdgeInsets.only(top: 20.0),
       child: Material(
         borderOnForeground: true,
         shape: buildBeveledRectangleBorder(
@@ -418,12 +425,6 @@ class _StatsDashboardFiltersState extends State<StatsDashboardFilters> {
           onExpansionChanged: (isExpanded) {
             if (isExpanded) {
               scrollToSelectedContent(expansionTileKey);
-              // Future.delayed(Duration(milliseconds: 200))
-              //     .then((value) => widget.scrollController.animateTo(
-              //             widget.scrollController.position.maxScrollExtent,
-              //             duration: Duration(milliseconds: 400),
-              //             curve: Curves.easeInOut));
-
             }
           },
           children: [
@@ -493,10 +494,10 @@ class _StatsDashboardFiltersState extends State<StatsDashboardFilters> {
                     maneuvering = value;
                   });
                 }),
-            // ListTile()
           ],
         ),
       ),
     );
   }
 }
+
