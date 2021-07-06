@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:star_citizen_app/constants.dart';
 
 class ComponentTitle extends StatelessWidget {
   const ComponentTitle({Key? key, required this.title}) : super(key: key);
@@ -31,11 +32,7 @@ class ComponentTile extends StatelessWidget {
         child: Material(
           color: Theme.of(context).colorScheme.background,
           borderOnForeground: true,
-          shape: BeveledRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8.0)),
-              side: BorderSide(
-                  color: Theme.of(context).colorScheme.primaryVariant,
-                  width: 2.0)),
+          shape: buildBeveledRectangleBorder(kPrimaryNavyVariant, kMediumBevel, kMediumBevelWidth),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             componentTitle,
