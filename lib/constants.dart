@@ -5,7 +5,7 @@ const double kFlingVelocity = 2.0;
 
 // Color Constants
 const Color kPrimaryNavy = Color(0xFF0C2838);
-const Color kPrimaryNavyVariant = Color(0xFF09314D);
+const Color kPrimaryNavyVariant = Color(0xFF204566);
 Color kOnPrimaryNavy = Colors.grey.shade100;
 const Color kSecondaryCyan = Color(0xFF42EDF8);
 const Color kSecondaryCyanVariant = Color(0xFF02F0DB);
