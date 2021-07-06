@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:star_citizen_app/Screens/widgets/component_tile.dart';
 
+import '../../constants.dart';
+
 List<String> components = [
   'Weapons',
   'Turrets',
@@ -24,13 +26,30 @@ class ComponentSelectionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: ListView.builder(
-            padding: EdgeInsets.fromLTRB(0, 25, 0, 50),
-            itemCount: components.length,
-            itemBuilder: (context, index) => ComponentTile(
-                  componentTitle: ComponentTitle(title: components[index]),
-                  componentBlock: buildComponentBlock(),
-                )));
+        padding: EdgeInsets.all(10.0),
+        child: Column(
+          children: [
+            SizedBox(height: 25),
+            Expanded(
+              child: Material(
+                borderOnForeground: true,
+                shape: buildBeveledRectangleBorder(kPrimaryNavyVariant, kLargeBevel, kLargeBevelWidth),
+                color: Theme.of(context).colorScheme.primary,
+                child: ListView.separated(
+                    padding: EdgeInsets.all(25.0),
+                    itemCount: components.length,
+                    separatorBuilder: (context, index) => Divider(
+                      color: Theme.of(context).colorScheme.primaryVariant,
+                      thickness: 2.0
+                    ),
+                    itemBuilder: (context, index) => ComponentTile(
+                          componentTitle: ComponentTitle(title: components[index]),
+                          componentBlock: buildComponentBlock(),
+                        )),
+              ),
+            ),
+          ],
+        ));
   }
 
   List<Widget> buildComponentBlock() {

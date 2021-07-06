@@ -28,19 +28,14 @@ class ComponentTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(10),
-        child: Material(
-          color: Theme.of(context).colorScheme.background,
-          borderOnForeground: true,
-          shape: buildBeveledRectangleBorder(kPrimaryNavyVariant, kMediumBevel, kMediumBevelWidth),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            componentTitle,
-            Column(
-              children: componentBlock,
-            )
-          ]),
-        ));
+        padding: EdgeInsets.only(bottom: 16.0),
+        child:
+            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          componentTitle,
+          Column(
+            children: componentBlock,
+          )
+        ]));
   }
 }
 
@@ -55,7 +50,6 @@ class ComponentTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Table(
         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
         children: [
@@ -63,10 +57,13 @@ class ComponentTable extends StatelessWidget {
             ComponentSize(size: componentSize),
             Container(
               height: 2.0,
-              width: 20.0,
+              width: 15.0,
               color: Theme.of(context).colorScheme.secondary,
             ),
-            ComponentItem(item: componentItem, type: ' - Ballistic Gatling',)
+            ComponentItem(
+              item: componentItem,
+              type: ' Ballistic Scattergun',
+            )
           ]),
           TableRow(children: [
             buildPowerAndCooler(),
@@ -80,9 +77,10 @@ class ComponentTable extends StatelessWidget {
           ])
         ],
         columnWidths: {
-          0: FlexColumnWidth(3),
+          // Item column needs to be 3x the size column
+          0: FlexColumnWidth(4),
           1: FlexColumnWidth(1),
-          2: FlexColumnWidth(9)
+          2: FlexColumnWidth(12)
         },
       ),
     );
@@ -96,9 +94,19 @@ class ComponentSize extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<String> sizeStringList = size.split(' ');
     return Container(
       child: OutlinedButton(
-        child: Text(size),
+        child: RichText(
+          text: TextSpan(
+              text: sizeStringList[1],
+              style: Theme.of(context).textTheme.subtitle1,
+              children: [
+                TextSpan(
+                    text: ' ${sizeStringList[0]}',
+                    style: Theme.of(context).textTheme.caption)
+              ]),
+        ),
         onPressed: () {},
       ),
     );
@@ -106,7 +114,8 @@ class ComponentSize extends StatelessWidget {
 }
 
 class ComponentItem extends StatelessWidget {
-  const ComponentItem({Key? key, required this.item, required this.type}) : super(key: key);
+  const ComponentItem({Key? key, required this.item, required this.type})
+      : super(key: key);
 
   final String item;
   final String type;
@@ -119,8 +128,22 @@ class ComponentItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.max,
           children: [
-            RichText(text: TextSpan(text: item, style: Theme.of(context).textTheme.subtitle1, children: [TextSpan(text: type, style: Theme.of(context).textTheme.caption)])),
-            Text('972dps')
+            RichText(
+                text: TextSpan(
+                    text: item,
+                    style: Theme.of(context).textTheme.subtitle1,
+                    children: [
+                  TextSpan(
+                      text: type, style: Theme.of(context).textTheme.caption)
+                ])),
+            RichText(
+                text: TextSpan(
+                    text: '972',
+                    style: Theme.of(context).textTheme.subtitle1,
+                    children: [
+                  TextSpan(
+                      text: 'dps', style: Theme.of(context).textTheme.caption)
+                ]))
           ],
         ),
         onPressed: () {}, // TODO: onPrewssed activates selection menu
@@ -132,13 +155,13 @@ class ComponentItem extends StatelessWidget {
 
 Widget buildPower() {
   return Row(
-    children: [Icon(Icons.bolt_sharp), Text('20')],
+    children: [Icon(Icons.bolt_sharp, size: 16), Text('20')],
   );
 }
 
 Widget buildCooler() {
   return Row(
-    children: [Icon(Icons.ac_unit_sharp), Text('34')],
+    children: [Icon(Icons.ac_unit_sharp, size: 16,), Text('34')],
   );
 }
 
