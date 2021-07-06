@@ -114,7 +114,7 @@ class StatDashboardRows extends StatelessWidget {
       case 'Missiles':
         return buildMissileStat(splitStat);
       case 'EMPS':
-        return buildEMStat(splitStat);
+        return buildEMPStat(splitStat);
       case 'Shields':
         return buildShieldStat(splitStat);
       case 'Power Plants':
@@ -122,7 +122,7 @@ class StatDashboardRows extends StatelessWidget {
       case 'Coolers':
         return buildCoolerStat(splitStat);
       case 'EM':
-        return buildEMPStat(splitStat);
+        return buildEMStat(splitStat);
       case 'IR':
         return buildIRStat(splitStat);
       default:
