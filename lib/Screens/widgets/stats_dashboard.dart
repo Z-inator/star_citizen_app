@@ -73,6 +73,7 @@ class _StatsDashboardState extends State<StatsDashboard> {
             ),
             Expanded(
               child: Material(
+                clipBehavior: Clip.hardEdge,
                 borderOnForeground: true,
                 shape: buildBeveledRectangleBorder(kGreyOnSurface, kLargeBevel, kLargeBevelWidth),
                 child: ListView(

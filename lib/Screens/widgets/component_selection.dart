@@ -32,6 +32,7 @@ class ComponentSelectionList extends StatelessWidget {
             SizedBox(height: 25),
             Expanded(
               child: Material(
+                clipBehavior: Clip.hardEdge,
                 borderOnForeground: true,
                 shape: buildBeveledRectangleBorder(kPrimaryNavyVariant, kLargeBevel, kLargeBevelWidth),
                 color: Theme.of(context).colorScheme.primary,
