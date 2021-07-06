@@ -377,6 +377,8 @@ class StatsDashboardFilters extends StatefulWidget {
 }
 
 class _StatsDashboardFiltersState extends State<StatsDashboardFilters> {
+  
+
   bool weaponsFiring = true;
   bool mining = true;
   bool shieldsRecharging = true;
@@ -393,11 +395,9 @@ class _StatsDashboardFiltersState extends State<StatsDashboardFilters> {
         borderOnForeground: true,
         shape: buildBeveledRectangleBorder(
             kGreyOnSurface, kMediumBevel, kMediumBevelWidth),
-        child: Column(
+        child: ExpansionTile(
+          title: Text('SIMULATION'),
           children: [
-            ListTile(
-              title: Text('SIMULATION'),
-            ),
             SwitchListTile(
                 value: weaponsFiring,
                 title: Text('Weapons Firing'),
