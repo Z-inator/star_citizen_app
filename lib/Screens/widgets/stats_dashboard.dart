@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:star_citizen_app/constants.dart';
+import '../../constants.dart';
 
 Map<String, String> statItem = {
   'Weapons': '587 117',
