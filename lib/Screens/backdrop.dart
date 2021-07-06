@@ -12,26 +12,26 @@ class FrontLayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      elevation: 16.0,
-      shape: BeveledRectangleBorder(
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(46.0)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: onTap,
-            child: Container(
-              height: 24.0,
-              alignment: AlignmentDirectional.centerStart,
+        elevation: 20.0,
+        shape: BeveledRectangleBorder(
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(46.0)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: onTap,
+              child: Container(
+                height: 24.0,
+                alignment: AlignmentDirectional.centerStart,
+              ),
             ),
-          ),
-          Expanded(
-            child: child,
-          ),
-        ],
-      ),
+            Expanded(
+              child: child,
+            ),
+          ],
+        ),
     );
   }
 }
