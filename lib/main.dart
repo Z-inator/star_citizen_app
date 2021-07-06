@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       home: Backdrop(
         frontLayer: StatsDashboard(),
         backLayer: ComponentSelectionList(),
-        frontTitle: Text('Ship Name',
+        frontTitle: Text('CALCULATOR',
             style: Theme.of(context).primaryTextTheme.headline6),
         backTitle:
             Text('BUILD', style: Theme.of(context).primaryTextTheme.headline6),
@@ -29,9 +29,11 @@ class MyApp extends StatelessWidget {
 }
 
 ThemeData buildAppTheme() {
-  final ThemeData base = ThemeData.dark();
-  // final TextTheme textTheme = buildTextTheme(base.textTheme, kOnPrimaryNavy);
+  final ThemeData base = ThemeData.light();
+  final TextTheme textTheme = buildTextTheme(base.textTheme, kOnPrimaryNavy);
   return base.copyWith(
+    brightness: Brightness.dark,
+      canvasColor: kSurface,
       colorScheme: base.colorScheme.copyWith(
           primary: kPrimaryNavy,
           primaryVariant: kPrimaryNavyVariant,
@@ -50,22 +52,22 @@ ThemeData buildAppTheme() {
           titleSpacing: 0.0),
       iconTheme: base.iconTheme.copyWith(color: kSecondaryCyan),
       primaryIconTheme: base.primaryIconTheme.copyWith(color: kSecondaryCyan),
-      // textTheme: textTheme,
-      // primaryTextTheme: textTheme,
+      accentIconTheme: base.accentIconTheme.copyWith(color: kSecondaryCyan),
+      textTheme: textTheme,
+      primaryTextTheme: textTheme,
       outlinedButtonTheme: OutlinedButtonThemeData(
           style: OutlinedButton.styleFrom(
-              padding: EdgeInsets.all(4),
+              padding: EdgeInsets.all(4.0),
               side: BorderSide(color: kSecondaryCyan),
               shape: buildBeveledRectangleBorder(kSecondaryCyan, kSmallBevel, kSmallBevelWidth),
-              textStyle: base.textTheme.subtitle1!.copyWith(fontSize: 16.0),
-              primary: base.textTheme.subtitle1!.color,
-              // onSurface: base.textTheme.subtitle1!.color,
+              textStyle: textTheme.subtitle1!.copyWith(fontSize: 16),
+              primary: kOnPrimaryNavy,
               )),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          padding: EdgeInsets.symmetric(horizontal: 2),
+          padding: EdgeInsets.all(4.0),
           textStyle: base.textTheme.caption!.copyWith(fontSize: 12),
-          primary: base.textTheme.caption!.color,
+          primary: kOnPrimaryNavy,
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           minimumSize: Size.zero
         )
@@ -73,18 +75,18 @@ ThemeData buildAppTheme() {
   );
 }
 
-// TextTheme buildTextTheme(TextTheme base, Color color) {
-//   return base.copyWith(
-//     headline1: base.headline1!.copyWith(color: color),
-//     headline2: base.headline2!.copyWith(color: color),
-//     headline3: base.headline3!.copyWith(color: color),
-//     headline4: base.headline4!.copyWith(color: color),
-//     headline5: base.headline5!.copyWith(color: color),
-//     headline6: base.headline6!.copyWith(color: color),
-//     subtitle1: base.subtitle1!.copyWith(color: color, fontWeight: FontWeight.bold),
-//     subtitle2: base.subtitle2!.copyWith(color: color),
-//     bodyText1: base.bodyText1!.copyWith(color: color),
-//     bodyText2: base.bodyText2!.copyWith(color: color),
-//     caption: base.caption!.copyWith(color: color),
-//   );
-// }
+TextTheme buildTextTheme(TextTheme base, Color color) {
+  return base.copyWith(
+    headline1: base.headline1!.copyWith(color: color),
+    headline2: base.headline2!.copyWith(color: color),
+    headline3: base.headline3!.copyWith(color: color),
+    headline4: base.headline4!.copyWith(color: color),
+    headline5: base.headline5!.copyWith(color: color),
+    headline6: base.headline6!.copyWith(color: color),
+    subtitle1: base.subtitle1!.copyWith(color: color, fontWeight: FontWeight.bold),
+    subtitle2: base.subtitle2!.copyWith(color: color),
+    bodyText1: base.bodyText1!.copyWith(color: color),
+    bodyText2: base.bodyText2!.copyWith(color: color),
+    caption: base.caption!.copyWith(color: color),
+  );
+}
