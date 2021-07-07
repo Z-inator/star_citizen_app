@@ -29,8 +29,8 @@ class StatsDashboardHeader extends StatefulWidget {
 
 class _StatsDashboardHeaderState extends State<StatsDashboardHeader>
     with SingleTickerProviderStateMixin {
-  late AnimationController controller;
   late Widget animatedWidget;
+  bool isExpanding = false;
 
   Widget buildListTile(BuildContext context) {
     return ListTile(
@@ -46,35 +46,46 @@ class _StatsDashboardHeaderState extends State<StatsDashboardHeader>
   Widget buildIconButton(BuildContext context) {
     BackdropProvider backDropProvider =
         Provider.of<BackdropProvider>(context, listen: false);
-    return IconButton(
-        onPressed: () => backDropProvider.toggleBackdropLayerVisibility,
-        icon: Icon(MdiIcons.rocket));
+    return Container(
+      margin: EdgeInsets.only(left: 34.0),
+      child: IconButton(
+          onPressed: () => backDropProvider.toggleBackdropLayerVisibility,
+          icon: Icon(MdiIcons.rocket)),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     BackdropProvider backDropProvider = Provider.of<BackdropProvider>(context);
-    backDropProvider.isExpanded
-        ? animatedWidget = buildListTile(context)
-        : animatedWidget = buildIconButton(context);
+
+    // backDropProvider.isExpanded
+    //     ? animatedWidget = buildListTile(context)
+    //     : animatedWidget = buildIconButton(context);
     backDropProvider.controller.addStatusListener((status) {
       if (status == AnimationStatus.forward) {
         setState(() {
-          animatedWidget = buildListTile(context);
+          isExpanding = true;
         });
       } else if (status == AnimationStatus.reverse) {
         setState(() {
-          animatedWidget = buildIconButton(context);
+          isExpanding = false;
         });
       }
     });
-    return AnimatedSwitcher(
-      duration: Duration(milliseconds: 300),
-      transitionBuilder: (Widget child, Animation<double> animation) {
-        return ScaleTransition(scale: animation, child: child);
-      },
-      child: animatedWidget,
-    );
+    return AnimatedCrossFade(
+        firstChild: buildListTile(context),
+        secondChild: buildIconButton(context),
+        crossFadeState: backDropProvider.isExpanded
+            ? CrossFadeState.showFirst
+            : CrossFadeState.showSecond,
+        duration: Duration(milliseconds: 300));
+    // AnimatedSwitcher(
+    //   duration: Duration(milliseconds: 300),
+    //   transitionBuilder: (Widget child, Animation<double> animation) {
+    //     return ScaleTransition(scale: animation, child: child);
+    //   },
+    //   child: animatedWidget,
+    // );
   }
 }
 
@@ -129,6 +140,14 @@ class _StatsDashboardState extends State<StatsDashboard> {
         child: Column(
           children: [
             StatsDashboardHeader(),
+            // ListTile(
+            //   title: Text(
+            //     'Ship Name',
+            //     style: Theme.of(context).textTheme.headline4,
+            //     textAlign: TextAlign.center,
+            //   ),
+            //   trailing: Icon(Icons.flight_sharp),
+            // ),
             Expanded(
               child: Material(
                 clipBehavior: Clip.hardEdge,
@@ -137,6 +156,7 @@ class _StatsDashboardState extends State<StatsDashboard> {
                     kGreyOnSurface, kLargeBevel, kLargeBevelWidth),
                 child: ListView(
                   controller: scrollController,
+                  clipBehavior: Clip.hardEdge,
                   padding: EdgeInsets.all(25.0),
                   physics: ClampingScrollPhysics(),
                   children: [
@@ -412,22 +432,22 @@ class StatDashboardRows extends StatelessWidget {
           children: [
             RichText(
                 text: TextSpan(children: [
-              WidgetSpan(child: Icon(Icons.data_usage_sharp)),
+              WidgetSpan(child: Icon(Icons.data_usage_sharp, size: 16.0)),
               TextSpan(text: statList[1]),
             ])),
             RichText(
                 text: TextSpan(children: [
-              WidgetSpan(child: Icon(Icons.data_usage_sharp)),
+              WidgetSpan(child: Icon(Icons.data_usage_sharp, size: 16.0)),
               TextSpan(text: statList[2]),
             ])),
             RichText(
                 text: TextSpan(children: [
-              WidgetSpan(child: Icon(Icons.data_usage_sharp)),
+              WidgetSpan(child: Icon(Icons.data_usage_sharp, size: 16.0)),
               TextSpan(text: statList[3]),
             ])),
             RichText(
                 text: TextSpan(children: [
-              WidgetSpan(child: Icon(Icons.data_usage_sharp)),
+              WidgetSpan(child: Icon(Icons.data_usage_sharp, size: 16.0)),
               TextSpan(text: statList[4]),
             ]))
           ],

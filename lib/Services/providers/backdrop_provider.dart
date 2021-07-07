@@ -1,11 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/scheduler.dart';
 
 class BackdropProvider extends ChangeNotifier {
   BackdropProvider({required this.controller, required this.velocity});
 
   AnimationController controller;
   double velocity;
+  // AnimationStatus status;
 
   bool get isExpanded {
     final AnimationStatus status = controller.status;
@@ -13,7 +15,13 @@ class BackdropProvider extends ChangeNotifier {
         status == AnimationStatus.forward;
   }
 
+  // AnimationStatus get status {
+
+  // }
+
   void toggleBackdropLayerVisibility() async {
+    
     await controller.fling(velocity: isExpanded ? -velocity : velocity);
+    
   }
 }

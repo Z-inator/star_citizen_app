@@ -6,8 +6,7 @@ import 'package:star_citizen_app/main.dart';
 import '../constants.dart';
 
 class FrontLayer extends StatelessWidget {
-  const FrontLayer({Key? key, required this.child})
-      : super(key: key);
+  const FrontLayer({Key? key, required this.child}) : super(key: key);
 
   final Widget child;
 
@@ -138,33 +137,54 @@ class _BackdropState extends State<Backdrop>
   // }
 
   Widget buildStack(BuildContext context, BoxConstraints constraints) {
-
     double layerTileHeight = 45.0;
     final Size layerSize = constraints.biggest;
     final double layerTop = layerSize.height - layerTileHeight;
+    print(layerTop.toString());
+    print(layerSize.height.toString());
 
     Animation<RelativeRect> layerAnimation = RelativeRectTween(
-            begin: RelativeRect.fromLTRB(layerSize.width * .75, layerTop, 0.0,
+            begin: RelativeRect.fromLTRB(layerSize.width * 0.75, layerTop, 0.0,
                 layerTop - layerSize.height),
             end: RelativeRect.fromLTRB(0.0, 0.0, 0.0, 0.0))
         .animate(controller.view);
+
+    // AnimationController animation = AnimationController(
+    //     vsync: this, duration: Duration(milliseconds: 300), value: 1.0);
+
+    Animation<Offset> slideAnimation = Tween<Offset>(
+            begin: Offset(.75, .1), end: Offset(0, 0))
+        .animate(CurvedAnimation(parent: controller, curve: Curves.easeInOut));
 
     return Stack(
       key: backdropKey,
       children: <Widget>[
         widget.backLayer,
-        PositionedTransition(
-          rect: layerAnimation,
-          child: FrontLayer(
-            child: widget.frontLayer,
-          ),
+        // AnimatedBuilder(
+        //   animation: animation,
+        //   builder: (context, child) {
+        //     return Container(
+        //       height: animation.value * (),
+        //     )
+        //   }
+        // ),
+        SlideTransition(
+          position: slideAnimation,
+          child: FrontLayer(child: widget.frontLayer),
         ),
+        // PositionedTransition(
+        //   rect: layerAnimation,
+        //   child: FrontLayer(
+        //     child: widget.frontLayer,
+        //   ),
+        // ),
       ],
     );
   }
 
   PreferredSizeWidget buildAppBar(BuildContext context) {
-    BackdropProvider backDropProvider = Provider.of<BackdropProvider>(context, listen: false);
+    BackdropProvider backDropProvider =
+        Provider.of<BackdropProvider>(context, listen: false);
     return AppBar(
       title: BackdropTitle(
         listenable: controller.view,
