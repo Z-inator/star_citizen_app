@@ -1,37 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:star_citizen_app/Services/providers/backdrop_provider.dart';
+import 'package:star_citizen_app/main.dart';
 
 import '../constants.dart';
 
 class FrontLayer extends StatelessWidget {
-  const FrontLayer({Key? key, required this.onTap, required this.child})
+  const FrontLayer({Key? key, required this.child})
       : super(key: key);
 
-  final VoidCallback onTap;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return Material(
-        elevation: 20.0,
-        shape: BeveledRectangleBorder(
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(46.0)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: onTap,
-              child: Container(
-                height: 24.0,
-                alignment: AlignmentDirectional.centerStart,
-              ),
-            ),
-            Expanded(
-              child: child,
-            ),
-          ],
-        ),
+      elevation: 20.0,
+      shape: BeveledRectangleBorder(
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(45.0)),
+      ),
+      child: child,
     );
   }
 }
@@ -55,8 +42,7 @@ class BackdropTitle extends AnimatedWidget {
   Widget build(BuildContext context) {
     final Animation<double> animation = listenable;
     return Row(
-
-      children: [        
+      children: [
         SizedBox(
           width: 72.0,
           child: IconButton(
@@ -73,8 +59,7 @@ class BackdropTitle extends AnimatedWidget {
                 ),
                 Opacity(
                   opacity: CurvedAnimation(
-                          parent: animation,
-                          curve: Interval(0.5, 1.0))
+                          parent: animation, curve: Interval(0.5, 1.0))
                       .value,
                   child: Icon(Icons.tune_rounded),
                 ),
@@ -92,10 +77,9 @@ class BackdropTitle extends AnimatedWidget {
               child: backTitle,
             ),
             Opacity(
-              opacity: CurvedAnimation(
-                      parent: animation,
-                      curve: Interval(0.5, 1.0))
-                  .value,
+              opacity:
+                  CurvedAnimation(parent: animation, curve: Interval(0.5, 1.0))
+                      .value,
               child: frontTitle,
             ),
           ],
@@ -147,19 +131,21 @@ class _BackdropState extends State<Backdrop>
         status == AnimationStatus.forward;
   }
 
-  void toggleBackdropLayerVisibility() {
-    controller.fling(
-        velocity: frontLayerVisible ? -kFlingVelocity : kFlingVelocity);
-  }
+  // void toggleBackdropLayerVisibility() async {
+  //   await controller.fling(
+  //       velocity: isExpanded.value ? -kFlingVelocity : kFlingVelocity);
+  //   isExpanded.value = !isExpanded.value;
+  // }
 
   Widget buildStack(BuildContext context, BoxConstraints constraints) {
-    double layerTileHeight = 48.0;
+
+    double layerTileHeight = 45.0;
     final Size layerSize = constraints.biggest;
     final double layerTop = layerSize.height - layerTileHeight;
 
     Animation<RelativeRect> layerAnimation = RelativeRectTween(
-            begin: RelativeRect.fromLTRB(
-                0.0, layerTop, 0.0, layerTop - layerSize.height),
+            begin: RelativeRect.fromLTRB(layerSize.width * .75, layerTop, 0.0,
+                layerTop - layerSize.height),
             end: RelativeRect.fromLTRB(0.0, 0.0, 0.0, 0.0))
         .animate(controller.view);
 
@@ -170,7 +156,6 @@ class _BackdropState extends State<Backdrop>
         PositionedTransition(
           rect: layerAnimation,
           child: FrontLayer(
-            onTap: toggleBackdropLayerVisibility,
             child: widget.frontLayer,
           ),
         ),
@@ -179,10 +164,11 @@ class _BackdropState extends State<Backdrop>
   }
 
   PreferredSizeWidget buildAppBar(BuildContext context) {
+    BackdropProvider backDropProvider = Provider.of<BackdropProvider>(context, listen: false);
     return AppBar(
       title: BackdropTitle(
         listenable: controller.view,
-        onPress: toggleBackdropLayerVisibility,
+        onPress: backDropProvider.toggleBackdropLayerVisibility,
         frontTitle: widget.frontTitle,
         backTitle: widget.backTitle,
       ),
@@ -199,17 +185,22 @@ class _BackdropState extends State<Backdrop>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).colorScheme.background,
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.background,
-          appBar: buildAppBar(context),
-          body: LayoutBuilder(
-            builder: buildStack,
-          ),
-        ),
-      ),
-    );
+    return ChangeNotifierProvider(
+        create: (context) =>
+            BackdropProvider(controller: controller, velocity: kFlingVelocity),
+        builder: (context, child) {
+          return Container(
+            color: Theme.of(context).colorScheme.background,
+            child: SafeArea(
+              child: Scaffold(
+                backgroundColor: Theme.of(context).colorScheme.background,
+                appBar: buildAppBar(context),
+                body: LayoutBuilder(
+                  builder: buildStack,
+                ),
+              ),
+            ),
+          );
+        });
   }
 }
