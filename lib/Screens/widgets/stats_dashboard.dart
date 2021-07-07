@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:star_citizen_app/Services/providers/backdrop_provider.dart';
 import '../../constants.dart';
+import '../../main.dart';
 
 Map<String, String> statItem = {
   'Weapons': '587 117',
@@ -13,6 +17,66 @@ Map<String, String> statItem = {
   'EM': '1658',
   'IR': '4308 958 180 1417 3600'
 };
+
+class StatsDashboardHeader extends StatefulWidget {
+  const StatsDashboardHeader({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  _StatsDashboardHeaderState createState() => _StatsDashboardHeaderState();
+}
+
+class _StatsDashboardHeaderState extends State<StatsDashboardHeader>
+    with SingleTickerProviderStateMixin {
+  late AnimationController controller;
+  late Widget animatedWidget;
+
+  Widget buildListTile(BuildContext context) {
+    return ListTile(
+      title: Text(
+        'Ship Name',
+        style: Theme.of(context).textTheme.headline4,
+        textAlign: TextAlign.center,
+      ),
+      trailing: Icon(Icons.flight_sharp),
+    );
+  }
+
+  Widget buildIconButton(BuildContext context) {
+    BackdropProvider backDropProvider =
+        Provider.of<BackdropProvider>(context, listen: false);
+    return IconButton(
+        onPressed: () => backDropProvider.toggleBackdropLayerVisibility,
+        icon: Icon(MdiIcons.rocket));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    BackdropProvider backDropProvider = Provider.of<BackdropProvider>(context);
+    backDropProvider.isExpanded
+        ? animatedWidget = buildListTile(context)
+        : animatedWidget = buildIconButton(context);
+    backDropProvider.controller.addStatusListener((status) {
+      if (status == AnimationStatus.forward) {
+        setState(() {
+          animatedWidget = buildListTile(context);
+        });
+      } else if (status == AnimationStatus.reverse) {
+        setState(() {
+          animatedWidget = buildIconButton(context);
+        });
+      }
+    });
+    return AnimatedSwitcher(
+      duration: Duration(milliseconds: 300),
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        return ScaleTransition(scale: animation, child: child);
+      },
+      child: animatedWidget,
+    );
+  }
+}
 
 class StatsDashboard extends StatefulWidget {
   StatsDashboard({Key? key}) : super(key: key);
@@ -48,6 +112,7 @@ class _StatsDashboardState extends State<StatsDashboard> {
 
   @override
   Widget build(BuildContext context) {
+    BackdropProvider backDropProvider = Provider.of<BackdropProvider>(context);
     return Theme(
       data: Theme.of(context).copyWith(
           outlinedButtonTheme: OutlinedButtonThemeData(
@@ -60,22 +125,16 @@ class _StatsDashboardState extends State<StatsDashboard> {
         primary: Theme.of(context).textTheme.subtitle1!.color,
       ))),
       child: Container(
-        padding: EdgeInsets.all(10.0),
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
         child: Column(
           children: [
-            ListTile(
-              title: Text(
-                'Ship Name',
-                style: Theme.of(context).textTheme.headline4,
-                textAlign: TextAlign.center,
-              ),
-              trailing: Icon(Icons.flight_sharp),
-            ),
+            StatsDashboardHeader(),
             Expanded(
               child: Material(
                 clipBehavior: Clip.hardEdge,
                 borderOnForeground: true,
-                shape: buildBeveledRectangleBorder(kGreyOnSurface, kLargeBevel, kLargeBevelWidth),
+                shape: buildBeveledRectangleBorder(
+                    kGreyOnSurface, kLargeBevel, kLargeBevelWidth),
                 child: ListView(
                   controller: scrollController,
                   padding: EdgeInsets.all(25.0),
@@ -399,10 +458,10 @@ class _StatsDashboardFiltersState extends State<StatsDashboardFilters> {
   void scrollToSelectedContent(GlobalKey expansionTileKey) {
     final keyContext = expansionTileKey.currentContext;
     if (keyContext != null) {
-      // Feels kind of hacky but the ListView doesn't properly scroll without 
+      // Feels kind of hacky but the ListView doesn't properly scroll without
       // the expansion finishing and I didn't find a solution to add a listener
       // to the animation.
-      Future.delayed(Duration(milliseconds: 220)).then((value) =>   
+      Future.delayed(Duration(milliseconds: 220)).then((value) =>
           Scrollable.ensureVisible(keyContext,
               duration: Duration(milliseconds: 300)));
     }
@@ -501,4 +560,3 @@ class _StatsDashboardFiltersState extends State<StatsDashboardFilters> {
     );
   }
 }
-
