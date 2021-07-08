@@ -57,7 +57,8 @@ ThemeData buildAppTheme() {
       primaryTextTheme: textTheme,
       outlinedButtonTheme: OutlinedButtonThemeData(
           style: OutlinedButton.styleFrom(
-              padding: EdgeInsets.all(4.0),
+              minimumSize: Size.fromHeight(42),
+              padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
               side: BorderSide(color: kSecondaryCyan),
               shape: buildBeveledRectangleBorder(kSecondaryCyan, kSmallBevel, kSmallBevelWidth),
               textStyle: textTheme.subtitle1!.copyWith(fontSize: 16),

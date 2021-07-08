@@ -114,7 +114,7 @@ class _BackdropState extends State<Backdrop>
   @override
   void initState() {
     controller = AnimationController(
-        duration: Duration(milliseconds: 500), value: 1.0, vsync: this);
+        duration: Duration(milliseconds: 300), value: 1.0, vsync: this);
     super.initState();
   }
 

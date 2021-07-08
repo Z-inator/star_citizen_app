@@ -80,12 +80,14 @@ class StatsDashboardHeader extends AnimatedWidget {
         Opacity(
           opacity: CurvedAnimation(
                   parent: animation,
-                  curve: Interval(0.5, 1.0))
+                  curve: Curves.easeIn)
               .value,
           child: buildListTile(context),
         ),
         Opacity(
-          opacity: CurvedAnimation(parent: ReverseAnimation(animation), curve: Interval(0.5, 1.0))
+          opacity: CurvedAnimation(
+              parent: ReverseAnimation(animation), 
+              curve: Curves.easeIn)
               .value,
           child: buildIconButton(context),
         ),
@@ -143,17 +145,6 @@ class _StatsDashboardState extends State<StatsDashboard> {
   @override
   Widget build(BuildContext context) {
     BackdropProvider backDropProvider = Provider.of<BackdropProvider>(context);
-    // backDropProvider.controller.addStatusListener((status) {
-    //   if (status == AnimationStatus.forward) {
-    //     setState(() {
-    //       isExpanded = true;
-    //     });
-    //   } else if (status == AnimationStatus.reverse) {
-    //     setState(() {
-    //       isExpanded = false;
-    //     });
-    //   }
-    // });
     return Theme(
       data: Theme.of(context).copyWith(
           outlinedButtonTheme: OutlinedButtonThemeData(
@@ -171,24 +162,7 @@ class _StatsDashboardState extends State<StatsDashboard> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             StatsDashboardHeader(listenable: backDropProvider.controller.view),
-            // ListTile(
-            //   title: Text(
-            //     'Ship Name',
-            //     style: Theme.of(context).textTheme.headline4,
-            //     textAlign: TextAlign.center,
-            //   ),
-            //   trailing: Icon(Icons.flight_sharp),
-            // ),
             Expanded(child: buildStatsDashboardBody(context)),
-            // Expanded(
-            //   child: AnimatedCrossFade(
-            //       firstChild: buildStatsDashboardBody(context),
-            //       secondChild: Container(),
-            //       crossFadeState: isExpanded
-            //           ? CrossFadeState.showFirst
-            //           : CrossFadeState.showSecond,
-            //       duration: Duration(milliseconds: 300)),
-            // )
           ],
         ),
       ),
@@ -203,7 +177,6 @@ class _StatsDashboardState extends State<StatsDashboard> {
           kGreyOnSurface, kLargeBevel, kLargeBevelWidth),
       child: ListView(
         controller: scrollController,
-        // clipBehavior: Clip.hardEdge,
         padding: EdgeInsets.all(25.0),
         physics: ClampingScrollPhysics(),
         children: [
