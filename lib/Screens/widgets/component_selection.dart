@@ -49,9 +49,48 @@ class ComponentSelectionList extends StatelessWidget {
                         )),
               ),
             ),
+            // Expanded(
+            //   child: Material(
+            //     clipBehavior: Clip.hardEdge,
+            //     borderOnForeground: true,
+            //     shape: buildBeveledRectangleBorder(kPrimaryNavyVariant, kLargeBevel, kLargeBevelWidth),
+            //     color: Theme.of(context).colorScheme.primary,
+            //     child: SingleChildScrollView(
+            //       child: Material(
+            //               clipBehavior: Clip.hardEdge,
+            //               borderOnForeground: true,
+            //               shape: buildBeveledRectangleBorder(kPrimaryNavyVariant, kLargeBevel, kLargeBevelWidth),
+            //               // BeveledRectangleBorder(
+            //               //   borderRadius: BorderRadius.o(top: Radius.circular(kLargeBevel)),
+            //               //   side: BorderSide(color: kPrimaryNavyVariant, width: kLargeBevelWidth)
+            //               // ),
+                          
+            //               color: Theme.of(context).colorScheme.primary,
+            //               child: ListView.separated(
+            //                 shrinkWrap: true,
+            //                 physics: NeverScrollableScrollPhysics(),
+            //                 padding: EdgeInsets.all(25.0),
+            //                 itemCount: components.length,
+            //                 separatorBuilder: (context, index) => Divider(
+            //                   color: Theme.of(context).colorScheme.primaryVariant,
+            //                   thickness: 2.0
+            //                 ),
+            //                 itemBuilder: (context, index) => ComponentTile(
+            //                       componentTitle: ComponentTitle(title: components[index]),
+            //                       componentBlock: buildComponentBlock(),
+            //                     )),
+            //             ),
+            //     ),
+            //   ),
+            // )
           ],
         ));
   }
+
+  // List<Widget> buildColumn() {
+  //   List<Widget> column = [];
+
+  // }
 
   List<Widget> buildComponentBlock() {
     List<Widget> componentBlock = [];
