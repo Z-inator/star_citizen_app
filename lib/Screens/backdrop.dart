@@ -114,7 +114,7 @@ class _BackdropState extends State<Backdrop>
   @override
   void initState() {
     controller = AnimationController(
-        duration: Duration(milliseconds: 300), value: 1.0, vsync: this);
+        duration: Duration(milliseconds: 500), value: 1.0, vsync: this);
     super.initState();
   }
 
@@ -152,9 +152,11 @@ class _BackdropState extends State<Backdrop>
     // AnimationController animation = AnimationController(
     //     vsync: this, duration: Duration(milliseconds: 300), value: 1.0);
 
-    Animation<Offset> slideAnimation = Tween<Offset>(
-            begin: Offset(.75, .1), end: Offset(0, 0))
-        .animate(CurvedAnimation(parent: controller, curve: Curves.easeInOut));
+    double testHeight = layerTop / layerSize.height;
+
+    Animation<Offset> slideAnimation =
+        Tween<Offset>(begin: Offset(0.75, testHeight), end: Offset(0, 0))
+            .animate(controller.view);
 
     return Stack(
       key: backdropKey,

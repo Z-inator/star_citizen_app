@@ -18,19 +18,15 @@ Map<String, String> statItem = {
   'IR': '4308 958 180 1417 3600'
 };
 
-class StatsDashboardHeader extends StatefulWidget {
-  const StatsDashboardHeader({
-    Key? key,
-  }) : super(key: key);
+class StatsDashboardHeader extends AnimatedWidget {
+  const StatsDashboardHeader({Key? key, required Animation<double> listenable})
+      : listenable = listenable,
+        super(key: key, listenable: listenable);
 
-  @override
-  _StatsDashboardHeaderState createState() => _StatsDashboardHeaderState();
-}
+  final Animation<double> listenable;
 
-class _StatsDashboardHeaderState extends State<StatsDashboardHeader>
-    with SingleTickerProviderStateMixin {
-  late Widget animatedWidget;
-  bool isExpanding = false;
+  // bool isExpanded = true;
+  // late Widget animatedWidget;
 
   Widget buildListTile(BuildContext context) {
     return ListTile(
@@ -46,44 +42,66 @@ class _StatsDashboardHeaderState extends State<StatsDashboardHeader>
   Widget buildIconButton(BuildContext context) {
     BackdropProvider backDropProvider =
         Provider.of<BackdropProvider>(context, listen: false);
+    double width = MediaQuery.of(context).size.width;
     return Container(
-      margin: EdgeInsets.only(left: 34.0),
+      // The thought process here is to put the icon in the middle of the sliver
+      // the sliver cuts to 1/4 of the biggest constraints and half of that
+      // would be 1/8 then subtract half the icon size
+      margin: EdgeInsets.only(left: width / 8 - 12),
       child: IconButton(
-          onPressed: () => backDropProvider.toggleBackdropLayerVisibility,
+          onPressed: () => backDropProvider.toggleBackdropLayerVisibility(),
+          alignment: Alignment.centerLeft,
           icon: Icon(MdiIcons.rocket)),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    BackdropProvider backDropProvider = Provider.of<BackdropProvider>(context);
-
+    // BackdropProvider backDropProvider = Provider.of<BackdropProvider>(context);
+    final Animation<double> animation = listenable;
     // backDropProvider.isExpanded
     //     ? animatedWidget = buildListTile(context)
     //     : animatedWidget = buildIconButton(context);
-    backDropProvider.controller.addStatusListener((status) {
-      if (status == AnimationStatus.forward) {
-        setState(() {
-          isExpanding = true;
-        });
-      } else if (status == AnimationStatus.reverse) {
-        setState(() {
-          isExpanding = false;
-        });
-      }
-    });
-    return AnimatedCrossFade(
-        firstChild: buildListTile(context),
-        secondChild: buildIconButton(context),
-        crossFadeState: backDropProvider.isExpanded
-            ? CrossFadeState.showFirst
-            : CrossFadeState.showSecond,
-        duration: Duration(milliseconds: 300));
+    // backDropProvider.controller.addStatusListener((status) {
+    //   if (status == AnimationStatus.forward) {
+    //     setState(() {
+    //       // isExpanded = true;
+    //       animatedWidget = buildListTile(context);
+    //     });
+    //   } else if (status == AnimationStatus.reverse) {
+    //     setState(() {
+    //       // isExpanded = false;
+    //       animatedWidget = buildIconButton(context);
+    //     });
+    //   }
+    // });
+    return Stack(
+      children: [
+        Opacity(
+          opacity: CurvedAnimation(
+                  parent: animation,
+                  curve: Interval(0.5, 1.0))
+              .value,
+          child: buildListTile(context),
+        ),
+        Opacity(
+          opacity: CurvedAnimation(parent: ReverseAnimation(animation), curve: Interval(0.5, 1.0))
+              .value,
+          child: buildIconButton(context),
+        ),
+      ],
+    );
+    // AnimatedCrossFade(
+    //     firstChild: buildListTile(context),
+    //     secondChild: buildIconButton(context),
+    //     crossFadeState:
+    //         isExpanded ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+    //     duration: Duration(milliseconds: 300));
     // AnimatedSwitcher(
-    //   duration: Duration(milliseconds: 300),
-    //   transitionBuilder: (Widget child, Animation<double> animation) {
-    //     return ScaleTransition(scale: animation, child: child);
-    //   },
+    //   duration: Duration(milliseconds: 500),
+    //   // transitionBuilder: (Widget child, Animation<double> animation) {
+    //   //   return ScaleTransition(scale: animation, child: child);
+    //   // },
     //   child: animatedWidget,
     // );
   }
@@ -98,6 +116,7 @@ class StatsDashboard extends StatefulWidget {
 
 class _StatsDashboardState extends State<StatsDashboard> {
   late ScrollController scrollController;
+  bool isExpanded = true;
 
   @override
   void initState() {
@@ -124,6 +143,17 @@ class _StatsDashboardState extends State<StatsDashboard> {
   @override
   Widget build(BuildContext context) {
     BackdropProvider backDropProvider = Provider.of<BackdropProvider>(context);
+    // backDropProvider.controller.addStatusListener((status) {
+    //   if (status == AnimationStatus.forward) {
+    //     setState(() {
+    //       isExpanded = true;
+    //     });
+    //   } else if (status == AnimationStatus.reverse) {
+    //     setState(() {
+    //       isExpanded = false;
+    //     });
+    //   }
+    // });
     return Theme(
       data: Theme.of(context).copyWith(
           outlinedButtonTheme: OutlinedButtonThemeData(
@@ -138,8 +168,9 @@ class _StatsDashboardState extends State<StatsDashboard> {
       child: Container(
         padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            StatsDashboardHeader(),
+            StatsDashboardHeader(listenable: backDropProvider.controller.view),
             // ListTile(
             //   title: Text(
             //     'Ship Name',
@@ -148,54 +179,65 @@ class _StatsDashboardState extends State<StatsDashboard> {
             //   ),
             //   trailing: Icon(Icons.flight_sharp),
             // ),
-            Expanded(
-              child: Material(
-                clipBehavior: Clip.hardEdge,
-                borderOnForeground: true,
-                shape: buildBeveledRectangleBorder(
-                    kGreyOnSurface, kLargeBevel, kLargeBevelWidth),
-                child: ListView(
-                  controller: scrollController,
-                  clipBehavior: Clip.hardEdge,
-                  padding: EdgeInsets.all(25.0),
-                  physics: ClampingScrollPhysics(),
-                  children: [
-                    OutlinedButton.icon(
-                        onPressed: () {},
-                        icon: Icon(Icons.flight_sharp,
-                            color: Theme.of(context).colorScheme.secondary),
-                        label: Text('Select Ship or Vehicle')),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        OutlinedButton.icon(
-                            onPressed: () {},
-                            icon: Icon(Icons.info_sharp,
-                                color: Theme.of(context).colorScheme.secondary),
-                            label: Text('Ship Info')),
-                        OutlinedButton.icon(
-                            onPressed: () {},
-                            icon: Icon(Icons.save_sharp,
-                                color: Theme.of(context).colorScheme.secondary),
-                            label: Text('Save')),
-                        OutlinedButton.icon(
-                            onPressed: () {},
-                            icon: Icon(Icons.share_sharp,
-                                color: Theme.of(context).colorScheme.secondary),
-                            label: Text('Share'))
-                      ],
-                    ),
-                    Column(
-                      children: buildStatRows(),
-                    ),
-                    StatsDashboardFilters(scrollController: scrollController),
-                  ],
-                ),
-              ),
-            ),
+            Expanded(child: buildStatsDashboardBody(context)),
+            // Expanded(
+            //   child: AnimatedCrossFade(
+            //       firstChild: buildStatsDashboardBody(context),
+            //       secondChild: Container(),
+            //       crossFadeState: isExpanded
+            //           ? CrossFadeState.showFirst
+            //           : CrossFadeState.showSecond,
+            //       duration: Duration(milliseconds: 300)),
+            // )
           ],
         ),
+      ),
+    );
+  }
+
+  Widget buildStatsDashboardBody(BuildContext context) {
+    return Material(
+      clipBehavior: Clip.hardEdge,
+      borderOnForeground: true,
+      shape: buildBeveledRectangleBorder(
+          kGreyOnSurface, kLargeBevel, kLargeBevelWidth),
+      child: ListView(
+        controller: scrollController,
+        // clipBehavior: Clip.hardEdge,
+        padding: EdgeInsets.all(25.0),
+        physics: ClampingScrollPhysics(),
+        children: [
+          OutlinedButton.icon(
+              onPressed: () {},
+              icon: Icon(Icons.flight_sharp,
+                  color: Theme.of(context).colorScheme.secondary),
+              label: Text('Select Ship or Vehicle')),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              OutlinedButton.icon(
+                  onPressed: () {},
+                  icon: Icon(Icons.info_sharp,
+                      color: Theme.of(context).colorScheme.secondary),
+                  label: Text('Ship Info')),
+              OutlinedButton.icon(
+                  onPressed: () {},
+                  icon: Icon(Icons.save_sharp,
+                      color: Theme.of(context).colorScheme.secondary),
+                  label: Text('Save')),
+              OutlinedButton.icon(
+                  onPressed: () {},
+                  icon: Icon(Icons.share_sharp,
+                      color: Theme.of(context).colorScheme.secondary),
+                  label: Text('Share'))
+            ],
+          ),
+          Column(
+            children: buildStatRows(),
+          ),
+          StatsDashboardFilters(scrollController: scrollController),
+        ],
       ),
     );
   }

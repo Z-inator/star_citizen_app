@@ -20,8 +20,7 @@ class BackdropProvider extends ChangeNotifier {
   // }
 
   void toggleBackdropLayerVisibility() async {
-    
-    await controller.fling(velocity: isExpanded ? -velocity : velocity);
-    
+    isExpanded ? controller.reverse() : controller.forward();
+    // await controller.fling(velocity: isExpanded ? -velocity : velocity);
   }
 }
