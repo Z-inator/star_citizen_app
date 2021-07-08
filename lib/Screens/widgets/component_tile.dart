@@ -1,6 +1,95 @@
 import 'package:flutter/material.dart';
 import 'package:star_citizen_app/constants.dart';
 
+class ComponentTile extends StatelessWidget {
+  const ComponentTile(
+      {Key? key, required this.componentTitle, required this.componentBlock})
+      : super(key: key);
+
+  final Widget componentTitle;
+
+  final List<Widget> componentBlock;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        padding: EdgeInsets.only(bottom: 16.0),
+        child:
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch, 
+            children: [
+              componentTitle,
+              Column(
+                children: componentBlock,
+              )
+            ]));
+  }
+}
+
+class ComponentTable extends StatelessWidget {
+  const ComponentTable(
+      {Key? key,
+      // required this.componentItem,
+      // required this.componentSize,
+      required this.powerCoolerRow,
+      required this.sizeComponentRow})
+      : super(key: key);
+
+  // final String componentItem;
+  // final String componentSize;
+
+  final List<Widget> powerCoolerRow;
+  final List<Widget> sizeComponentRow;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(bottom: 6),
+      child: Table(
+        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+        children: [
+          TableRow(children: [
+            sizeComponentRow[0],
+            // ComponentSize(size: componentSize),
+            Container(
+              height: 2.0,
+              width: 15.0,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+            sizeComponentRow[1],
+            // ComponentItem(
+            //   item: componentItem,
+            //   type: ' Ballistic Scattergun',
+            // )
+          ]),
+          TableRow(children: [
+            powerCoolerRow[0],
+            // buildPowerAndCooler(),
+            Container(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                powerCoolerRow[1],
+                // buildPowerButton(context), 
+                powerCoolerRow[2]
+                // buildPowerAndCooler()
+              ],
+            )
+          ])
+        ],
+        columnWidths: {
+          // Item column needs to be 3x the size column
+          0: FlexColumnWidth(4),
+          1: FlexColumnWidth(1),
+          2: FlexColumnWidth(12)
+        },
+      ),
+    );
+  }
+}
+
 class ComponentTitle extends StatelessWidget {
   const ComponentTitle({Key? key, required this.title}) : super(key: key);
 
@@ -16,77 +105,6 @@ class ComponentTitle extends StatelessWidget {
   }
 }
 
-class ComponentTile extends StatelessWidget {
-  const ComponentTile(
-      {Key? key, required this.componentTitle, required this.componentBlock})
-      : super(key: key);
-
-  final Widget componentTitle;
-
-  final List<Widget> componentBlock;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.only(bottom: 16.0),
-        child:
-            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-          componentTitle,
-          Column(
-            children: componentBlock,
-          )
-        ]));
-  }
-}
-
-class ComponentTable extends StatelessWidget {
-  const ComponentTable(
-      {Key? key, required this.componentItem, required this.componentSize})
-      : super(key: key);
-
-  final String componentItem;
-  final String componentSize;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Table(
-        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-        children: [
-          TableRow(children: [
-            ComponentSize(size: componentSize),
-            Container(
-              height: 2.0,
-              width: 15.0,
-              color: Theme.of(context).colorScheme.secondary,
-            ),
-            ComponentItem(
-              item: componentItem,
-              type: ' Ballistic Scattergun',
-            )
-          ]),
-          TableRow(children: [
-            buildPowerAndCooler(),
-            Container(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [buildPowerButton(context), buildPowerAndCooler()],
-            )
-          ])
-        ],
-        columnWidths: {
-          // Item column needs to be 3x the size column
-          0: FlexColumnWidth(4),
-          1: FlexColumnWidth(1),
-          2: FlexColumnWidth(12)
-        },
-      ),
-    );
-  }
-}
-
 class ComponentSize extends StatelessWidget {
   const ComponentSize({Key? key, required this.size}) : super(key: key);
 
@@ -97,17 +115,33 @@ class ComponentSize extends StatelessWidget {
     List<String> sizeStringList = size.split(' ');
     return Container(
       child: OutlinedButton(
-        child: RichText(
-          text: TextSpan(
-              text: sizeStringList[1],
-              style: Theme.of(context).textTheme.subtitle1,
-              children: [
-                TextSpan(
-                    text: ' ${sizeStringList[0]}',
-                    style: Theme.of(context).textTheme.caption)
-              ]),
+        // child: ListTile(
+        //   title: Text(sizeStringList[1],
+        //         style: Theme.of(context).textTheme.subtitle1),
+        //   subtitle: Text(sizeStringList[0],
+        //         style: Theme.of(context).textTheme.caption),
+        // ),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Text(sizeStringList[1],
+                // style: Theme.of(context).textTheme.subtitle1
+            ),
+            Text(sizeStringList[0],
+                style: Theme.of(context).textTheme.caption),
+          ],
         ),
-        onPressed: () {},
+        // RichText(
+        //   text: TextSpan(
+        //       text: sizeStringList[1],
+        //       style: Theme.of(context).textTheme.subtitle1,
+        //       children: [
+        //         TextSpan(
+        //             text: ' ${sizeStringList[0]}',
+        //             style: Theme.of(context).textTheme.caption)
+        //       ]),
+        // ),
+        onPressed: () {},   // TODO: activate selection menu
       ),
     );
   }
@@ -124,18 +158,43 @@ class ComponentItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: OutlinedButton(
+        // child: ListTile(
+        //   title: Text(item,
+        //     // style: Theme.of(context).textTheme.subtitle1
+        //   ),
+        //   subtitle: Text(type, 
+        //       style: Theme.of(context).textTheme.caption
+        //   ),
+        //   trailing: RichText(
+        //         text: TextSpan(
+        //             text: '972',
+        //             style: Theme.of(context).textTheme.subtitle1,
+        //             children: [
+        //           TextSpan(
+        //               text: 'dps', style: Theme.of(context).textTheme.caption)
+        //         ])),
+        // ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.max,
           children: [
-            RichText(
-                text: TextSpan(
-                    text: item,
-                    style: Theme.of(context).textTheme.subtitle1,
-                    children: [
-                  TextSpan(
-                      text: type, style: Theme.of(context).textTheme.caption)
-                ])),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(item,
+                  style: Theme.of(context).textTheme.subtitle1),
+                Text(type, 
+                  style: Theme.of(context).textTheme.caption),
+              ],
+            ),
+                // RichText(
+                //     text: TextSpan(
+                //         text: item,
+                //         style: Theme.of(context).textTheme.subtitle1,
+                //         children: [
+                //       TextSpan(
+                //           text: type, style: Theme.of(context).textTheme.caption)
+                //     ])),
             RichText(
                 text: TextSpan(
                     text: '972',
@@ -161,7 +220,13 @@ Widget buildPower() {
 
 Widget buildCooler() {
   return Row(
-    children: [Icon(Icons.ac_unit_sharp, size: 16,), Text('34')],
+    children: [
+      Icon(
+        Icons.ac_unit_sharp,
+        size: 16,
+      ),
+      Text('34')
+    ],
   );
 }
 
@@ -171,7 +236,7 @@ Widget buildPowerAndCooler() {
   );
 }
 
-Widget buildPowerButton(BuildContext context) {
+Widget buildAdjustmentButtons() {
   return Row(
     children: [
       TextButton(onPressed: () {}, child: Text('Power')),

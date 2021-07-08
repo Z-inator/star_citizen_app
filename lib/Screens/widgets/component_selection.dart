@@ -26,7 +26,7 @@ class ComponentSelectionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(10.0),
+        padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 22.5),
         child: Column(
           children: [
             SizedBox(height: 25),
@@ -49,7 +49,34 @@ class ComponentSelectionList extends StatelessWidget {
                         )),
               ),
             ),
-            // Expanded(
+          ],
+        ));
+  }
+
+  List<Widget> buildComponentBlock() {
+    List<Widget> componentBlock = [];
+    weapons.forEach((element) {
+      componentBlock.add(
+          ComponentTable(
+            // componentItem: element, 
+            // componentSize: 'Gimbal S4',
+            sizeComponentRow: [
+              ComponentSize(size: 'Gimbal S4'),
+              ComponentItem(item: element, type: 'Ballistic Scattergun')
+            ],
+            powerCoolerRow: [
+              buildPowerAndCooler(),
+              buildAdjustmentButtons(),
+              buildPowerAndCooler()
+            ],
+          ));
+    });
+    return componentBlock;
+  }
+}
+
+
+ // Expanded(
             //   child: Material(
             //     clipBehavior: Clip.hardEdge,
             //     borderOnForeground: true,
@@ -83,21 +110,3 @@ class ComponentSelectionList extends StatelessWidget {
             //     ),
             //   ),
             // )
-          ],
-        ));
-  }
-
-  // List<Widget> buildColumn() {
-  //   List<Widget> column = [];
-
-  // }
-
-  List<Widget> buildComponentBlock() {
-    List<Widget> componentBlock = [];
-    weapons.forEach((element) {
-      componentBlock.add(
-          ComponentTable(componentItem: element, componentSize: 'Gimbal S4'));
-    });
-    return componentBlock;
-  }
-}
