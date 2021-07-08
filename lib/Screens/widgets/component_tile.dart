@@ -214,7 +214,10 @@ class ComponentItem extends StatelessWidget {
 
 Widget buildPower() {
   return Row(
-    children: [Icon(Icons.bolt_sharp, size: 16), Text('20')],
+    children: [
+      Icon(Icons.bolt_sharp, size: 16), 
+      Text('20')
+    ],
   );
 }
 
@@ -232,7 +235,16 @@ Widget buildCooler() {
 
 Widget buildPowerAndCooler() {
   return Row(
-    children: [buildPower(), buildCooler()],
+    children: [
+      Container(
+        padding: EdgeInsets.all(4.0),
+        child: buildPower()
+      ), 
+      Container(
+        padding: EdgeInsets.all(4.0),
+        child: buildCooler()
+      )
+    ],
   );
 }
 
