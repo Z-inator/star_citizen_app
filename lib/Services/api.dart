@@ -6,10 +6,10 @@ import 'package:http/http.dart' as http;
 
 Future<Ship> fetchShip() async {
   http.Response response = await http.get(
-    Uri.parse('api.starcitizen-api.com'),
-    headers: {
-      HttpHeaders.authorizationHeader: ''
-    }
+    Uri.parse('https://api.starcitizen-api.com/AXIkbpms1J3jJcesgsvqVI0mlA5BR0GW/v1/gamedata/get/3.6.1/ship?name=Avenger'),
+    // headers: {
+    //   HttpHeaders.authorizationHeader: 'AXIkbpms1J3jJcesgsvqVI0mlA5BR0GW'
+    // }
   );
   if (response.statusCode == 200) {
     return Ship.fromJson(jsonDecode(response.body));
@@ -25,7 +25,9 @@ class Ship {
   Ship({required this.shipID, required this.shipName});
 
   factory Ship.fromJson(Map<String, dynamic> json) {
-    return Ship(shipID: json['shipID'], shipName: json['shipName']);
+    return Ship(
+      shipID: json['data']['displayname'], 
+      shipName: json['data']['name']);
   }
 }
 
