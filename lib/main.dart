@@ -46,7 +46,7 @@ class _APITestState extends State<APITest> {
         body: Text(''),
         floatingActionButton: FloatingActionButton(
             child: Icon(Icons.ac_unit),
-            onPressed: () => fetchShip().then((ship) => log(ship.shipName))),
+            onPressed: () => getWeaponsFromJSON(context)),
       ),
     );
   }

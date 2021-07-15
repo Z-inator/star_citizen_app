@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'dart:html';
+
 class Weapon {
   final String name;
   final String description;
@@ -5,15 +9,15 @@ class Weapon {
   final int grade;
   final String manufacturer;
   final String type;
-  final double dps700;
-  final double dps300;
+  // final double dps700;
+  // final double dps300;
   final double alphaDamage; // TODO: ammunition[impactDamage; physical]
   // final double explosionRadius;
-  final double fireRate;
+  // final double fireRate;
   final double range;
   final double speed;
-  final int ammoCount;
-  final int pelletsPerShot;
+  final double ammoCount;
+  // final int pelletsPerShot;
   // final double dpsDropPerMeter;
   // final double dpsMin;
   // final double dpsDropStartDistance;
@@ -81,15 +85,15 @@ class Weapon {
     required this.size,
     required this.grade,
     required this.type,
-    required this.dps700,
-    required this.dps300,
+    // required this.dps700,
+    // required this.dps300,
     required this.alphaDamage,
     // required this.explosionRadius,
-    required this.fireRate,
+    // required this.fireRate,
     required this.range,
     required this.speed,
     required this.ammoCount,
-    required this.pelletsPerShot,
+    // required this.pelletsPerShot,
     // required this.dpsDropPerMeter,
     // required this.dpsMin,
     // required this.dpsDropStartDistance,
@@ -146,26 +150,77 @@ class Weapon {
   });
 
   factory Weapon.fromJson(Map<String, dynamic> json) {
+    // cannon
+    // repeater
+    // scattergun
+    // gatling
+    // pod
+    RegExp weaponTypes = RegExp(r'()');
+    String getWeaponType(String type) {
+      List<String> split = type.split('_');
+      if (split.contains('Cannon'))
+      switch (type) {
+        case :
+          return 'Plasma Cannon';
+        case 'LaserCannon':
+          return 'Laser Cannon';
+        case 'BallisticCannon':
+          return 'Ballistic Cannon';
+        case 'DistortionRepeater':
+          return 'Distortion Repeater';
+        case 'PlasmaCannon':
+          return 'Plasma Cannon';
+        case 'PlasmaCannon':
+          return 'Plasma Cannon';
+        case 'PlasmaCannon':
+          return 'Plasma Cannon';
+        case 'PlasmaCannon':
+          return 'Plasma Cannon';
+        case 'PlasmaCannon':
+          return 'Plasma Cannon';
+        case 'PlasmaCannon':
+          return 'Plasma Cannon';
+        case 'PlasmaCannon':
+          return 'Plasma Cannon';
+        case 'PlasmaCannon':
+          return 'Plasma Cannon';
+        case 'PlasmaCannon':
+          return 'Plasma Cannon';
+        default:
+      }
+    }
+
+    //92
+    Map<String, dynamic> stdItem = json['stdItem'];
+    // List<String> description =
+    //     (json['stdItem']['Description'] as String).split('\n');
+    Map<String, dynamic> ammunition = stdItem['Ammunition'];
+    Map<String, dynamic> powerConnection = stdItem['PowerConnection'];
+    Map<String, dynamic> heatConnection = stdItem['HeatConnection'];
+    Map<String, dynamic> durability = stdItem['Durability'];
+    String weaponType = getWeaponType(json['className']);
     return Weapon(
         name: json['stdItem']['Name'],
-        description: json['stdItem']['Descriptions'],
-        manufacturer: json['manufacturer'],
+        description: json['stdItem']['Description'],
+        manufacturer: json['stdItem']['Manufacturer']['Name'],
         size: json['size'],
         grade: json['grade'],
-        type: (json['tags'] as String).split(' ')[1],
-        dps700: json['stdItem']['Weapon']['Modes'][0]['DamagePerSecond']['Physical'],
-        dps300: json['stdItem']['Weapon']['Modes'][0]['DamagePerSecond']['Physical'],
-        alphaDamage: json['stdItem']['Weapon']['Ammunition']['ImpactDamage']['Physical'],
-        fireRate: json['stdItem']['Weapon']['Modes'][0]['RoundsPerMinute'],
-        range: json['stdItem']['Weapon']['Ammunition']['Speed'],
-        speed: json['stdItem']['Weapon']['Ammunition']['Range'],
-        ammoCount: json['stdItem']['Weapon']['Ammunition']['Capacity'],
-        pelletsPerShot: json['stdItem']['Weapon']['Modes'][0]['PelletsPerShot'],
-        powerBase: json['stdItem']['PowerConnection']['PowerBase'],
-        powerDraw: json['stdItem']['PowerConnection']['PowerDraw'],
-        maxCoolingRate: json['stdItem']['HeatConnection']['CoolingRate'],
-        thermalEnergyBase: json['stdItem']['HeatConnection']['ThermalEnergyBase'],
-        thermalEnergyDraw: json['stdItem']['HeatConnection']['ThermalEnergyDraw'],
-        health: json['stdItem']['Durability']['Health'],);
+        type: weaponType,
+        // dps700: json['stdItem']['Weapon']['Modes'][0]['DamagePerSecond']['Physical'],
+        // dps300: json['stdItem']['Weapon']['Modes'][0]['DamagePerSecond']['Physical'],
+        alphaDamage: json['stdItem']['Ammunition']['ImpactDamage'][0] ?? 0,
+        // fireRate: json['stdItem']['Weapon']['Modes'][0]['RoundsPerMinute'],
+        range: json['stdItem']['Ammunition']['Speed'] ?? 0,
+        speed: json['stdItem']['Ammunition']['Range'] ?? 0,
+        ammoCount: json['stdItem']['Ammunition']['Capacity'] ?? 0,
+        // pelletsPerShot: json['stdItem']['Weapon']['Modes'][0]['PelletsPerShot'],
+        powerBase: json['stdItem']['PowerConnection']['PowerBase'] ?? 0,
+        powerDraw: json['stdItem']['PowerConnection']['PowerDraw'] ?? 0,
+        maxCoolingRate: json['stdItem']['HeatConnection']['CoolingRate'] ?? 0,
+        thermalEnergyBase:
+            json['stdItem']['HeatConnection']['ThermalEnergyBase'] ?? 0,
+        thermalEnergyDraw:
+            json['stdItem']['HeatConnection']['ThermalEnergyDraw'] ?? 0,
+        health: durability['Health'] ?? 0);
   }
 }
