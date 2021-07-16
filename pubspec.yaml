@@ -31,8 +31,9 @@ dependencies:
 
   lint: ^1.5.3
 
-  # http Request Package
+  # Working with other documents
   http: ^0.13.3
+  xml: ^5.1.2
 
   # Provider for State management
   provider: ^5.0.0
