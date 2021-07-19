@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:html';
+// import 'dart:html';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -10,39 +10,54 @@ import 'package:star_citizen_app/Models/ship.dart';
 import 'package:star_citizen_app/Models/weapon.dart';
 import 'package:star_citizen_app/Screens/widgets/component_selection.dart';
 
-List<Weapon> getWeapons(List<dynamic> raw) {
-  List<dynamic> weaponRaw =
-      raw.where((element) => element['type'] == 'WeaponGun').toList();
-  log(weaponRaw.length.toString());
-  return weaponRaw.map((item) => Weapon.fromJson(item)).toList();
-}
+// List<Weapon> getWeapons(List<dynamic> raw) {
+//   List<dynamic> weaponRaw =
+//       raw.where((element) => element['type'] == 'WeaponGun').toList();
+//   log(weaponRaw.length.toString());
+//   return weaponRaw.map((item) => Weapon.fromJson(item)).toList();
+// }
 
 Future<List<Weapon>> getWeaponsFromJSON(BuildContext context) async {
-  int number = 0;
   String jsonString = await DefaultAssetBundle.of(context)
       .loadString('assets/data/ship-items.json');
   List<dynamic> raw = jsonDecode(jsonString);
-  List<dynamic> weaponRaw =
-      raw.where((element) => element['type'] == 'WeaponGun').toList();
-  List<dynamic> noHealth = [];
-  noHealth.addAll(weaponRaw.where((element) =>
-      (element['stdItem']['Description'] as String).split('\n').length < 4));
-  noHealth.forEach((element) {
-    log(element['reference'].toString());
-  });
-  List<Weapon> weapons =
-      weaponRaw.map((item) => Weapon.fromJson(item)).toList();
+  List<dynamic> weaponRaw = raw
+      .where((element) => element['classification'] == 'Ship.Weapon.Gun')
+      .toList();
+
+  List<Weapon> weapons = [];
+  Weapon? newWeapon;
+  for (var item in weaponRaw) {
+    try {
+      newWeapon = Weapon.fromJson(item);
+      weapons.add(newWeapon);
+    } catch (e) {
+      log(e.toString());
+      log(item['reference'].toString());
+    }
+  }
+  // weapons.forEach((Weapon weapon) {
+  //   log(weapon.type);
+  //   if (weapon.type == 'UNKNOWN') log(weapon.name);
+  // });
+  // List<dynamic> noHealth = [];
+  // noHealth.addAll(weaponRaw.where((element) =>
+  //     (element['stdItem']['Description'] as String).split('\n').length < 4));
+  // noHealth.forEach((element) {
+  //   log(element['reference'].toString());
+  // });
+  // List<Weapon> weapons =
+  //     weaponRaw.map((item) => Weapon.fromJson(item)).toList();
   return weapons;
 }
 
-Future<List<Weapon>> getWeaponsFromXML(BuildContext context) async {
-  String xmlString =
-      await DefaultAssetBundle.of(context).loadString('assets/data/game.xml');
-  var raw = xml.XmlDocument.parse(xmlString);
-  var elements = raw.findAllElements('EntityClassDefinition.${className}');
+// Future<List<Weapon>> getWeaponsFromXML(BuildContext context) async {
+//   String xmlString =
+//       await DefaultAssetBundle.of(context).loadString('assets/data/game.xml');
+//   var raw = xml.XmlDocument.parse(xmlString);
+//   var elements = raw.findAllElements('EntityClassDefinition.${className}');
 
-  
-}
+// }
 
 class ShipFuture extends StatefulWidget {
   ShipFuture({Key? key}) : super(key: key);
@@ -54,11 +69,11 @@ class ShipFuture extends StatefulWidget {
 class _ShipFutureState extends State<ShipFuture> {
   late Future<Ship> futureShip;
 
-  @override
-  void initState() {
-    futureShip = fetchShip();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   futureShip = fetchShip();
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {

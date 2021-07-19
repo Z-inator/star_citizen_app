@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'dart:html';
+// import 'dart:html';
 
 class Weapon {
   final String name;
@@ -155,52 +155,59 @@ class Weapon {
     // scattergun
     // gatling
     // pod
-    RegExp weaponTypes = RegExp(r'()');
     String getWeaponType(String type) {
-      List<String> split = type.split('_');
-      if (split.contains('Cannon'))
-      switch (type) {
-        case :
-          return 'Plasma Cannon';
-        case 'LaserCannon':
-          return 'Laser Cannon';
-        case 'BallisticCannon':
-          return 'Ballistic Cannon';
-        case 'DistortionRepeater':
-          return 'Distortion Repeater';
-        case 'PlasmaCannon':
-          return 'Plasma Cannon';
-        case 'PlasmaCannon':
-          return 'Plasma Cannon';
-        case 'PlasmaCannon':
-          return 'Plasma Cannon';
-        case 'PlasmaCannon':
-          return 'Plasma Cannon';
-        case 'PlasmaCannon':
-          return 'Plasma Cannon';
-        case 'PlasmaCannon':
-          return 'Plasma Cannon';
-        case 'PlasmaCannon':
-          return 'Plasma Cannon';
-        case 'PlasmaCannon':
-          return 'Plasma Cannon';
-        case 'PlasmaCannon':
-          return 'Plasma Cannon';
-        default:
-      }
+      // if (type.contains('Item Type')) {
+      //   int indexStart = type.indexOf('Item Type');
+      //   int? indexEnd;
+      //   for (var i = indexStart; i < type.length; i++) {
+      //     if (i == 'S') indexEnd = i - 2;
+      //   }
+      //   String weaponTypeString = type.substring(indexStart, indexEnd);
+      //   weaponTypeString.split(': ')[1];
+      // }
+      String? weaponType = weaponTypes[type];
+      return weaponType ?? '';
     }
 
-    //92
-    Map<String, dynamic> stdItem = json['stdItem'];
+    String getWeaponName(String name, String type) {
+      String weaponName = name;
+      List<String> typeString = type.split(' ');
+      // weaponName.replaceAll('Cannon', 'replace');
+      for (var item in typeString) {
+        weaponName = weaponName.replaceAll(item, ' ');
+      }
+      // RegExp typeOmit = RegExp(r'');
+      // weaponName.replaceAll(from, replace)
+      // if (type == 'Mass Driver Cannon' && name.contains(type)) {
+      //     int endIndex = name.indexOf(type) - 1;
+      //     weaponName = name.substring(0, endIndex);
+      // } else {
+      //   String baseType = type.split(' ')[1];
+      //   if (name.contains(baseType)) {
+      //     int endIndex = name.indexOf(baseType) - 1;
+      //     weaponName = name.substring(0, endIndex);
+      //   }
+      // }
+      weaponName = weaponName.trimRight().replaceAll('  ', ' ');
+      return weaponName;
+    }
+
     // List<String> description =
     //     (json['stdItem']['Description'] as String).split('\n');
-    Map<String, dynamic> ammunition = stdItem['Ammunition'];
-    Map<String, dynamic> powerConnection = stdItem['PowerConnection'];
-    Map<String, dynamic> heatConnection = stdItem['HeatConnection'];
-    Map<String, dynamic> durability = stdItem['Durability'];
-    String weaponType = getWeaponType(json['className']);
+    String weaponType;
+    if (json['classification'] == 'Ship.Weapon.Rocket') {
+      List<String> classType = json['className'].split('_');
+      weaponType = getWeaponType(classType[0]);
+    } else {
+      List<String> classType = json['className'].split('_');
+      weaponType = getWeaponType(classType[1]);
+    }
+    String weaponName = getWeaponName(json['stdItem']['Name'], weaponType);
+
+    if (weaponType == '') throw Exception('No Type');
+    if (weaponName == '') throw Exception('No Name');
     return Weapon(
-        name: json['stdItem']['Name'],
+        name: weaponName,
         description: json['stdItem']['Description'],
         manufacturer: json['stdItem']['Manufacturer']['Name'],
         size: json['size'],
@@ -221,6 +228,36 @@ class Weapon {
             json['stdItem']['HeatConnection']['ThermalEnergyBase'] ?? 0,
         thermalEnergyDraw:
             json['stdItem']['HeatConnection']['ThermalEnergyDraw'] ?? 0,
-        health: durability['Health'] ?? 0);
+        health: json['stdItem']['Durability']['Health'] ?? 0);
   }
 }
+
+Map<String, String> weaponTypes = {
+  'PlasmaCannon': 'Plasma Cannon',
+  'ScatterGun': 'Plasma Scattergun',
+  'BallisticCannon': 'Ballistic Cannon',
+  'BallisticGatling': 'Ballistic Gatling',
+  'BallisticRepeater': 'Ballistic Repeater',
+  'BallisticScatterGun': 'Ballistic Scattergun',
+  'LaserCannon': 'Laser Cannon',
+  'LaserRepeater': 'Laser Repeater',
+  'LaserScatterGun': 'Laser Scattergun',
+  'DistortionRepeater': 'Distortion Repeater',
+  'DistortionCannon': 'Distortion Cannon',
+  'DistortionScatterGun': 'Distortion Scattergun',
+  'NeutronRepeater': 'Neutron Repeater',
+  'NeutronCannon': 'Neutron Cannon',
+  'TachyonCannon': 'Tachyon Cannon',
+  'MassDriver': 'Mass Driver Cannon',
+  'JavelinBallisticCannon': 'Ballistic Cannon',
+  'RPOD': 'Rocket Pod',
+};
+
+List<String> baseTypes = [
+  'Cannon',
+  'Scattergun',
+  'Gatling',
+  'Repeater',
+  'Mass Driver Cannon',
+  'Rocket Pod'
+];

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:star_citizen_app/Models/weapon.dart';
 import 'package:star_citizen_app/Screens/backdrop.dart';
 import 'package:star_citizen_app/Services/api.dart';
 import 'package:star_citizen_app/constants.dart';
@@ -18,7 +19,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Flutter Demo', theme: buildAppTheme(), home: APITest()
-
         // Backdrop(
         //   frontLayer: StatsDashboard(),
         //   backLayer: ComponentSelectionList(),
@@ -39,14 +39,34 @@ class APITest extends StatefulWidget {
 }
 
 class _APITestState extends State<APITest> {
+  List<Weapon> weapons = [];
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Scaffold(
-        body: Text(''),
+        backgroundColor: kPrimaryNavy,
+        body: FutureBuilder(
+          initialData: weapons,
+          future: getWeaponsFromJSON(context),
+          builder: (context, AsyncSnapshot snapshot) {
+            weapons = snapshot.data;
+            return ListView.builder(
+            itemCount: weapons.length,
+            itemBuilder: (context, int index) {
+              return ListTile(
+                title: Text(weapons[index].name),
+                subtitle: Text(weapons[index].type),
+              );
+            });
+          }
+        ),
+        
         floatingActionButton: FloatingActionButton(
             child: Icon(Icons.ac_unit),
-            onPressed: () => getWeaponsFromJSON(context)),
+            onPressed: () {
+              setState(() {
+              });
+            }),
       ),
     );
   }
