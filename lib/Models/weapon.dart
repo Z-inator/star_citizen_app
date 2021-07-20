@@ -11,13 +11,14 @@ class Weapon {
   final String type;
   // final double dps700;
   // final double dps300;
-  final double alphaDamage; // TODO: ammunition[impactDamage; physical]
+  final Map<String, dynamic> alphaDamage; // TODO: ammunition[impactDamage; physical]
+  final Map<String, dynamic> dps;
   // final double explosionRadius;
-  // final double fireRate;
+  final double fireRate;
   final double range;
   final double speed;
   final double ammoCount;
-  // final int pelletsPerShot;
+  final double pelletsPerShot;
   // final double dpsDropPerMeter;
   // final double dpsMin;
   // final double dpsDropStartDistance;
@@ -88,12 +89,13 @@ class Weapon {
     // required this.dps700,
     // required this.dps300,
     required this.alphaDamage,
+    required this.dps,
     // required this.explosionRadius,
-    // required this.fireRate,
+    required this.fireRate,
     required this.range,
     required this.speed,
     required this.ammoCount,
-    // required this.pelletsPerShot,
+    required this.pelletsPerShot,
     // required this.dpsDropPerMeter,
     // required this.dpsMin,
     // required this.dpsDropStartDistance,
@@ -156,15 +158,6 @@ class Weapon {
     // gatling
     // pod
     String getWeaponType(String type) {
-      // if (type.contains('Item Type')) {
-      //   int indexStart = type.indexOf('Item Type');
-      //   int? indexEnd;
-      //   for (var i = indexStart; i < type.length; i++) {
-      //     if (i == 'S') indexEnd = i - 2;
-      //   }
-      //   String weaponTypeString = type.substring(indexStart, indexEnd);
-      //   weaponTypeString.split(': ')[1];
-      // }
       String? weaponType = weaponTypes[type];
       return weaponType ?? '';
     }
@@ -172,28 +165,13 @@ class Weapon {
     String getWeaponName(String name, String type) {
       String weaponName = name;
       List<String> typeString = type.split(' ');
-      // weaponName.replaceAll('Cannon', 'replace');
       for (var item in typeString) {
         weaponName = weaponName.replaceAll(item, ' ');
       }
-      // RegExp typeOmit = RegExp(r'');
-      // weaponName.replaceAll(from, replace)
-      // if (type == 'Mass Driver Cannon' && name.contains(type)) {
-      //     int endIndex = name.indexOf(type) - 1;
-      //     weaponName = name.substring(0, endIndex);
-      // } else {
-      //   String baseType = type.split(' ')[1];
-      //   if (name.contains(baseType)) {
-      //     int endIndex = name.indexOf(baseType) - 1;
-      //     weaponName = name.substring(0, endIndex);
-      //   }
-      // }
       weaponName = weaponName.trimRight().replaceAll('  ', ' ');
       return weaponName;
     }
 
-    // List<String> description =
-    //     (json['stdItem']['Description'] as String).split('\n');
     String weaponType;
     if (json['classification'] == 'Ship.Weapon.Rocket') {
       List<String> classType = json['className'].split('_');
@@ -206,6 +184,7 @@ class Weapon {
 
     if (weaponType == '') throw Exception('No Type');
     if (weaponName == '') throw Exception('No Name');
+
     return Weapon(
         name: weaponName,
         description: json['stdItem']['Description'],
@@ -215,15 +194,16 @@ class Weapon {
         type: weaponType,
         // dps700: json['stdItem']['Weapon']['Modes'][0]['DamagePerSecond']['Physical'],
         // dps300: json['stdItem']['Weapon']['Modes'][0]['DamagePerSecond']['Physical'],
-        alphaDamage: json['stdItem']['Ammunition']['ImpactDamage'][0] ?? 0,
-        // fireRate: json['stdItem']['Weapon']['Modes'][0]['RoundsPerMinute'],
-        range: json['stdItem']['Ammunition']['Speed'] ?? 0,
-        speed: json['stdItem']['Ammunition']['Range'] ?? 0,
-        ammoCount: json['stdItem']['Ammunition']['Capacity'] ?? 0,
-        // pelletsPerShot: json['stdItem']['Weapon']['Modes'][0]['PelletsPerShot'],
-        powerBase: json['stdItem']['PowerConnection']['PowerBase'] ?? 0,
-        powerDraw: json['stdItem']['PowerConnection']['PowerDraw'] ?? 0,
-        maxCoolingRate: json['stdItem']['HeatConnection']['CoolingRate'] ?? 0,
+        alphaDamage: json['stdItem']['Ammunition']['ImpactDamage'],
+        dps: json['stdItem']['Weapon']['Modes'][0]['DamagePerSecond'],
+        fireRate: json['stdItem']['Weapon']['Modes'][0]['RoundsPerMinute'],
+        range: json['stdItem']['Ammunition']['Range'] ?? 0.0,
+        speed: json['stdItem']['Ammunition']['Speed'] ?? 0.0,
+        ammoCount: json['stdItem']['Ammunition']['Capacity'] ?? 0.0,
+        pelletsPerShot: json['stdItem']['Weapon']['Modes'][0]['PelletsPerShot'] ?? 0.0,
+        powerBase: json['stdItem']['PowerConnection']['PowerBase'] ?? 0.0,
+        powerDraw: json['stdItem']['PowerConnection']['PowerDraw'] ?? 0.0,
+        maxCoolingRate: json['stdItem']['HeatConnection']['CoolingRate'] ?? 0.0,
         thermalEnergyBase:
             json['stdItem']['HeatConnection']['ThermalEnergyBase'] ?? 0,
         thermalEnergyDraw:

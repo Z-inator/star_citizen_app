@@ -22,7 +22,10 @@ Future<List<Weapon>> getWeaponsFromJSON(BuildContext context) async {
       .loadString('assets/data/ship-items.json');
   List<dynamic> raw = jsonDecode(jsonString);
   List<dynamic> weaponRaw = raw
-      .where((element) => element['classification'] == 'Ship.Weapon.Gun')
+      .where((element) =>
+          element['classification'] == 'Ship.Weapon.Gun' ||
+          element['classification'] == 'Ship.Weapon.NoseMounted' ||
+          element['classification'] == 'Ship.Weapon.Rocket')
       .toList();
 
   List<Weapon> weapons = [];

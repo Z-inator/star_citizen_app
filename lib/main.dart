@@ -54,8 +54,10 @@ class _APITestState extends State<APITest> {
             itemCount: weapons.length,
             itemBuilder: (context, int index) {
               return ListTile(
+                leading: Text(weapons[index].size.toString()),
                 title: Text(weapons[index].name),
                 subtitle: Text(weapons[index].type),
+                trailing: Text(weapons[index].thermalEnergyDraw.toString()),
               );
             });
           }
