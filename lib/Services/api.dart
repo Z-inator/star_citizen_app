@@ -17,6 +17,59 @@ import 'package:star_citizen_app/Screens/widgets/component_selection.dart';
 //   return weaponRaw.map((item) => Weapon.fromJson(item)).toList();
 // }
 
+// Future getShipFromShipFile(BuildContext context, String classPath) async {
+//   String fileString = 'D:/Zach\'s PC/Downloads/scunpacked-master/scunpacked-master/api/dist/json/v2/ships/${classPath}-parts.json';
+//   List<dynamic> raw = jsonDecode(fileString);
+//   List<dynamic> weapons = [];
+//   weapons.add(raw.where((element) => element['Parts'][1]['Parts'][]))
+// }
+
+Future<List<Ship>> getShipsFromJSON(BuildContext context) async {
+  String jsonString =
+      await DefaultAssetBundle.of(context).loadString('assets/data/ships.json');
+  List<dynamic> raw = jsonDecode(jsonString);
+  List<Ship> ships = [];
+  Ship? newShip;
+  for (var item in raw) {
+    try {
+      newShip = Ship.fromJson(item);
+      ships.add(newShip);
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+  List<String> classPath = [];
+
+  // raw.map((json) {
+  //   String className = json['ClassName'];
+
+  // })
+  // List<Ship> ships = [];
+  // Ship? newShip;
+  // for (var item in raw) {
+  //   try {
+  //     newShip = Ship.fromJson(item);
+  //     ships.add(newShip);
+  //   } catch (e) {
+  //     log(e.toString());
+  //     log(item['reference'].toString());
+  //   }
+  // }
+  // weapons.forEach((Weapon weapon) {
+  //   log(weapon.type);
+  //   if (weapon.type == 'UNKNOWN') log(weapon.name);
+  // });
+  // List<dynamic> noHealth = [];
+  // noHealth.addAll(weaponRaw.where((element) =>
+  //     (element['stdItem']['Description'] as String).split('/n').length < 4));
+  // noHealth.forEach((element) {
+  //   log(element['reference'].toString());
+  // });
+  // List<Weapon> weapons =
+  //     weaponRaw.map((item) => Weapon.fromJson(item)).toList();
+  return ships;
+}
+
 Future<List<Weapon>> getWeaponsFromJSON(BuildContext context) async {
   String jsonString = await DefaultAssetBundle.of(context)
       .loadString('assets/data/ship-items.json');
@@ -45,7 +98,7 @@ Future<List<Weapon>> getWeaponsFromJSON(BuildContext context) async {
   // });
   // List<dynamic> noHealth = [];
   // noHealth.addAll(weaponRaw.where((element) =>
-  //     (element['stdItem']['Description'] as String).split('\n').length < 4));
+  //     (element['stdItem']['Description'] as String).split('/n').length < 4));
   // noHealth.forEach((element) {
   //   log(element['reference'].toString());
   // });

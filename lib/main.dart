@@ -6,6 +6,7 @@ import 'package:star_citizen_app/Screens/backdrop.dart';
 import 'package:star_citizen_app/Services/api.dart';
 import 'package:star_citizen_app/constants.dart';
 
+import 'Models/ship.dart';
 import 'Screens/widgets/component_selection.dart';
 import 'Screens/widgets/stats_dashboard.dart';
 
@@ -39,7 +40,7 @@ class APITest extends StatefulWidget {
 }
 
 class _APITestState extends State<APITest> {
-  List<Weapon> weapons = [];
+  List<Ship> weapons = [];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -47,17 +48,17 @@ class _APITestState extends State<APITest> {
         backgroundColor: kPrimaryNavy,
         body: FutureBuilder(
           initialData: weapons,
-          future: getWeaponsFromJSON(context),
+          future: getShipsFromJSON(context),
           builder: (context, AsyncSnapshot snapshot) {
             weapons = snapshot.data;
             return ListView.builder(
             itemCount: weapons.length,
             itemBuilder: (context, int index) {
               return ListTile(
-                leading: Text(weapons[index].size.toString()),
+                leading: Text(weapons[index].career),
                 title: Text(weapons[index].name),
-                subtitle: Text(weapons[index].type),
-                trailing: Text(weapons[index].thermalEnergyDraw.toString()),
+                subtitle: Text(weapons[index].role),
+                trailing: Text(weapons[index].shipSize.toString()),
               );
             });
           }
