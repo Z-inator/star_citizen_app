@@ -3,6 +3,7 @@ import 'dart:developer';
 // import 'dart:html';
 
 class Weapon {
+  final String className;
   final String name;
   final String description;
   final int size;
@@ -11,7 +12,8 @@ class Weapon {
   final String type;
   // final double dps700;
   // final double dps300;
-  final Map<String, dynamic> alphaDamage; // TODO: ammunition[impactDamage; physical]
+  final Map<String, dynamic>
+      alphaDamage; // TODO: ammunition[impactDamage; physical]
   final Map<String, dynamic> dps;
   // final double explosionRadius;
   final double fireRate;
@@ -80,6 +82,7 @@ class Weapon {
   // final double basePrice;
 
   Weapon({
+    required this.className,
     required this.name,
     required this.description,
     required this.manufacturer,
@@ -186,6 +189,7 @@ class Weapon {
     if (weaponName == '') throw Exception('No Name');
 
     return Weapon(
+        className: json['className'],
         name: weaponName,
         description: json['stdItem']['Description'],
         manufacturer: json['stdItem']['Manufacturer']['Name'],
@@ -200,7 +204,8 @@ class Weapon {
         range: json['stdItem']['Ammunition']['Range'] ?? 0.0,
         speed: json['stdItem']['Ammunition']['Speed'] ?? 0.0,
         ammoCount: json['stdItem']['Ammunition']['Capacity'] ?? 0.0,
-        pelletsPerShot: json['stdItem']['Weapon']['Modes'][0]['PelletsPerShot'] ?? 0.0,
+        pelletsPerShot:
+            json['stdItem']['Weapon']['Modes'][0]['PelletsPerShot'] ?? 0.0,
         powerBase: json['stdItem']['PowerConnection']['PowerBase'] ?? 0.0,
         powerDraw: json['stdItem']['PowerConnection']['PowerDraw'] ?? 0.0,
         maxCoolingRate: json['stdItem']['HeatConnection']['CoolingRate'] ?? 0.0,
