@@ -3,10 +3,14 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:star_citizen_app/Models/weapon.dart';
 import 'package:star_citizen_app/Screens/backdrop.dart';
+import 'package:star_citizen_app/Screens/data_screen.dart';
 import 'package:star_citizen_app/Services/api.dart';
 import 'package:star_citizen_app/constants.dart';
+import 'package:star_citizen_app/routes.dart';
 
 import 'Models/ship.dart';
+import 'Screens/widgets/component_selection.dart';
+import 'Screens/widgets/stats_dashboard.dart';
 
 /// 
 /// TODO: ReGex for camelCase to be used later,
@@ -22,7 +26,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo', theme: buildAppTheme(), home: APITest()
+        title: 'Flutter Demo', 
+        theme: buildAppTheme(), 
+        // home: APITest(),
+        initialRoute: 'Calculator',
+        onGenerateRoute: generateRoutes
         // Backdrop(
         //   frontLayer: StatsDashboard(),
         //   backLayer: ComponentSelectionList(),
