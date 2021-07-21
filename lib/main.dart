@@ -7,8 +7,11 @@ import 'package:star_citizen_app/Services/api.dart';
 import 'package:star_citizen_app/constants.dart';
 
 import 'Models/ship.dart';
-import 'Screens/widgets/component_selection.dart';
-import 'Screens/widgets/stats_dashboard.dart';
+
+/// 
+/// TODO: ReGex for camelCase to be used later,
+/// Regex(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])
+/// eclipseRCPExt > eclipse/RCP/Ext
 
 void main() {
   runApp(MyApp());
