@@ -3,8 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:star_citizen_app/Services/providers/backdrop_provider.dart';
-import '../../constants.dart';
-import '../../main.dart';
+import '../../../constants.dart';
 
 Map<String, String> statItem = {
   'Weapons': '587 117',

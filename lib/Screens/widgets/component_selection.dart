@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:star_citizen_app/Screens/widgets/component_tile.dart';
 
-import '../../constants.dart';
+import '../../../constants.dart';
+import 'component_tile.dart';
 
 List<String> components = [
   'Weapons',

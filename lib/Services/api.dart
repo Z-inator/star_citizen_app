@@ -8,7 +8,6 @@ import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart' as xml;
 import 'package:star_citizen_app/Models/ship.dart';
 import 'package:star_citizen_app/Models/weapon.dart';
-import 'package:star_citizen_app/Screens/widgets/component_selection.dart';
 
 // List<Weapon> getWeapons(List<dynamic> raw) {
 //   List<dynamic> weaponRaw =
