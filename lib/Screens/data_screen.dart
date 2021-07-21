@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:star_citizen_app/Models/weapon.dart';
 import 'package:table_sticky_headers/table_sticky_headers.dart';
 
 class ComponentDataTable extends StatelessWidget {
-  final List<Weapon> componentItems;
+  final List<dynamic> componentItems;
   // final List<String> componentList;
   // final List<String> componentAttributes;
-  final List<String> componentData;
+  // final List<String> componentData;
   ComponentDataTable(
       {Key? key,
       // required this.componentList,
       // required this.componentAttributes,
-      required this.componentData,
+      // required this.componentData,
       required this.componentItems})
       : super(key: key);
 
