@@ -4,9 +4,9 @@ import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'cooler.g.dart';
+// part 'cooler.g.dart';
 
-@JsonSerializable()
+// @JsonSerializable()
 class Cooler {
   final String name;
   final String manufacturer;

@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'ships.g.dart';
+// part 'ships.g.dart';
 
-@JsonSerializable()
+// @JsonSerializable()
 class TestShip {
   final String className;
   final String name;

@@ -3,9 +3,9 @@ import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'shield.g.dart';
+// part 'shield.g.dart';
 
-@JsonSerializable()
+// @JsonSerializable()
 class Shield {
   final String name;
   final String manufacturer;

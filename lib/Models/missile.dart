@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:collection/collection.dart';
 
-part 'missile.g.dart';
+// part 'missile.g.dart';
 
-@JsonSerializable()
+// @JsonSerializable()
 class Missile {
   final String name;
   final String manufacturere;
