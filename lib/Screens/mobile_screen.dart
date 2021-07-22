@@ -1,45 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:star_citizen_app/Screens/data_screen.dart';
+import 'package:star_citizen_app/Screens/widgets/component_selection.dart';
+import 'package:star_citizen_app/Screens/widgets/stats_dashboard.dart';
+import 'package:star_citizen_app/Services/providers/backdrop_provider.dart';
+import 'package:star_citizen_app/Services/providers/content_provider.dart';
 
 import '../constants.dart';
+import 'backdrop.dart';
 
-class MobileFrameWork extends StatefulWidget {
-  Widget body;
-  Widget title;
+class MobileFramework extends StatelessWidget {
+  MobileFramework({Key? key}) : super(key: key);
 
-  MobileFrameWork({Key? key, required this.title, required this.body})
-      : super(key: key);
-
-  @override
-  _MobileFrameWorkState createState() => _MobileFrameWorkState();
-}
-
-class _MobileFrameWorkState extends State<MobileFrameWork> {
-  String currentPage = 'Calculator';
-  final List<String> drawerList = [
-    'Calculator',
-    'Cart',
-    'Hangar',
-    '',
-    'Ships&Vehicles',
-    'Weapons',
-    'Missiles',
-    'Shields',
-    'Power Plants',
-    'Coolers',
-    'Quantum Drives',
-    'EMPs',
-    'QEDs',
-    'Mining Lasers',
-    '',
-    'Account',
-    'Spread Love',
-    'About',
-  ];
+  Icon icon = Icon(Icons.data_usage_sharp);
 
   Drawer buildDrawer(BuildContext context) {
+    ContentProvider contentProvider = Provider.of<ContentProvider>(context);
     ThemeData themeData = Theme.of(context);
-    bool ptuLive = true;
-    Icon icon = Icon(Icons.data_usage_sharp);
     return Drawer(
         child: Column(mainAxisSize: MainAxisSize.max, children: [
       DrawerHeader(
@@ -68,57 +46,66 @@ class _MobileFrameWorkState extends State<MobileFrameWork> {
               ),
               SwitchListTile(
                   title: Text('3.13.1-LIVE.7491200'),
-                  value: ptuLive,
+                  value: contentProvider.ptuLive,
                   activeColor: themeData.colorScheme.secondary,
                   activeTrackColor:
                       themeData.colorScheme.secondary.withOpacity(0.5),
-                  onChanged: (bool value) {
-                    setState(() {
-                      ptuLive = value;
-                    });
-                  })
+                  onChanged: (bool value) =>
+                      contentProvider.changePTULive(value))
             ],
           )),
-      Expanded(
-        child: ListView.builder(
-          itemCount: drawerList.length,
-          itemBuilder: (BuildContext context, int index) {
-            String routeName = '/${drawerList[index]}';
-            if (index == 3 || index == 14) {
-              return Divider(color: kGreyOnSurface, thickness: 2.0);
-            } else {
-              return ListTile(
-                  leading: icon,
-                  title: Text(drawerList[index]),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.pushReplacementNamed(context, routeName);
-                  });
-            }
-          },
-        ),
-      )
+      Expanded(child: buildMenu(context))
     ]));
   }
 
-  PreferredSizeWidget buildAppBar(Widget title) {
-    return AppBar(
-      title: title,
-    );
+  Widget buildMenu(BuildContext context) {
+    ContentProvider contentState = Provider.of<ContentProvider>(context);
+    return ListView.builder(
+        itemCount: contentState.drawerList.length,
+        itemBuilder: (BuildContext context, int index) {
+          // String routeName = '/${drawerList[index]}';
+          if (index == 3 || index == 14) {
+            return Divider(color: kGreyOnSurface, thickness: 2.0);
+          } else {
+            return ListTile(
+                selected: index == contentState.currentPage,
+                selectedTileColor: kPrimaryNavyVariant,
+                leading: icon,
+                title: Text(contentState.drawerList[index]),
+                onTap: () {
+                  contentState.changePage(index);
+                });
+          }
+        });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).colorScheme.background,
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.background,
-          appBar: buildAppBar(widget.title),
-          body: widget.body,
-          endDrawer: buildDrawer(context),
-        ),
-      ),
-    );
+    return ChangeNotifierProvider(
+        create: (context) => ContentProvider(),
+        builder: (context, child) {
+          ContentProvider contentState = Provider.of<ContentProvider>(context);
+          List<TestData> testData = [];
+          for (var item in contentState.content['Weapons']!) {
+            testData.add(TestData.fromJson(item));
+          }
+
+          return SafeArea(
+            child: Scaffold(
+              backgroundColor: Theme.of(context).colorScheme.background,
+              // appBar: buildAppBar(context),
+              body: ComponentDataTable(
+                      componentItems: testData),
+              // contentState.pageName == 'Calculator'
+              //     ? Backdrop(
+              //         frontLayer: StatsDashboard(),
+              //         backLayer: ComponentSelectionList())
+              //     : ComponentDataTable(
+              //         componentItems:
+              //             contentState.content[contentState.currentPage]!),
+              endDrawer: buildDrawer(context),
+            ),
+          );
+        });
   }
 }

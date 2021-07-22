@@ -96,14 +96,15 @@ class Backdrop extends StatefulWidget {
       {Key? key,
       required this.frontLayer,
       required this.backLayer,
-      required this.frontTitle,
-      required this.backTitle})
+      // required this.frontTitle,
+      // required this.backTitle
+      })
       : super(key: key);
 
   final Widget frontLayer;
   final Widget backLayer;
-  final String frontTitle;
-  final String backTitle;
+  // final String frontTitle;
+  // final String backTitle;
 
   @override
   _BackdropState createState() => _BackdropState();
@@ -127,11 +128,11 @@ class _BackdropState extends State<Backdrop>
     super.dispose();
   }
 
-  bool get frontLayerVisible {
-    final AnimationStatus status = controller.status;
-    return status == AnimationStatus.completed ||
-        status == AnimationStatus.forward;
-  }
+  // bool get frontLayerVisible {
+  //   final AnimationStatus status = controller.status;
+  //   return status == AnimationStatus.completed ||
+  //       status == AnimationStatus.forward;
+  // }
 
   // void toggleBackdropLayerVisibility() async {
   //   await controller.fling(
@@ -143,8 +144,6 @@ class _BackdropState extends State<Backdrop>
     double layerTileHeight = 45.0;
     final Size layerSize = constraints.biggest;
     final double layerTop = layerSize.height - layerTileHeight;
-    print(layerTop.toString());
-    print(layerSize.height.toString());
 
     Animation<RelativeRect> layerAnimation = RelativeRectTween(
             begin: RelativeRect.fromLTRB(layerSize.width * 0.75, layerTop, 0.0,
@@ -194,8 +193,8 @@ class _BackdropState extends State<Backdrop>
       title: BackdropTitle(
         listenable: controller.view,
         onPress: backDropProvider.toggleBackdropLayerVisibility,
-        frontTitle: widget.frontTitle,
-        backTitle: widget.backTitle,
+        frontTitle: 'Calculator',
+        backTitle: 'Build',
       ),
     );
   }
@@ -206,31 +205,13 @@ class _BackdropState extends State<Backdrop>
         create: (context) =>
             BackdropProvider(controller: controller, velocity: kFlingVelocity),
         builder: (context, child) {
-          BackdropProvider backDropProvider =
-              Provider.of<BackdropProvider>(context, listen: false);
-          return MobileFrameWork(
-            title: BackdropTitle(
-                listenable: controller.view,
-                onPress: backDropProvider.toggleBackdropLayerVisibility,
-                frontTitle: widget.frontTitle,
-                backTitle: widget.backTitle,
-              ),
-            // buildCalculatorAppBar(context),
-            body: LayoutBuilder(builder: buildStack),
+          return Scaffold(
+            backgroundColor: Theme.of(context).colorScheme.background,
+            appBar: buildCalculatorAppBar(context),
+            body: LayoutBuilder(
+              builder: buildStack,
+            ),
           );
-          // Container(
-          //   color: Theme.of(context).colorScheme.background,
-          //   child: SafeArea(
-          //     child: Scaffold(
-          //       backgroundColor: Theme.of(context).colorScheme.background,
-          //       appBar: buildCalculatorAppBar(context),
-          //       body: LayoutBuilder(
-          //         builder: buildStack,
-          //       ),
-          //       endDrawer: buildDrawer(context),
-          //     ),
-          //   ),
-          // );
         });
   }
 }
