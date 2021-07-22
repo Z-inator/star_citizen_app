@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:star_citizen_app/Models/weapon.dart';
 import 'package:star_citizen_app/Screens/backdrop.dart';
 import 'package:star_citizen_app/Screens/data_screen.dart';
+import 'package:star_citizen_app/Screens/mobile_screen.dart';
 import 'package:star_citizen_app/Services/api.dart';
 import 'package:star_citizen_app/constants.dart';
 import 'package:star_citizen_app/routes.dart';
@@ -21,16 +22,37 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   // This widget is the root of your application.
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  PageRouterDelegate _routerDelegate = PageRouterDelegate();
+
+  PageRouteInformationParser _routeInformationParser = PageRouteInformationParser();
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return  MaterialApp(
         title: 'Flutter Demo', 
         theme: buildAppTheme(), 
-        // home: APITest(),
-        initialRoute: 'Calculator',
-        onGenerateRoute: generateRoutes
+        home: MobileFramework()
+    );
+
+    // TODO: use this for webpage
+    // MaterialApp.router(
+    //   title: 'Flutter Demo',
+    //   theme: buildAppTheme(),
+    //   routeInformationParser: _routeInformationParser, 
+    //   routerDelegate: _routerDelegate
+      
+    //
+        // APITest(),
+        // initialRoute: 'Calculator',
+        // onGenerateRoute: generateRoutes
         // Backdrop(
         //   frontLayer: StatsDashboard(),
         //   backLayer: ComponentSelectionList(),
@@ -39,7 +61,7 @@ class MyApp extends StatelessWidget {
         //   backTitle:
         //       Text('BUILD', style: Theme.of(context).primaryTextTheme.headline6),
         // ),
-        );
+        // );
   }
 }
 
