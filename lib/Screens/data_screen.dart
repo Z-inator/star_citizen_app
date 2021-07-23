@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:star_citizen_app/Screens/widgets/data_table/data_tables.dart';
 import 'package:star_citizen_app/Services/providers/content_provider.dart';
-import 'package:table_sticky_headers/table_sticky_headers.dart';
+
 
 class ComponentDataTable extends StatelessWidget {
   final List<dynamic> componentItems;
@@ -21,8 +22,8 @@ class ComponentDataTable extends StatelessWidget {
 
   List<String> buildColumn() {
     List<String> column = [];
-    componentItems.map((weapon) {
-      column.add(weapon.name);
+    componentItems.map((item) {
+      column.add(item.name);
     });
     return column;
   }
@@ -49,6 +50,25 @@ class ComponentDataTable extends StatelessWidget {
     return output;
   }
 
+  int columns = 10;
+  int rows = 20;
+
+  List<List<String>> makeData() {
+    final List<List<String>> output = [];
+    for (int i = 0; i < columns; i++) {
+      final List<String> row = [];
+      for (int j = 0; j < rows; j++) {
+        row.add('L$j : T$i');
+      }
+      output.add(row);
+    }
+    return output;
+  }
+
+  List<String> makeTitleColumn() => List.generate(columns, (i) => 'Top $i');
+
+  List<String> makeTitleRow() => List.generate(rows, (i) => 'Left $i');
+
   PreferredSizeWidget buildAppBar(BuildContext context) {
     ContentProvider contentState = Provider.of<ContentProvider>(context);
     return AppBar(title: Text(contentState.pageName));
@@ -56,19 +76,18 @@ class ComponentDataTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    componentList = buildColumn();
-    componentAttributes = buildRow();
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: buildAppBar(context),
-      body: StickyHeadersTable(
+    componentList = makeTitleColumn();
+    componentAttributes = makeTitleRow();
+    List<List<String>> data = makeData();
+    return Center(
+      child: StickyHeadersTable(
           columnsLength: componentList.length,
           rowsLength: componentAttributes.length,
           columnsTitleBuilder: (i) => Text(componentList[i]),
           rowsTitleBuilder: (i) => Text(componentAttributes[i]),
-          contentCellBuilder: (i, j) => Text(
-              buildData(componentList.length, componentAttributes.length)[i]
-                  [j])),
+          contentCellBuilder: (i, j) => Text(data[i][j]),
+          legendCell: Text('sticky'),
+      ),
     );
   }
 }
