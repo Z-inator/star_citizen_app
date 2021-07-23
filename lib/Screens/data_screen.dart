@@ -23,19 +23,17 @@ class ComponentDataTable extends StatelessWidget {
   }
 
   List<String> buildTitleColumns() {
-    List<String> columns = [];
     var tempItem = componentItems[0];
     Map<String, dynamic> itemMap = tempItem.toMap();
-    List attributeList = itemMap.keys.toList();
+    List<String> attributeList = itemMap.keys.toList();
     attributeList.remove('name');
     RegExp regExp = RegExp(
         '(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[0-9])(?=[A-Z][a-z])|(?<=[a-zA-Z])(?=[0-9])');
-    List attributeListFormatted = [];
+    List<String> attributeListFormatted = [];
     for (String attribute in attributeList) {
-      String newString = attribute.split(regExp).join();
+      attributeListFormatted.add(attribute.split(regExp).join(' '));
     }
-    columns.addAll(itemMap.keys);
-    return columns;
+    return attributeListFormatted;
   }
 
   List<List<String>> buildData() {
