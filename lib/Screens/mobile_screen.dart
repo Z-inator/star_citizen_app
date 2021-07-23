@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +19,8 @@ class MobileFramework extends StatefulWidget {
   _MobileFrameworkState createState() => _MobileFrameworkState();
 }
 
-class _MobileFrameworkState extends State<MobileFramework> with SingleTickerProviderStateMixin {
+class _MobileFrameworkState extends State<MobileFramework>
+    with SingleTickerProviderStateMixin {
   late AnimationController controller;
 
   @override
@@ -36,7 +39,8 @@ class _MobileFrameworkState extends State<MobileFramework> with SingleTickerProv
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => ContentProvider(controller: controller, velocity: kFlingVelocity),
+        create: (context) =>
+            ContentProvider(controller: controller, velocity: kFlingVelocity),
         builder: (context, child) {
           ContentProvider contentState = Provider.of<ContentProvider>(context);
           List<TestData> testData = [];
@@ -48,25 +52,27 @@ class _MobileFrameworkState extends State<MobileFramework> with SingleTickerProv
               backgroundColor: Theme.of(context).colorScheme.background,
               appBar: AppBar(
                 title: contentState.pageName == 'Calculator'
-                  ? BackdropTitle(onPress: contentState.toggleBackdropLayerVisibility, frontTitle: 'Calculator', backTitle: 'Build', listenable: controller.view)
-                  : Row(
-                    children: [
-                      SizedBox(
-                        width: 72.0,
-                        child: Icon(Icons.data_usage_sharp),
+                    ? BackdropTitle(
+                        onPress: contentState.toggleBackdropLayerVisibility,
+                        frontTitle: 'Calculator',
+                        backTitle: 'Build',
+                        listenable: controller.view)
+                    : Row(
+                        children: [
+                          SizedBox(
+                            width: 72.0,
+                            child: Icon(Icons.data_usage_sharp),
+                          ),
+                          Text(contentState.pageName)
+                        ],
                       ),
-                      Text(contentState.pageName)
-                    ],
-                  ),
               ),
-              body: 
-              // ComponentDataTable(
-              //         componentItems: testData),
-              contentState.pageName == 'Calculator'
-                  ? NewBackdrop()
-                  : ComponentDataTable(
-                      componentItems:
-                          testData),
+              body:
+                  // ComponentDataTable(
+                  //         componentItems: testData),
+                  contentState.pageName == 'Calculator'
+                      ? NewBackdrop()
+                      : ComponentDataTable(componentItems: testData),
               endDrawer: NavigationDrawer(),
             ),
           );
@@ -82,29 +88,27 @@ class NavigationDrawer extends StatefulWidget {
 }
 
 class _NavigationDrawerState extends State<NavigationDrawer> {
-
-
   Widget buildMenu(BuildContext context) {
-      ContentProvider contentState = Provider.of<ContentProvider>(context);
-      return ListView.builder(
-          itemCount: contentState.drawerList.length,
-          itemBuilder: (BuildContext context, int index) {
-            // String routeName = '/${drawerList[index]}';
-            if (index == 3 || index == 14) {
-              return Divider(color: kGreyOnSurface, thickness: 2.0);
-            } else {
-              return ListTile(
-                  selected: index == contentState.currentPage,
-                  selectedTileColor: kPrimaryNavyVariant,
-                  leading: Icon(Icons.data_usage_sharp),
-                  title: Text(contentState.drawerList[index]),
-                  onTap: () {
-                    contentState.changePage(index);
-                  });
-            }
-          });
-    }
-
+    ContentProvider contentState = Provider.of<ContentProvider>(context);
+    return ListView.builder(
+        itemCount: contentState.drawerList.length,
+        itemBuilder: (BuildContext context, int index) {
+          // String routeName = '/${drawerList[index]}';
+          if (index == 3 || index == 14) {
+            return Divider(color: kGreyOnSurface, thickness: 2.0);
+          } else {
+            return ListTile(
+                selected: index == contentState.currentPage,
+                selectedTileColor: kPrimaryNavyVariant,
+                leading: Icon(Icons.data_usage_sharp),
+                title: Text(contentState.drawerList[index]),
+                onTap: () {
+                  Navigator.pop(context);
+                  contentState.changePage(index);
+                });
+          }
+        });
+  }
 
   @override
   Widget build(BuildContext context) {

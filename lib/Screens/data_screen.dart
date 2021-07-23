@@ -1,8 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:star_citizen_app/Screens/widgets/data_table/data_tables.dart';
 import 'package:star_citizen_app/Services/providers/content_provider.dart';
-
 
 class ComponentDataTable extends StatelessWidget {
   final List<dynamic> componentItems;
@@ -20,38 +21,38 @@ class ComponentDataTable extends StatelessWidget {
   late List<String> componentList;
   late List<String> componentAttributes;
 
-  List<String> buildColumn() {
-    List<String> column = [];
-    componentItems.map((item) {
-      column.add(item.name);
+  List<String> buildTitleRows() {
+    List<String> rows = [];
+    componentItems.forEach((element) {
+      rows.add(element.name);
     });
-    return column;
+    return rows;
   }
 
-  List<String> buildRow() {
-    List<String> row = [];
+  List<String> buildTitleColumns() {
+    List<String> columns = [];
     var tempItem = componentItems[0];
-    Map<String, dynamic> jsonMap = tempItem.toMap();
-    row.addAll(jsonMap.keys);
-    return row;
+    Map<String, dynamic> itemMap = tempItem.toMap();
+    columns.addAll(itemMap.keys);
+    return columns;
   }
 
-  List<List<String>> buildData(int numberOfColumns, int numberOfRows) {
+  List<List<String>> buildData() {
     List<List<String>> output = [];
-    for (int i = 0; i < numberOfColumns; i++) {
-      List<String> row = [];
-      Map<String, dynamic> tempItem = componentItems[i].toMap();
-      List<dynamic> tempAttributes = tempItem.values.toList();
-      for (int j = 0; j < numberOfRows; j++) {
-        row.add(tempAttributes[j]);
+    for (int i = 0; i < componentAttributes.length; i++) {
+      List<String> rowsPerColumn = [];
+      // for all componentlist items for "name"
+      for (int j = 0; j < componentList.length; j++) {
+        Map tempComponent = componentItems[j].toMap();
+        rowsPerColumn.add(tempComponent[componentAttributes[i]]);
       }
-      output.add(row);
+      output.add(rowsPerColumn);
     }
     return output;
   }
 
-  int columns = 10;
-  int rows = 20;
+  final columns = 10;
+  final rows = 20;
 
   List<List<String>> makeData() {
     final List<List<String>> output = [];
@@ -65,28 +66,30 @@ class ComponentDataTable extends StatelessWidget {
     return output;
   }
 
+  /// Simple generator for column title
   List<String> makeTitleColumn() => List.generate(columns, (i) => 'Top $i');
 
+  /// Simple generator for row title
   List<String> makeTitleRow() => List.generate(rows, (i) => 'Left $i');
-
-  PreferredSizeWidget buildAppBar(BuildContext context) {
-    ContentProvider contentState = Provider.of<ContentProvider>(context);
-    return AppBar(title: Text(contentState.pageName));
-  }
 
   @override
   Widget build(BuildContext context) {
-    componentList = makeTitleColumn();
-    componentAttributes = makeTitleRow();
-    List<List<String>> data = makeData();
+    componentList = buildTitleRows();
+    componentAttributes = buildTitleColumns();
+    log('${componentList} - ${componentAttributes}');
+    List<List<String>> data = buildData();
+    
+    // componentList = makeTitleColumn();
+    // componentAttributes = makeTitleRow();
+    // List<List<String>> data = makeData();
     return Center(
       child: StickyHeadersTable(
-          columnsLength: componentList.length,
-          rowsLength: componentAttributes.length,
-          columnsTitleBuilder: (i) => Text(componentList[i]),
-          rowsTitleBuilder: (i) => Text(componentAttributes[i]),
-          contentCellBuilder: (i, j) => Text(data[i][j]),
-          legendCell: Text('sticky'),
+        columnsLength: componentAttributes.length,
+        rowsLength: componentList.length,
+        columnsTitleBuilder: (i) => Text(componentAttributes[i]),
+        rowsTitleBuilder: (i) => Text(componentList[i]),
+        contentCellBuilder: (i, j) => Text(data[i][j]),
+        legendCell: Text('sticky'),
       ),
     );
   }
