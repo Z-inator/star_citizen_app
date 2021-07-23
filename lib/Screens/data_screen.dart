@@ -7,15 +7,8 @@ import 'package:star_citizen_app/Services/providers/content_provider.dart';
 
 class ComponentDataTable extends StatelessWidget {
   final List<dynamic> componentItems;
-  // final List<String> componentList;
-  // final List<String> componentAttributes;
-  // final List<String> componentData;
-  ComponentDataTable(
-      {Key? key,
-      // required this.componentList,
-      // required this.componentAttributes,
-      // required this.componentData,
-      required this.componentItems})
+
+  ComponentDataTable({Key? key, required this.componentItems})
       : super(key: key);
 
   late List<String> componentList;
@@ -33,6 +26,14 @@ class ComponentDataTable extends StatelessWidget {
     List<String> columns = [];
     var tempItem = componentItems[0];
     Map<String, dynamic> itemMap = tempItem.toMap();
+    List attributeList = itemMap.keys.toList();
+    attributeList.remove('name');
+    RegExp regExp = RegExp(
+        '(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[0-9])(?=[A-Z][a-z])|(?<=[a-zA-Z])(?=[0-9])');
+    List attributeListFormatted = [];
+    for (String attribute in attributeList) {
+      String newString = attribute.split(regExp).join();
+    }
     columns.addAll(itemMap.keys);
     return columns;
   }
@@ -51,37 +52,11 @@ class ComponentDataTable extends StatelessWidget {
     return output;
   }
 
-  final columns = 10;
-  final rows = 20;
-
-  List<List<String>> makeData() {
-    final List<List<String>> output = [];
-    for (int i = 0; i < columns; i++) {
-      final List<String> row = [];
-      for (int j = 0; j < rows; j++) {
-        row.add('L$j : T$i');
-      }
-      output.add(row);
-    }
-    return output;
-  }
-
-  /// Simple generator for column title
-  List<String> makeTitleColumn() => List.generate(columns, (i) => 'Top $i');
-
-  /// Simple generator for row title
-  List<String> makeTitleRow() => List.generate(rows, (i) => 'Left $i');
-
   @override
   Widget build(BuildContext context) {
     componentList = buildTitleRows();
     componentAttributes = buildTitleColumns();
-    log('${componentList} - ${componentAttributes}');
     List<List<String>> data = buildData();
-    
-    // componentList = makeTitleColumn();
-    // componentAttributes = makeTitleRow();
-    // List<List<String>> data = makeData();
     return Center(
       child: StickyHeadersTable(
         columnsLength: componentAttributes.length,
