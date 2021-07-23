@@ -10,12 +10,104 @@ import 'package:star_citizen_app/Services/providers/content_provider.dart';
 import '../constants.dart';
 import 'backdrop.dart';
 
-class MobileFramework extends StatelessWidget {
+class MobileFramework extends StatefulWidget {
   MobileFramework({Key? key}) : super(key: key);
 
-  Icon icon = Icon(Icons.data_usage_sharp);
+  @override
+  _MobileFrameworkState createState() => _MobileFrameworkState();
+}
 
-  Drawer buildDrawer(BuildContext context) {
+class _MobileFrameworkState extends State<MobileFramework> with SingleTickerProviderStateMixin {
+  late AnimationController controller;
+
+  @override
+  void initState() {
+    controller = AnimationController(
+        duration: Duration(milliseconds: 300), value: 1.0, vsync: this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+        create: (context) => ContentProvider(controller: controller, velocity: kFlingVelocity),
+        builder: (context, child) {
+          ContentProvider contentState = Provider.of<ContentProvider>(context);
+          List<TestData> testData = [];
+          for (var item in contentState.content['Weapons']!) {
+            testData.add(TestData.fromJson(item));
+          }
+          return SafeArea(
+            child: Scaffold(
+              backgroundColor: Theme.of(context).colorScheme.background,
+              appBar: AppBar(
+                title: contentState.pageName == 'Calculator'
+                  ? BackdropTitle(onPress: contentState.toggleBackdropLayerVisibility, frontTitle: 'Calculator', backTitle: 'Build', listenable: controller.view)
+                  : Row(
+                    children: [
+                      SizedBox(
+                        width: 72.0,
+                        child: Icon(Icons.data_usage_sharp),
+                      ),
+                      Text(contentState.pageName)
+                    ],
+                  ),
+              ),
+              body: 
+              // ComponentDataTable(
+              //         componentItems: testData),
+              contentState.pageName == 'Calculator'
+                  ? NewBackdrop()
+                  : ComponentDataTable(
+                      componentItems:
+                          testData),
+              endDrawer: NavigationDrawer(),
+            ),
+          );
+        });
+  }
+}
+
+class NavigationDrawer extends StatefulWidget {
+  NavigationDrawer({Key? key}) : super(key: key);
+
+  @override
+  _NavigationDrawerState createState() => _NavigationDrawerState();
+}
+
+class _NavigationDrawerState extends State<NavigationDrawer> {
+
+
+  Widget buildMenu(BuildContext context) {
+      ContentProvider contentState = Provider.of<ContentProvider>(context);
+      return ListView.builder(
+          itemCount: contentState.drawerList.length,
+          itemBuilder: (BuildContext context, int index) {
+            // String routeName = '/${drawerList[index]}';
+            if (index == 3 || index == 14) {
+              return Divider(color: kGreyOnSurface, thickness: 2.0);
+            } else {
+              return ListTile(
+                  selected: index == contentState.currentPage,
+                  selectedTileColor: kPrimaryNavyVariant,
+                  leading: Icon(Icons.data_usage_sharp),
+                  title: Text(contentState.drawerList[index]),
+                  onTap: () {
+                    contentState.changePage(index);
+                  });
+            }
+          });
+    }
+
+
+  @override
+  Widget build(BuildContext context) {
     ContentProvider contentProvider = Provider.of<ContentProvider>(context);
     ThemeData themeData = Theme.of(context);
     return Drawer(
@@ -56,56 +148,5 @@ class MobileFramework extends StatelessWidget {
           )),
       Expanded(child: buildMenu(context))
     ]));
-  }
-
-  Widget buildMenu(BuildContext context) {
-    ContentProvider contentState = Provider.of<ContentProvider>(context);
-    return ListView.builder(
-        itemCount: contentState.drawerList.length,
-        itemBuilder: (BuildContext context, int index) {
-          // String routeName = '/${drawerList[index]}';
-          if (index == 3 || index == 14) {
-            return Divider(color: kGreyOnSurface, thickness: 2.0);
-          } else {
-            return ListTile(
-                selected: index == contentState.currentPage,
-                selectedTileColor: kPrimaryNavyVariant,
-                leading: icon,
-                title: Text(contentState.drawerList[index]),
-                onTap: () {
-                  contentState.changePage(index);
-                });
-          }
-        });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-        create: (context) => ContentProvider(),
-        builder: (context, child) {
-          ContentProvider contentState = Provider.of<ContentProvider>(context);
-          List<TestData> testData = [];
-          for (var item in contentState.content['Weapons']!) {
-            testData.add(TestData.fromJson(item));
-          }
-
-          return SafeArea(
-            child: Scaffold(
-              backgroundColor: Theme.of(context).colorScheme.background,
-              // appBar: buildAppBar(context),
-              body: ComponentDataTable(
-                      componentItems: testData),
-              // contentState.pageName == 'Calculator'
-              //     ? Backdrop(
-              //         frontLayer: StatsDashboard(),
-              //         backLayer: ComponentSelectionList())
-              //     : ComponentDataTable(
-              //         componentItems:
-              //             contentState.content[contentState.currentPage]!),
-              endDrawer: buildDrawer(context),
-            ),
-          );
-        });
   }
 }

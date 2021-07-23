@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:star_citizen_app/Screens/mobile_screen.dart';
+import 'package:star_citizen_app/Screens/widgets/component_selection.dart';
+import 'package:star_citizen_app/Screens/widgets/stats_dashboard.dart';
 import 'package:star_citizen_app/Services/providers/backdrop_provider.dart';
+import 'package:star_citizen_app/Services/providers/content_provider.dart';
 import 'package:star_citizen_app/main.dart';
 
 import '../constants.dart';
@@ -92,14 +95,13 @@ class BackdropTitle extends AnimatedWidget {
 }
 
 class Backdrop extends StatefulWidget {
-  Backdrop(
-      {Key? key,
-      required this.frontLayer,
-      required this.backLayer,
-      // required this.frontTitle,
-      // required this.backTitle
-      })
-      : super(key: key);
+  Backdrop({
+    Key? key,
+    required this.frontLayer,
+    required this.backLayer,
+    // required this.frontTitle,
+    // required this.backTitle
+  }) : super(key: key);
 
   final Widget frontLayer;
   final Widget backLayer;
@@ -213,5 +215,63 @@ class _BackdropState extends State<Backdrop>
             ),
           );
         });
+  }
+}
+
+class NewBackdrop extends StatelessWidget {
+  NewBackdrop({Key? key}) : super(key: key);
+
+  late AnimationController controller;
+
+  Widget buildStack(BuildContext context, BoxConstraints constraints) {
+    double layerTileHeight = 45.0;
+    final Size layerSize = constraints.biggest;
+    final double layerTop = layerSize.height - layerTileHeight;
+
+    Animation<RelativeRect> layerAnimation = RelativeRectTween(
+            begin: RelativeRect.fromLTRB(layerSize.width * 0.75, layerTop, 0.0,
+                layerTop - layerSize.height),
+            end: RelativeRect.fromLTRB(0.0, 0.0, 0.0, 0.0))
+        .animate(controller.view);
+
+    // AnimationController animation = AnimationController(
+    //     vsync: this, duration: Duration(milliseconds: 300), value: 1.0);
+
+    double testHeight = layerTop / layerSize.height;
+
+    Animation<Offset> slideAnimation =
+        Tween<Offset>(begin: Offset(0.75, testHeight), end: Offset(0, 0))
+            .animate(controller.view);
+
+    return Stack(
+      children: <Widget>[
+        ComponentSelectionList(),
+        // AnimatedBuilder(
+        //   animation: animation,
+        //   builder: (context, child) {
+        //     return Container(
+        //       height: animation.value * (),
+        //     )
+        //   }
+        // ),
+        SlideTransition(
+          position: slideAnimation,
+          child: FrontLayer(child: StatsDashboard()),
+        ),
+        // PositionedTransition(
+        //   rect: layerAnimation,
+        //   child: FrontLayer(
+        //     child: widget.frontLayer,
+        //   ),
+        // ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ContentProvider contentProvider = Provider.of<ContentProvider>(context);
+    controller = contentProvider.controller;
+    return LayoutBuilder(builder: buildStack);
   }
 }

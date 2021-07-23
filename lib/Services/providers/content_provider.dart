@@ -7,6 +7,27 @@ class ContentProvider extends ChangeNotifier {
   int currentPage = 0;
   String pageName = 'Calculator';
   bool ptuLive = true;
+  AnimationController controller;
+  double velocity;
+
+  ContentProvider({required this.controller, required this.velocity});
+
+  // AnimationStatus status;
+
+  bool get isExpanded {
+    final AnimationStatus status = controller.status;
+    return status == AnimationStatus.completed ||
+        status == AnimationStatus.forward;
+  }
+
+  // AnimationStatus get status {
+
+  // }
+
+  void toggleBackdropLayerVisibility() async {
+    isExpanded ? controller.reverse() : controller.forward();
+    // await controller.fling(velocity: isExpanded ? -velocity : velocity);
+  }
 
   final List<String> drawerList = [
     'Calculator',

@@ -3,6 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:star_citizen_app/Services/providers/backdrop_provider.dart';
+import 'package:star_citizen_app/Services/providers/content_provider.dart';
 import '../../../constants.dart';
 
 Map<String, String> statItem = {
@@ -39,8 +40,8 @@ class StatsDashboardHeader extends AnimatedWidget {
   }
 
   Widget buildIconButton(BuildContext context) {
-    BackdropProvider backDropProvider =
-        Provider.of<BackdropProvider>(context, listen: false);
+    ContentProvider contentProvider =
+        Provider.of<ContentProvider>(context, listen: false);
     double width = MediaQuery.of(context).size.width;
     return Container(
       // The thought process here is to put the icon in the middle of the sliver
@@ -48,7 +49,7 @@ class StatsDashboardHeader extends AnimatedWidget {
       // would be 1/8 then subtract half the icon size
       margin: EdgeInsets.only(left: width / 8 - 12),
       child: IconButton(
-          onPressed: () => backDropProvider.toggleBackdropLayerVisibility(),
+          onPressed: () => contentProvider.toggleBackdropLayerVisibility(),
           alignment: Alignment.centerLeft,
           icon: Icon(MdiIcons.rocket)),
     );
@@ -143,7 +144,7 @@ class _StatsDashboardState extends State<StatsDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    BackdropProvider backDropProvider = Provider.of<BackdropProvider>(context);
+    ContentProvider contentProvider = Provider.of<ContentProvider>(context);
     return Theme(
       data: Theme.of(context).copyWith(
           outlinedButtonTheme: OutlinedButtonThemeData(
@@ -160,7 +161,7 @@ class _StatsDashboardState extends State<StatsDashboard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            StatsDashboardHeader(listenable: backDropProvider.controller.view),
+            StatsDashboardHeader(listenable: contentProvider.controller.view),
             Expanded(child: buildStatsDashboardBody(context)),
           ],
         ),
