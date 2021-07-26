@@ -39,29 +39,29 @@ class FilterButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return 
-    Theme(
-      data: Theme.of(context).copyWith(
-          outlinedButtonTheme: OutlinedButtonThemeData(
-              style: OutlinedButton.styleFrom(
-        padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
-        side: BorderSide(color: kPrimaryNavyVariant),
-        shape: buildBeveledRectangleBorder(
-            kPrimaryNavyVariant, kSmallBevel, kSmallBevelWidth),
-        textStyle: Theme.of(context).textTheme.subtitle1,
-        primary: Theme.of(context).textTheme.subtitle1!.color,
-      ))),
-      child: Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          OutlinedButton(onPressed: () {}, child: Text('Compare Selected')),
-          OutlinedButton(onPressed: () {}, child: Text('Size Filter')),
-          OutlinedButton(onPressed: () {}, child: Text('Reset Filter')),
-        ],
-      ),
-    ));
+    return Theme(
+        data: Theme.of(context).copyWith(
+            outlinedButtonTheme: OutlinedButtonThemeData(
+                style: OutlinedButton.styleFrom(
+          padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
+          side: BorderSide(color: kSecondaryCyan),
+          shape: buildBeveledRectangleBorder(
+              kSecondaryCyan, kSmallBevel, kSmallBevelWidth),
+          textStyle: Theme.of(context).textTheme.subtitle1,
+          primary: Theme.of(context).textTheme.subtitle1!.color,
+        ))),
+        child: Container(
+          padding: EdgeInsets.only(bottom: 10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              OutlinedButton(onPressed: () {}, child: Text('Compare Selected')),
+              OutlinedButton(onPressed: () {}, child: Text('Size Filter')),
+              OutlinedButton(onPressed: () {}, child: Text('Reset Filter')),
+            ],
+          ),
+        ));
   }
 }
 
@@ -110,6 +110,58 @@ class ComponentDataTable extends StatelessWidget {
     return output;
   }
 
+  Widget buildStickyRow(String attribute) {
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      color: kPrimaryNavyVariant,
+      child: Center(child: Text(attribute)),
+    );
+  }
+
+  Widget buildStickyColumn(String name) {
+    return Container(
+        color: kPrimaryNavyVariant,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Expanded(
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    ComponentCheckBox(),
+                    Text(name),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: 1.0,
+              color: kGreyOnSurface,
+            )
+          ],
+        ));
+  }
+
+  Widget buildCell(dynamic infoPoint) {
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      child: Column(
+        children: [
+          Expanded(child: Center(child: Text(infoPoint.toString()))),
+          Container(
+            width: double.infinity,
+            height: 1.0,
+            color: kGreyOnSurface,
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     componentList = buildTitleRows();
@@ -118,17 +170,13 @@ class ComponentDataTable extends StatelessWidget {
     return StickyHeadersTable(
       columnsLength: componentAttributes.length,
       rowsLength: componentList.length,
-      columnsTitleBuilder: (i) =>
-          TextButton(onPressed: () {}, child: Text(componentAttributes[i])),
-      rowsTitleBuilder: (i) => Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          ComponentCheckBox(),
-          Text(componentList[i]),
-        ],
-      ),
-      contentCellBuilder: (i, j) => Text(data[i][j]),
-      legendCell: TextButton(onPressed: () {}, child: Text('Name')),
+      columnsTitleBuilder: (i) => buildStickyRow(componentAttributes[i]),
+      onColumnTitlePressed: (i) {},
+      rowsTitleBuilder: (i) => buildStickyColumn(componentList[i]),
+      onRowTitlePressed: (i) {},
+      contentCellBuilder: (i, j) => buildCell(data[i][j]),
+      legendCell: buildStickyRow('Name'),
+      // cellDimensions: CellDimensions.variableColumnWidth(columnWidths: columnWidths, contentCellHeight: contentCellHeight, stickyLegendWidth: stickyLegendWidth, stickyLegendHeight: stickyLegendHeight),
     );
   }
 }
