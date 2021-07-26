@@ -112,7 +112,7 @@ class ComponentDataTable extends StatelessWidget {
 
   Widget buildStickyRow(String attribute) {
     return Container(
-      width: double.infinity,
+      // width: double.infinity,
       height: double.infinity,
       color: kPrimaryNavyVariant,
       child: Center(child: Text(attribute)),
@@ -147,13 +147,13 @@ class ComponentDataTable extends StatelessWidget {
 
   Widget buildCell(dynamic infoPoint) {
     return Container(
-      width: double.infinity,
+      // width: double.infinity,
       height: double.infinity,
       child: Column(
         children: [
           Expanded(child: Center(child: Text(infoPoint.toString()))),
           Container(
-            width: double.infinity,
+            // width: double.infinity,
             height: 1.0,
             color: kGreyOnSurface,
           )

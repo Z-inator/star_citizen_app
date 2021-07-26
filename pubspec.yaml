@@ -41,8 +41,10 @@ dependencies:
   # Additional Material Icons
   material_design_icons_flutter: 4.0.5955
 
-  # Data Table with Sticky Headers
+  # Data Table
   table_sticky_headers: ^2.0.0
+  syncfusion_flutter_datagrid: ^19.2.48-beta
+  
 
 dev_dependencies:
   flutter_test:
