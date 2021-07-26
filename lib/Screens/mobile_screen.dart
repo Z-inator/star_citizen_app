@@ -43,10 +43,6 @@ class _MobileFrameworkState extends State<MobileFramework>
             ContentProvider(controller: controller, velocity: kFlingVelocity),
         builder: (context, child) {
           ContentProvider contentState = Provider.of<ContentProvider>(context);
-          List<TestData> testData = [];
-          for (var item in contentState.content['Weapons']!) {
-            testData.add(TestData.fromJson(item));
-          }
           return SafeArea(
             child: Scaffold(
               backgroundColor: Theme.of(context).colorScheme.background,
@@ -72,7 +68,7 @@ class _MobileFrameworkState extends State<MobileFramework>
                   //         componentItems: testData),
                   contentState.pageName == 'Calculator'
                       ? NewBackdrop()
-                      : ComponentDataTable(componentItems: testData),
+                      : DataScreen(),
               endDrawer: NavigationDrawer(),
             ),
           );

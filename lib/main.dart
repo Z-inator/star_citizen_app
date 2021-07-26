@@ -125,6 +125,8 @@ ThemeData buildAppTheme() {
         onBackground: kOnPrimaryNavy,
         surface: kSurface,
         onSurface: kOnPrimaryNavy),
+    toggleableActiveColor: kSecondaryCyan,
+    unselectedWidgetColor: kOnPrimaryNavy,
     appBarTheme: base.appBarTheme.copyWith(
         brightness: Brightness.dark,
         backgroundColor: kPrimaryNavy,
