@@ -4,9 +4,69 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:star_citizen_app/Screens/widgets/data_table/data_tables.dart';
 import 'package:star_citizen_app/Services/providers/content_provider.dart';
+import 'package:star_citizen_app/constants.dart';
+
+class DataScreen extends StatelessWidget {
+  const DataScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    List<dynamic> data = [];
+    for (var i = 0; i < 25; i++) {
+      data.add(TestData.fromJson({
+        'name': 'name$i',
+        'type': 'type$i',
+        'weapon': 'weapon$i',
+        'heat': 'heat$i',
+        'power': 'power$i'
+      }));
+    }
+    return Container(
+      padding: EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          FilterButtons(),
+          Expanded(child: ComponentDataTable(componentItems: data))
+        ],
+      ),
+    );
+  }
+}
+
+class FilterButtons extends StatelessWidget {
+  const FilterButtons({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return 
+    Theme(
+      data: Theme.of(context).copyWith(
+          outlinedButtonTheme: OutlinedButtonThemeData(
+              style: OutlinedButton.styleFrom(
+        padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
+        side: BorderSide(color: kPrimaryNavyVariant),
+        shape: buildBeveledRectangleBorder(
+            kPrimaryNavyVariant, kSmallBevel, kSmallBevelWidth),
+        textStyle: Theme.of(context).textTheme.subtitle1,
+        primary: Theme.of(context).textTheme.subtitle1!.color,
+      ))),
+      child: Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          OutlinedButton(onPressed: () {}, child: Text('Compare Selected')),
+          OutlinedButton(onPressed: () {}, child: Text('Size Filter')),
+          OutlinedButton(onPressed: () {}, child: Text('Reset Filter')),
+        ],
+      ),
+    ));
+  }
+}
 
 class ComponentDataTable extends StatelessWidget {
-  final List<dynamic> componentItems;
+  List<dynamic> componentItems = [];
 
   ComponentDataTable({Key? key, required this.componentItems})
       : super(key: key);
@@ -55,15 +115,42 @@ class ComponentDataTable extends StatelessWidget {
     componentList = buildTitleRows();
     componentAttributes = buildTitleColumns();
     List<List<String>> data = buildData();
-    return Center(
-      child: StickyHeadersTable(
-        columnsLength: componentAttributes.length,
-        rowsLength: componentList.length,
-        columnsTitleBuilder: (i) => Text(componentAttributes[i]),
-        rowsTitleBuilder: (i) => Text(componentList[i]),
-        contentCellBuilder: (i, j) => Text(data[i][j]),
-        legendCell: Text('sticky'),
+    return StickyHeadersTable(
+      columnsLength: componentAttributes.length,
+      rowsLength: componentList.length,
+      columnsTitleBuilder: (i) =>
+          TextButton(onPressed: () {}, child: Text(componentAttributes[i])),
+      rowsTitleBuilder: (i) => Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          ComponentCheckBox(),
+          Text(componentList[i]),
+        ],
       ),
+      contentCellBuilder: (i, j) => Text(data[i][j]),
+      legendCell: TextButton(onPressed: () {}, child: Text('Name')),
+    );
+  }
+}
+
+class ComponentCheckBox extends StatefulWidget {
+  ComponentCheckBox({Key? key}) : super(key: key);
+
+  @override
+  _ComponentCheckBoxState createState() => _ComponentCheckBoxState();
+}
+
+class _ComponentCheckBoxState extends State<ComponentCheckBox> {
+  bool isChecked = false;
+  @override
+  Widget build(BuildContext context) {
+    return Checkbox(
+      value: isChecked,
+      onChanged: (bool? value) {
+        setState(() {
+          isChecked = value!;
+        });
+      },
     );
   }
 }
@@ -82,7 +169,7 @@ class TestData {
       required this.heat,
       required this.power});
 
-  factory TestData.fromJson(json) {
+  factory TestData.fromJson(Map<String, dynamic> json) {
     return TestData(
         name: json['name'],
         type: json['type'],
