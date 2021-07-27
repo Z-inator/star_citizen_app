@@ -1,7 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:measured_size/measured_size.dart';
 import 'package:provider/provider.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+
 import 'package:star_citizen_app/Screens/widgets/data_table/data_tables.dart';
 import 'package:star_citizen_app/Services/providers/content_provider.dart';
 import 'package:star_citizen_app/constants.dart';
@@ -15,7 +18,7 @@ class DataScreen extends StatelessWidget {
     for (var i = 0; i < 25; i++) {
       data.add(TestData.fromJson({
         'name': 'name$i',
-        'type': 'type$i',
+        'type': 'Ballistic Scattergun$i',
         'weapon': 'weapon$i',
         'heat': 'heat$i',
         'power': 'power$i'
@@ -116,8 +119,6 @@ class ComponentDataTable extends StatelessWidget {
 
   Widget buildStickyRow(String attribute) {
     return Container(
-      // width: double.infinity,
-      height: double.infinity,
       color: kPrimaryNavyVariant,
       child: Center(child: Text(attribute)),
     );
@@ -127,49 +128,89 @@ class ComponentDataTable extends StatelessWidget {
     return Container(
         color: kPrimaryNavyVariant,
         child: Column(
-          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    ComponentCheckBox(),
-                    Text(name),
-                  ],
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  ComponentCheckBox(),
+                  Text(name),
+                ],
               ),
             ),
-            Divider(
-              height: 2.0,
-            )
-            // Container(
-            //   width: double.infinity,
-            //   height: 1.0,
+            // Divider(
+            //   thickness: 2.0,
             //   color: kGreyOnSurface,
             // )
+            Container(
+              width: double.infinity,
+              height: 1.0,
+              color: kGreyOnSurface,
+            )
           ],
         ));
   }
 
   Widget buildCell(dynamic infoPoint) {
     return Container(
-      // width: double.infinity,
-      height: double.infinity,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(child: Center(child: Text(infoPoint.toString()))),
-          Divider(
-            height: 2.0,
-          )
-          // Container(
-          //   width: double.infinity,
-          //   height: 1.0,
+          Expanded(
+              child: Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(left: 10),
+                  child: Text(infoPoint.toString()))),
+          // Divider(
+          //   thickness: 2.0,
           //   color: kGreyOnSurface,
           // )
+          Container(
+            width: double.infinity,
+            height: 1.0,
+            color: kGreyOnSurface,
+          )
         ],
       ),
     );
+  }
+
+  List<double> getColumnWidths(List<List<String>> data) {
+    List<double> columnWidths = [];
+    List<String> maxStringList = [data[0][0]];
+    for (var i = 0; i < data.length; i++) {
+      for (var j = 0; j < data[i].length; j++) {
+        if (maxStringList.length != i + 1) {
+          maxStringList.add(data[i][j]);
+        }
+        if (data[i][j].length > maxStringList[i].length) {
+          maxStringList[i] = data[i][j];
+        }
+      }
+    }
+    for (var item in maxStringList) {
+      TextPainter textPainter = TextPainter()
+        ..text = TextSpan(text: item)
+        ..textDirection = TextDirection.ltr
+        ..layout(minWidth: 0, maxWidth: double.infinity);
+      columnWidths.add(textPainter.width + 20);
+    }
+    return columnWidths;
+  }
+
+  double getStickyColumnWidth(List<String> componentNames) {
+    String largestComponentName = '';
+    for (var item in componentNames) {
+      if (item.length > largestComponentName.length) {
+        largestComponentName = item;
+      }
+    }
+    TextPainter textPainter = TextPainter()
+        ..text = TextSpan(text: largestComponentName)
+        ..textDirection = TextDirection.ltr
+        ..layout(minWidth: 0, maxWidth: double.infinity);
+    return textPainter.width + 68;
   }
 
   @override
@@ -177,17 +218,6 @@ class ComponentDataTable extends StatelessWidget {
     componentList = buildTitleRows();
     componentAttributes = buildTitleColumns();
     List<List<String>> data = buildData();
-
-    // return SingleChildScrollView(
-    //   scrollDirection: Axis.horizontal,
-    //   child: SingleChildScrollView(
-    //     child: DataTable(
-    //       columns: componentAttributes.map((attribute) => DataColumn(label: Text(attribute))).toList(), 
-    //       rows: List.generate(componentList.length, (index) => )
-    //     ),
-    //   ),
-    // )
-
     return StickyHeadersTable(
       columnsLength: componentAttributes.length,
       rowsLength: componentList.length,
@@ -197,10 +227,56 @@ class ComponentDataTable extends StatelessWidget {
       onRowTitlePressed: (i) {},
       contentCellBuilder: (i, j) => buildCell(data[i][j]),
       legendCell: buildStickyRow('Name'),
-      // cellDimensions: CellDimensions.variableColumnWidth(columnWidths: columnWidths, contentCellHeight: contentCellHeight, stickyLegendWidth: stickyLegendWidth, stickyLegendHeight: stickyLegendHeight),
+      cellAlignments: CellAlignments.uniform(Alignment.centerLeft),
+      cellDimensions: CellDimensions.variableColumnWidth(
+          columnWidths: getColumnWidths(data),
+          contentCellHeight: 50.0,
+          stickyLegendWidth: getStickyColumnWidth(componentList),
+          stickyLegendHeight: 50.0),
     );
   }
 }
+
+// class MeasureWidgetSize extends StatefulWidget {
+//   final Widget container;
+//   final Function(double) getSize;
+//   MeasureWidgetSize({Key? key, required this.container, required this.getSize}) : super(key: key);
+
+//   @override
+//   _MeasureWidgetSizeState createState() => _MeasureWidgetSizeState();
+// }
+
+// class _MeasureWidgetSizeState extends State<MeasureWidgetSize> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MeasuredSize
+//   }
+// }
+
+// class ChildSizeNotifier extends StatelessWidget {
+//   final ValueNotifier<Size> notifier = ValueNotifier(const Size(0, 0));
+//   final Widget Function(BuildContext context, Size size, Widget child) builder;
+//   final Widget child;
+//   UjChildSizeNotifier({
+//     Key key,
+//     @required this.builder,
+//     this.child,
+//   }) : super(key: key) {}
+
+//   @override
+//   Widget build(BuildContext context) {
+//     WidgetsBinding.instance.addPostFrameCallback(
+//       (_) {
+//         notifier.value = (context.findRenderObject() as RenderBox).size;
+//       },
+//     );
+//     return ValueListenableBuilder(
+//       valueListenable: notifier,
+//       builder: builder,
+//       child: child,
+//     );
+//   }
+// }
 
 class ComponentCheckBox extends StatefulWidget {
   ComponentCheckBox({Key? key}) : super(key: key);
@@ -257,6 +333,89 @@ class TestData {
     };
   }
 }
+
+// class SyncFusionGrid extends StatelessWidget {
+//   final List<dynamic> componentItems;
+//   final employeeDataSource = EmployeeDataSource(employees: getEmployees());
+//   SyncFusionGrid({Key? key, required this.componentItems}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return SfDataGrid(
+//       source: employeeDataSource,
+//       columns: <GridColumn>[
+//         GridColumn(
+//             columnName: 'id',
+//             label: Container(
+//                 padding: EdgeInsets.all(16.0),
+//                 alignment: Alignment.centerRight,
+//                 child: Text(
+//                   'ID',
+//                 ))),
+//         GridColumn(
+//             columnName: 'name',
+//             label: Container(
+//                 padding: EdgeInsets.all(16.0),
+//                 alignment: Alignment.centerLeft,
+//                 child: Text('Name'))),
+//         GridColumn(
+//             columnName: 'designation',
+//             width: 120,
+//             label: Container(
+//                 padding: EdgeInsets.all(16.0),
+//                 alignment: Alignment.centerLeft,
+//                 child: Text('Designation'))),
+//         GridColumn(
+//             columnName: 'salary',
+//             label: Container(
+//                 padding: EdgeInsets.all(16.0),
+//                 alignment: Alignment.centerRight,
+//                 child: Text('Salary'))),
+//       ],
+//     )
+//   }
+// }
+
+// class EmployeeDataSource extends DataGridSource {
+//   EmployeeDataSource({List<Employee> employees}) {
+//      _employees = employees
+//         .map<DataGridRow>((e) => DataGridRow(cells: [
+//               DataGridCell<int>(columnName: 'id', value: e.id),
+//               DataGridCell<String>(columnName: 'name', value: e.name),
+//               DataGridCell<String>(
+//                   columnName: 'designation', value: e.designation),
+//               DataGridCell<int>(columnName: 'salary', value: e.salary),
+//             ]))
+//         .toList();
+//   }
+
+//   List<DataGridRow>  _employees = [];
+
+//   @override
+//   List<DataGridRow> get rows =>  _employees;
+
+//   @override
+//   DataGridRowAdapter? buildRow(DataGridRow row) {
+//     return DataGridRowAdapter(
+//         cells: row.getCells().map<Widget>((dataGridCell) {
+//       return Container(
+//         alignment: (dataGridCell.columnName == 'id' || dataGridCell.columnName == 'salary')
+//             ? Alignment.centerRight
+//             : Alignment.centerLeft,
+//         padding: EdgeInsets.all(16.0),
+//         child: Text(dataGridCell.value.toString()),
+//       );
+//     }).toList());
+//   }
+// }
+
+// class Employee {
+//   Employee(this.id, this.name, this.designation, this.salary);
+//   final int id;
+//   final String name;
+//   final String designation;
+//   final int salary;
+// }
 
 // class ScrollableTable extends StatelessWidget {
 //   ScrollableTable({Key? key, required this.componentItems}) : super(key: key);
@@ -351,143 +510,143 @@ class TestData {
 //       ],
 //     )
 
-    //   return Container(
-    //     child: HorizontalDataTable(
-    //       leftHandSideColumnWidth: 100,
-    //       rightHandSideColumnWidth: 600,
-    //       isFixedHeader: true,
-    //       headerWidgets: _getTitleWidget(),
-    //       leftSideItemBuilder: _generateFirstColumnRow,
-    //       rightSideItemBuilder: _generateRightHandSideColumnRow,
-    //       itemCount: componentItems.length,
-    //       rowSeparatorWidget: const Divider(
-    //         color: Colors.black54,
-    //         height: 1.0,
-    //         thickness: 0.0,
-    //       ),
-    //       leftHandSideColBackgroundColor: kPrimaryNavyVariant,
-    //       rightHandSideColBackgroundColor: kGreyOnSurface,
-    //       verticalScrollbarStyle: const ScrollbarStyle(
-    //         isAlwaysShown: true,
-    //         thickness: 4.0,
-    //         radius: Radius.circular(5.0),
-    //       ),
-    //       horizontalScrollbarStyle: const ScrollbarStyle(
-    //         isAlwaysShown: true,
-    //         thickness: 4.0,
-    //         radius: Radius.circular(5.0),
-    //       ),
-    //       enablePullToRefresh: true,
-    //       refreshIndicator: const WaterDropHeader(),
-    //       refreshIndicatorHeight: 60,
-    //       onRefresh: () async {
-    //         //Do sth
-    //         await Future.delayed(const Duration(milliseconds: 500));
-    //         _hdtRefreshController.refreshCompleted();
-    //       },
-    //       htdRefreshController: _hdtRefreshController,
-    //     ),
-    //     height: MediaQuery.of(context).size.height,
-    //   );
-    // }
+//   return Container(
+//     child: HorizontalDataTable(
+//       leftHandSideColumnWidth: 100,
+//       rightHandSideColumnWidth: 600,
+//       isFixedHeader: true,
+//       headerWidgets: _getTitleWidget(),
+//       leftSideItemBuilder: _generateFirstColumnRow,
+//       rightSideItemBuilder: _generateRightHandSideColumnRow,
+//       itemCount: componentItems.length,
+//       rowSeparatorWidget: const Divider(
+//         color: Colors.black54,
+//         height: 1.0,
+//         thickness: 0.0,
+//       ),
+//       leftHandSideColBackgroundColor: kPrimaryNavyVariant,
+//       rightHandSideColBackgroundColor: kGreyOnSurface,
+//       verticalScrollbarStyle: const ScrollbarStyle(
+//         isAlwaysShown: true,
+//         thickness: 4.0,
+//         radius: Radius.circular(5.0),
+//       ),
+//       horizontalScrollbarStyle: const ScrollbarStyle(
+//         isAlwaysShown: true,
+//         thickness: 4.0,
+//         radius: Radius.circular(5.0),
+//       ),
+//       enablePullToRefresh: true,
+//       refreshIndicator: const WaterDropHeader(),
+//       refreshIndicatorHeight: 60,
+//       onRefresh: () async {
+//         //Do sth
+//         await Future.delayed(const Duration(milliseconds: 500));
+//         _hdtRefreshController.refreshCompleted();
+//       },
+//       htdRefreshController: _hdtRefreshController,
+//     ),
+//     height: MediaQuery.of(context).size.height,
+//   );
+// }
 
-    // List<Widget> _getTitleWidget() {
-    //   return [
-    //     TextButton(
-    //       style: TextButton.styleFrom(
-    //         padding: EdgeInsets.zero,
-    //       ),
-    //       child: _getTitleItemWidget(
-    //           'Name' + (sortType == sortName ? (isAscending ? '↓' : '↑') : ''),
-    //           100),
-    //       onPressed: () {
-    //         sortType = sortName;
-    //         isAscending = !isAscending;
-    //         // user.sortName(isAscending);
-    //         // setState(() {});
-    //       },
-    //     ),
-    //     TextButton(
-    //       style: TextButton.styleFrom(
-    //         padding: EdgeInsets.zero,
-    //       ),
-    //       child: _getTitleItemWidget(
-    //           'Type' +
-    //               (sortType == sortStatus ? (isAscending ? '↓' : '↑') : ''),
-    //           100),
-    //       onPressed: () {
-    //         sortType = sortStatus;
-    //         isAscending = !isAscending;
-    //         // user.sortStatus(isAscending);
-    //         // setState(() {});
-    //       },
-    //     ),
-    //     _getTitleItemWidget('Weapon', 200),
-    //     _getTitleItemWidget('Heat', 100),
-    //     _getTitleItemWidget('Power', 200),
-    //   ];
-    // }
+// List<Widget> _getTitleWidget() {
+//   return [
+//     TextButton(
+//       style: TextButton.styleFrom(
+//         padding: EdgeInsets.zero,
+//       ),
+//       child: _getTitleItemWidget(
+//           'Name' + (sortType == sortName ? (isAscending ? '↓' : '↑') : ''),
+//           100),
+//       onPressed: () {
+//         sortType = sortName;
+//         isAscending = !isAscending;
+//         // user.sortName(isAscending);
+//         // setState(() {});
+//       },
+//     ),
+//     TextButton(
+//       style: TextButton.styleFrom(
+//         padding: EdgeInsets.zero,
+//       ),
+//       child: _getTitleItemWidget(
+//           'Type' +
+//               (sortType == sortStatus ? (isAscending ? '↓' : '↑') : ''),
+//           100),
+//       onPressed: () {
+//         sortType = sortStatus;
+//         isAscending = !isAscending;
+//         // user.sortStatus(isAscending);
+//         // setState(() {});
+//       },
+//     ),
+//     _getTitleItemWidget('Weapon', 200),
+//     _getTitleItemWidget('Heat', 100),
+//     _getTitleItemWidget('Power', 200),
+//   ];
+// }
 
-    // Widget _getTitleItemWidget(String label, double width) {
-    //   return Container(
-    //     child: Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
-    //     // width: width,
-    //     height: 56,
-    //     padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-    //     alignment: Alignment.centerLeft,
-    //   );
-    // }
+// Widget _getTitleItemWidget(String label, double width) {
+//   return Container(
+//     child: Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
+//     // width: width,
+//     height: 56,
+//     padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+//     alignment: Alignment.centerLeft,
+//   );
+// }
 
-    // Widget _generateFirstColumnRow(BuildContext context, int index) {
-    //   return Container(
-    //     child: Text(componentItems[index].name),
-    //     // width: 100,
-    //     height: 52,
-    //     padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-    //     alignment: Alignment.centerLeft,
-    //   );
-    // }
+// Widget _generateFirstColumnRow(BuildContext context, int index) {
+//   return Container(
+//     child: Text(componentItems[index].name),
+//     // width: 100,
+//     height: 52,
+//     padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+//     alignment: Alignment.centerLeft,
+//   );
+// }
 
-    // Widget _generateRightHandSideColumnRow(BuildContext context, int index) {
-    //   return Row(
-    //     children: <Widget>[
-    //       Container(
-    //         child: Row(
-    //           children: <Widget>[
-    //             Icon(
-    //                 Icons.notifications_active,
-    //                 color:
-    //                     Colors.green),
-    //             Text(componentItems[index].type)
-    //           ],
-    //         ),
-    //         // width: 100,
-    //         height: 52,
-    //         padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-    //         alignment: Alignment.centerLeft,
-    //       ),
-    //       Container(
-    //         child: Text(componentItems[index].weapon),
-    //         // width: 200,
-    //         height: 52,
-    //         padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-    //         alignment: Alignment.centerLeft,
-    //       ),
-    //       Container(
-    //         child: Text(componentItems[index].heat),
-    //         // width: 100,
-    //         height: 52,
-    //         padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-    //         alignment: Alignment.centerLeft,
-    //       ),
-    //       Container(
-    //         child: Text(componentItems[index].power),
-    //         // width: 200,
-    //         height: 52,
-    //         padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-    //         alignment: Alignment.centerLeft,
-    //       ),
-    //     ],
-    //   );
+// Widget _generateRightHandSideColumnRow(BuildContext context, int index) {
+//   return Row(
+//     children: <Widget>[
+//       Container(
+//         child: Row(
+//           children: <Widget>[
+//             Icon(
+//                 Icons.notifications_active,
+//                 color:
+//                     Colors.green),
+//             Text(componentItems[index].type)
+//           ],
+//         ),
+//         // width: 100,
+//         height: 52,
+//         padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+//         alignment: Alignment.centerLeft,
+//       ),
+//       Container(
+//         child: Text(componentItems[index].weapon),
+//         // width: 200,
+//         height: 52,
+//         padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+//         alignment: Alignment.centerLeft,
+//       ),
+//       Container(
+//         child: Text(componentItems[index].heat),
+//         // width: 100,
+//         height: 52,
+//         padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+//         alignment: Alignment.centerLeft,
+//       ),
+//       Container(
+//         child: Text(componentItems[index].power),
+//         // width: 200,
+//         height: 52,
+//         padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+//         alignment: Alignment.centerLeft,
+//       ),
+//     ],
+//   );
 //   }
 // }

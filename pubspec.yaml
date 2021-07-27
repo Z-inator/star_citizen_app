@@ -45,6 +45,7 @@ dependencies:
   table_sticky_headers: ^2.0.0
   syncfusion_flutter_datagrid: ^19.2.48-beta
   horizontal_data_table: ^3.4.2
+  measured_size: ^1.0.0
   
 
 dev_dependencies:
