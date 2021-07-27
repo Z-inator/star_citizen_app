@@ -135,7 +135,7 @@ class _StickyHeadersTableState extends State<StickyHeadersTable> {
               behavior: HitTestBehavior.opaque,
               onTap: widget.onStickyLegendPressed,
               child: Container(
-                // width: widget.cellDimensions.stickyLegendWidth,
+                width: widget.cellDimensions.stickyLegendWidth,
                 height: widget.cellDimensions.stickyLegendHeight,
                 alignment: widget.cellAlignments.stickyLegendAlignment,
                 child: widget.legendCell,
@@ -154,7 +154,7 @@ class _StickyHeadersTableState extends State<StickyHeadersTable> {
                         behavior: HitTestBehavior.opaque,
                         onTap: () => widget.onColumnTitlePressed(i),
                         child: Container(
-                          // width: widget.cellDimensions.stickyWidth(i),
+                          width: widget.cellDimensions.stickyWidth(i),
                           height: widget.cellDimensions.stickyLegendHeight,
                           alignment: widget.cellAlignments.rowAlignment(i),
                           child: widget.columnsTitleBuilder(i),
@@ -196,7 +196,7 @@ class _StickyHeadersTableState extends State<StickyHeadersTable> {
                         behavior: HitTestBehavior.opaque,
                         onTap: () => widget.onRowTitlePressed(i),
                         child: Container(
-                          // width: widget.cellDimensions.stickyLegendWidth,
+                          width: widget.cellDimensions.stickyLegendWidth,
                           height: widget.cellDimensions.stickyHeight(i),
                           alignment: widget.cellAlignments.columnAlignment(i),
                           child: widget.rowsTitleBuilder(i),
@@ -242,9 +242,9 @@ class _StickyHeadersTableState extends State<StickyHeadersTable> {
                                   onTap: () => widget.onContentCellPressed(
                                       columnIdx, rowIdx),
                                   child: Container(
-                                    // width: widget.cellDimensions
-                                    //     .contentSize(rowIdx, columnIdx)
-                                    //     .width,
+                                    width: widget.cellDimensions
+                                        .contentSize(rowIdx, columnIdx)
+                                        .width,
                                     height: widget.cellDimensions
                                         .contentSize(rowIdx, columnIdx)
                                         .height,
