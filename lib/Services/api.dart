@@ -30,8 +30,15 @@ Future<List<Ship>> getShipsFromJSON(BuildContext context) async {
   List<Ship> ships = [];
   Ship? newShip;
   for (var item in raw) {
+    String currentShipName = item['ClassName'];
+    String currentShipFile =
+        'D:/Zach\'s PC/Downloads/scunpacked-master/scunpacked-master/api/dist/json/v2/ships/$currentShipName.json';
+    Map<String, dynamic> currentShipRaw = jsonDecode(currentShipFile);
+    String currentShipPortsFile =
+        'D:/Zach\'s PC/Downloads/scunpacked-master/scunpacked-master/api/dist/json/v2/ships/$currentShipName-ports.json';
+    Map<String, dynamic> currentShipPortsRaw = jsonDecode(currentShipPortsFile);
     try {
-      newShip = Ship.fromJson(item);
+      newShip = Ship.fromMap(currentShipRaw, currentShipPortsRaw);
       ships.add(newShip);
     } catch (e) {
       log(e.toString());
