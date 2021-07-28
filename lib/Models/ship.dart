@@ -181,21 +181,21 @@ class Ship {
     };
   }
 
-  List<Map<String, dynamic>> getPilotHardpoints(
-      List<Map<String, dynamic>> hardPoints) {
-    List<Map<String, dynamic>> pilotHardPoints = [];
-    hardPoints.forEach((element) {
-      if (element['Loadout'].contains('Gimbal')) {
-        pilotHardpoints.add({
-          'gimbal': true,
-          'size': element['Size'],
-        });
-      } else {
-        pilotHardpoints.add({'gimbal': false, 'size': element['Size']});
-      }
-    });
-    return pilotHardPoints;
-  }
+  // List<Map<String, dynamic>> getPilotHardpoints(
+  //     List<Map<String, dynamic>> hardPoints) {
+  //   List<Map<String, dynamic>> pilotHardPoints = [];
+  //   hardPoints.forEach((element) {
+  //     if (element['Loadout'].contains('Gimbal')) {
+  //       pilotHardpoints.add({
+  //         'gimbal': true,
+  //         'size': element['Size'],
+  //       });
+  //     } else {
+  //       pilotHardpoints.add({'gimbal': false, 'size': element['Size']});
+  //     }
+  //   });
+  //   return pilotHardPoints;
+  // }
 
   factory Ship.fromMap(
       Map<String, dynamic> shipFileJson, Map<String, dynamic> shipPortsFile) {
@@ -244,7 +244,7 @@ class Ship {
         }
       })).toList(),
       missiles: List<Map<String, dynamic>>.from(
-          shipFileJson['MissileRacks']?.map((x) {
+          shipPortsFile['MissileRacks']?.map((x) {
         return x['Ports'].map((y) {
           return {'ClassName': y['Loadout']};
         }).toList();
@@ -254,9 +254,33 @@ class Ship {
         return {'ClassName': x['Loadout']};
       })).toList(),
       mannedTurrets: List<Map<String, dynamic>>.from(
-          shipFileJson['mannedTurrets']?.map((x) => x)),
+          shipPortsFile['MannedTurrets']?.map((x) {
+        return {
+          'size': x['Size'],
+          'powerBase': x['PowerConnection']['PowerBase'],
+          'powerDraw': x['PowerConnection']['PowerDraw'],
+          'thermalEnergyBase': x['HeatConnection']['ThermalEnergyBase'],
+          'thermalEnergyDraw': x['HeatConnection']['ThermalEnergyDraw'],
+          'coolingRate': x['HeatConnection']['CoolingRate'],
+          'turrestList': x['Ports'].map((y) {
+            return {'ClassName': y['Loadoat']};
+          }).toList()
+        };
+      })).toList(),
       remoteTurrets: List<Map<String, dynamic>>.from(
-          shipFileJson['remoteTurrets']?.map((x) => x)),
+          shipPortsFile['remoteTurrets']?.map((x) {
+        return {
+          'size': x['Size'],
+          'powerBase': x['PowerConnection']['PowerBase'],
+          'powerDraw': x['PowerConnection']['PowerDraw'],
+          'thermalEnergyBase': x['HeatConnection']['ThermalEnergyBase'],
+          'thermalEnergyDraw': x['HeatConnection']['ThermalEnergyDraw'],
+          'coolingRate': x['HeatConnection']['CoolingRate'],
+          'turrestList': x['Ports'].map((y) {
+            return {'ClassName': y['Loadoat']};
+          }).toList()
+        };
+      })),
     );
   }
 

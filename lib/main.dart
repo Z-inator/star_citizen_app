@@ -13,7 +13,7 @@ import 'Models/ship.dart';
 import 'Screens/widgets/component_selection.dart';
 import 'Screens/widgets/stats_dashboard.dart';
 
-/// 
+///
 /// TODO: ReGex for camelCase to be used later,
 /// Regex(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])
 /// eclipseRCPExt > eclipse/RCP/Ext
@@ -32,36 +32,38 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   PageRouterDelegate _routerDelegate = PageRouterDelegate();
 
-  PageRouteInformationParser _routeInformationParser = PageRouteInformationParser();
+  PageRouteInformationParser _routeInformationParser =
+      PageRouteInformationParser();
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
-        title: 'Flutter Demo', 
-        theme: buildAppTheme(), 
-        home: MobileFramework()
-    );
+    return MaterialApp(
+      //     title: 'Flutter Demo',
+      //     theme: buildAppTheme(),
+      //     home: MobileFramework()
+      // );
 
-    // TODO: use this for webpage
-    // MaterialApp.router(
-    //   title: 'Flutter Demo',
-    //   theme: buildAppTheme(),
-    //   routeInformationParser: _routeInformationParser, 
-    //   routerDelegate: _routerDelegate
-      
-    //
-        // APITest(),
-        // initialRoute: 'Calculator',
-        // onGenerateRoute: generateRoutes
-        // Backdrop(
-        //   frontLayer: StatsDashboard(),
-        //   backLayer: ComponentSelectionList(),
-        //   frontTitle: Text('CALCULATOR',
-        //       style: Theme.of(context).primaryTextTheme.headline6),
-        //   backTitle:
-        //       Text('BUILD', style: Theme.of(context).primaryTextTheme.headline6),
-        // ),
-        // );
+      // TODO: use this for webpage
+      // MaterialApp.router(
+      //   title: 'Flutter Demo',
+      //   theme: buildAppTheme(),
+      //   routeInformationParser: _routeInformationParser,
+      //   routerDelegate: _routerDelegate
+
+      //
+      home: APITest(),
+      // initialRoute: 'Calculator',
+      // onGenerateRoute: generateRoutes
+
+      // Backdrop(
+      //   frontLayer: StatsDashboard(),
+      //   backLayer: ComponentSelectionList(),
+      //   frontTitle: Text('CALCULATOR',
+      //       style: Theme.of(context).primaryTextTheme.headline6),
+      //   backTitle:
+      //       Text('BUILD', style: Theme.of(context).primaryTextTheme.headline6),
+      // ),
+    );
   }
 }
 
@@ -73,35 +75,36 @@ class APITest extends StatefulWidget {
 }
 
 class _APITestState extends State<APITest> {
-  List<Ship> weapons = [];
+  List<Ship> ships = [];
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Scaffold(
         backgroundColor: kPrimaryNavy,
-        body: FutureBuilder(
-          initialData: weapons,
-          future: getShipsFromJSON(context),
-          builder: (context, AsyncSnapshot snapshot) {
-            weapons = snapshot.data;
-            return ListView.builder(
-            itemCount: weapons.length,
-            itemBuilder: (context, int index) {
-              return ListTile(
-                leading: Text(weapons[index].career),
-                title: Text(weapons[index].name),
-                subtitle: Text(weapons[index].role),
-                trailing: Text(weapons[index].shipSize.toString()),
-              );
-            });
-          }
-        ),
-        
+        // body: FutureBuilder(
+        //   initialData: ships,
+        //   future: getShipsFromJSON(context),
+        //   builder: (context, AsyncSnapshot snapshot) {
+        //     ships = snapshot.data;
+        //     return ListView.builder(
+        //     itemCount: ships.length,
+        //     itemBuilder: (context, int index) {
+        //       return ListTile(
+        //         leading: Text(ships[index].career),
+        //         title: Text(ships[index].name),
+        //         subtitle: Text(ships[index].role),
+        //         trailing: Text(ships[index].size.toString()),
+        //       );
+        //     });
+        //   }
+        // ),
+
         floatingActionButton: FloatingActionButton(
             child: Icon(Icons.ac_unit),
             onPressed: () {
-              setState(() {
-              });
+              getShipsFromJSON(context);
+              // setState(() {
+              // });
             }),
       ),
     );

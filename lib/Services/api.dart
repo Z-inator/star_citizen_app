@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart' as xml;
 import 'package:star_citizen_app/Models/ship.dart';
 import 'package:star_citizen_app/Models/weapon.dart';
+import 'package:path_provider/path_provider.dart';
 
 // List<Weapon> getWeapons(List<dynamic> raw) {
 //   List<dynamic> weaponRaw =
@@ -26,16 +27,20 @@ import 'package:star_citizen_app/Models/weapon.dart';
 Future<List<Ship>> getShipsFromJSON(BuildContext context) async {
   String jsonString =
       await DefaultAssetBundle.of(context).loadString('assets/data/ships.json');
+  // String jsonString =
+  //     await DefaultAssetBundle.of(context).loadString('assets/data/ships.json');
   List<dynamic> raw = jsonDecode(jsonString);
   List<Ship> ships = [];
   Ship? newShip;
   for (var item in raw) {
     String currentShipName = item['ClassName'];
+    Directory localDirectory = await getApplicationDocumentsDirectory();
+    String localPath = localDirectory.path;
     String currentShipFile =
-        'D:/Zach\'s PC/Downloads/scunpacked-master/scunpacked-master/api/dist/json/v2/ships/$currentShipName.json';
+        '$localPath/../../../../Downloads/scunpacked-master/scunpacked-master/api/dist/json/v2/ships/$currentShipName.json';
     Map<String, dynamic> currentShipRaw = jsonDecode(currentShipFile);
     String currentShipPortsFile =
-        'D:/Zach\'s PC/Downloads/scunpacked-master/scunpacked-master/api/dist/json/v2/ships/$currentShipName-ports.json';
+        '$localPath/../../../../Downloads/scunpacked-master/scunpacked-master/api/dist/json/v2/ships/$currentShipName-ports.json';
     Map<String, dynamic> currentShipPortsRaw = jsonDecode(currentShipPortsFile);
     try {
       newShip = Ship.fromMap(currentShipRaw, currentShipPortsRaw);
