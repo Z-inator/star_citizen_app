@@ -10,6 +10,62 @@ import 'package:star_citizen_app/Models/ship.dart';
 import 'package:star_citizen_app/Models/weapon.dart';
 import 'package:path_provider/path_provider.dart';
 
+
+/*
+Uploader I am working on:
+Future<void> generateRequest() async {
+  String shipPath =
+      'D:/Zach\'s PC/Downloads/scunpacked-master/scunpacked-master/api/dist/json/v2/ships.json';
+  try {
+    File(shipPath)
+        .readAsString()
+        .then((fileContents) => processResponse(fileContents));
+  } catch (e) {
+    print(e.toString());
+  }
+}
+
+void processResponse(String jsonString) {
+  List<dynamic> raw = jsonDecode(jsonString);
+  print('obtained raw JSON');
+  List<Ship> ships = [];
+  Ship? newShip;
+  for (var item in raw) {
+    String currentShipName = item['ClassName'];
+    print(currentShipName);
+    String currentShipFilePath =
+        'D:/Zach\'s PC/Downloads/scunpacked-master/scunpacked-master/api/dist/json/v2/ships/$currentShipName.json';
+    Map<String, dynamic> currentShipRaw = {};
+    try {
+      File(currentShipFilePath).readAsString().then((fileContents) {
+        currentShipRaw = jsonDecode(fileContents);
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+    print('got currentShipRaw ---------------');
+    String currentShipPortsFilePath =
+        'D:/Zach\'s PC/Downloads/scunpacked-master/scunpacked-master/api/dist/json/v2/ships/$currentShipName-ports.json';
+    Map<String, dynamic> currentShipPortsRaw = {};
+    try {
+      File(currentShipFilePath).readAsString().then((fileContents) {
+        currentShipPortsRaw = jsonDecode(fileContents);
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+    print('got currentShipPortsRaw -------------------- ');
+    try {
+      newShip = Ship.fromMap(currentShipRaw, currentShipPortsRaw);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+  print(ships.length.toString());
+}
+*/
+
+
 // List<Weapon> getWeapons(List<dynamic> raw) {
 //   List<dynamic> weaponRaw =
 //       raw.where((element) => element['type'] == 'WeaponGun').toList();
