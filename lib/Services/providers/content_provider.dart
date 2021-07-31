@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:star_citizen_app/Screens/backdrop.dart';
 import 'package:star_citizen_app/Screens/widgets/component_selection.dart';
 import 'package:star_citizen_app/Screens/widgets/stats_dashboard.dart';

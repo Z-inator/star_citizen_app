@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:measured_size/measured_size.dart';
 import 'package:provider/provider.dart';
+import 'package:star_citizen_app/Services/providers/data_table_provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import 'package:star_citizen_app/Screens/widgets/data_table/data_tables.dart';
@@ -46,6 +47,8 @@ class FilterButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DataTableProvider dataTableProvider =
+        Provider.of<DataTableProvider>(context);
     return Theme(
         data: Theme.of(context).copyWith(
             outlinedButtonTheme: OutlinedButtonThemeData(
@@ -63,7 +66,11 @@ class FilterButtons extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.max,
             children: [
-              OutlinedButton(onPressed: () {}, child: Text('Compare Selected')),
+              OutlinedButton(
+                onPressed: () {
+
+                }, 
+                child: Text('Compare Selected')),
               OutlinedButton(onPressed: () {}, child: Text('Size Filter')),
               OutlinedButton(onPressed: () {}, child: Text('Reset Filter')),
             ],
@@ -207,9 +214,9 @@ class ComponentDataTable extends StatelessWidget {
       }
     }
     TextPainter textPainter = TextPainter()
-        ..text = TextSpan(text: largestComponentName)
-        ..textDirection = TextDirection.ltr
-        ..layout(minWidth: 0, maxWidth: double.infinity);
+      ..text = TextSpan(text: largestComponentName)
+      ..textDirection = TextDirection.ltr
+      ..layout(minWidth: 0, maxWidth: double.infinity);
     return textPainter.width + 68;
   }
 
@@ -237,6 +244,27 @@ class ComponentDataTable extends StatelessWidget {
   }
 }
 
+class ComponentCheckBox extends StatefulWidget {
+  ComponentCheckBox({Key? key}) : super(key: key);
+
+  @override
+  _ComponentCheckBoxState createState() => _ComponentCheckBoxState();
+}
+
+class _ComponentCheckBoxState extends State<ComponentCheckBox> {
+  bool isChecked = false;
+  @override
+  Widget build(BuildContext context) {
+    return Checkbox(
+      value: isChecked,
+      onChanged: (bool? value) {
+        setState(() {
+          isChecked = value!;
+        });
+      },
+    );
+  }
+}
 // class MeasureWidgetSize extends StatefulWidget {
 //   final Widget container;
 //   final Function(double) getSize;
@@ -278,27 +306,7 @@ class ComponentDataTable extends StatelessWidget {
 //   }
 // }
 
-class ComponentCheckBox extends StatefulWidget {
-  ComponentCheckBox({Key? key}) : super(key: key);
 
-  @override
-  _ComponentCheckBoxState createState() => _ComponentCheckBoxState();
-}
-
-class _ComponentCheckBoxState extends State<ComponentCheckBox> {
-  bool isChecked = false;
-  @override
-  Widget build(BuildContext context) {
-    return Checkbox(
-      value: isChecked,
-      onChanged: (bool? value) {
-        setState(() {
-          isChecked = value!;
-        });
-      },
-    );
-  }
-}
 
 class TestData {
   final String name;
