@@ -10,7 +10,6 @@ import 'package:star_citizen_app/Models/ship.dart';
 import 'package:star_citizen_app/Models/weapon.dart';
 import 'package:path_provider/path_provider.dart';
 
-
 /*
 Uploader I am working on:
 Future<void> generateRequest() async {
@@ -65,19 +64,11 @@ void processResponse(String jsonString) {
 }
 */
 
-
 // List<Weapon> getWeapons(List<dynamic> raw) {
 //   List<dynamic> weaponRaw =
 //       raw.where((element) => element['type'] == 'WeaponGun').toList();
 //   log(weaponRaw.length.toString());
 //   return weaponRaw.map((item) => Weapon.fromJson(item)).toList();
-// }
-
-// Future getShipFromShipFile(BuildContext context, String classPath) async {
-//   String fileString = 'D:/Zach\'s PC/Downloads/scunpacked-master/scunpacked-master/api/dist/json/v2/ships/${classPath}-parts.json';
-//   List<dynamic> raw = jsonDecode(fileString);
-//   List<dynamic> weapons = [];
-//   weapons.add(raw.where((element) => element['Parts'][1]['Parts'][]))
 // }
 
 Future<List<Ship>> getShipsFromJSON(BuildContext context) async {
@@ -88,25 +79,32 @@ Future<List<Ship>> getShipsFromJSON(BuildContext context) async {
   List<dynamic> raw = jsonDecode(jsonString);
   List<Ship> ships = [];
   Ship? newShip;
+  Map<String, dynamic> currentShipRaw = {};
+  Map<String, dynamic> currentShipPortsRaw = {};
   for (var item in raw) {
     String currentShipName = item['ClassName'];
-    Directory localDirectory = await getApplicationDocumentsDirectory();
-    String localPath = localDirectory.path;
-    String currentShipFile =
-        '$localPath/../../../../Downloads/scunpacked-master/scunpacked-master/api/dist/json/v2/ships/$currentShipName.json';
-    Map<String, dynamic> currentShipRaw = jsonDecode(currentShipFile);
-    String currentShipPortsFile =
-        '$localPath/../../../../Downloads/scunpacked-master/scunpacked-master/api/dist/json/v2/ships/$currentShipName-ports.json';
-    Map<String, dynamic> currentShipPortsRaw = jsonDecode(currentShipPortsFile);
+    String currentShipFilePath =
+        'D:/Zach\'s PC/Downloads/scunpacked-master/scunpacked-master/api/dist/json/v2/ships/${currentShipName.toLowerCase()}.json';
+    String currentShipPortsFilePath =
+        'D:/Zach\'s PC/Downloads/scunpacked-master/scunpacked-master/api/dist/json/v2/ships/${currentShipName.toLowerCase()}-ports.json';
     try {
-      newShip = Ship.fromMap(currentShipRaw, currentShipPortsRaw);
-      ships.add(newShip);
+      String shipFileContents = await File(currentShipFilePath).readAsString();
+      currentShipRaw = jsonDecode(shipFileContents);
+      String portFileContents =
+          await File(currentShipPortsFilePath).readAsString();
+      currentShipPortsRaw = jsonDecode(portFileContents);
     } catch (e) {
       log(e.toString());
+    } finally {
+      try {
+        newShip = Ship.fromMap(currentShipRaw, currentShipPortsRaw);
+        ships.add(newShip);
+      } catch (e) {
+        print(e.toString());
+        print(item['ClassName']);
+      }
     }
   }
-  List<String> classPath = [];
-
   // raw.map((json) {
   //   String className = json['ClassName'];
 
@@ -182,38 +180,38 @@ Future<List<Weapon>> getWeaponsFromJSON(BuildContext context) async {
 
 // }
 
-class ShipFuture extends StatefulWidget {
-  ShipFuture({Key? key}) : super(key: key);
+// class ShipFuture extends StatefulWidget {
+//   ShipFuture({Key? key}) : super(key: key);
 
-  @override
-  _ShipFutureState createState() => _ShipFutureState();
-}
+//   @override
+//   _ShipFutureState createState() => _ShipFutureState();
+// }
 
-class _ShipFutureState extends State<ShipFuture> {
-  late Future<Ship> futureShip;
+// class _ShipFutureState extends State<ShipFuture> {
+//   late Future<Ship> futureShip;
 
-  // @override
-  // void initState() {
-  //   futureShip = fetchShip();
-  //   super.initState();
-  // }
+//   // @override
+//   // void initState() {
+//   //   futureShip = fetchShip();
+//   //   super.initState();
+//   // }
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: FutureBuilder(
-          future: futureShip,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Text('Successful API call');
-            } else if (snapshot.hasError) {
-              return Text('${snapshot.error}');
-            }
-            return CircularProgressIndicator();
-          }),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       child: FutureBuilder(
+//           future: futureShip,
+//           builder: (context, snapshot) {
+//             if (snapshot.hasData) {
+//               return Text('Successful API call');
+//             } else if (snapshot.hasError) {
+//               return Text('${snapshot.error}');
+//             }
+//             return CircularProgressIndicator();
+//           }),
+//     );
+//   }
+// }
 
 // Future<Ship> fetchShip() async {
 //   http.Response response = await http.get(
