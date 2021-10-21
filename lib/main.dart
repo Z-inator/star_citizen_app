@@ -22,7 +22,6 @@ import 'package:flutter/material.dart';
 
 // Import the firebase_core plugin
 
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(App());
@@ -46,24 +45,29 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      // Initialize FlutterFire:
-      future: _initialization,
-      builder: (context, snapshot) {
-        // Check for errors
-        if (snapshot.hasError) {
-          return Center(child: Text('Something went weong'),);
-        }
+    return MyApp();
+    // FutureBuilder(
+    //   // Initialize FlutterFire:
+    //   future: _initialization,
+    //   builder: (context, snapshot) {
+    //     // Check for errors
+    //     if (snapshot.hasError) {
+    //       return Center(
+    //         child: Text('Something went weong'),
+    //       );
+    //     }
 
-        // Once complete, show your application
-        if (snapshot.connectionState == ConnectionState.done) {
-          return MyApp();
-        }
+    //     // Once complete, show your application
+    //     if (snapshot.connectionState == ConnectionState.done) {
+    //       return MyApp();
+    //     }
 
-        // Otherwise, show something whilst waiting for initialization to complete
-        return Center(child: CircularProgressIndicator(),);
-      },
-    );
+    //     // Otherwise, show something whilst waiting for initialization to complete
+    //     return Center(
+    //       child: CircularProgressIndicator(),
+    //     );
+    //   },
+    // );
   }
 }
 
@@ -83,32 +87,29 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      //     title: 'Flutter Demo',
-      //     theme: buildAppTheme(),
-      //     home: MobileFramework()
-      // );
+        title: 'Flutter Demo', theme: buildAppTheme(), home: MobileFramework());
 
-      // TODO: use this for webpage
-      // MaterialApp.router(
-      //   title: 'Flutter Demo',
-      //   theme: buildAppTheme(),
-      //   routeInformationParser: _routeInformationParser,
-      //   routerDelegate: _routerDelegate
+    // TODO: use this for webpage
+    // MaterialApp.router(
+    //   title: 'Flutter Demo',
+    //   theme: buildAppTheme(),
+    //   routeInformationParser: _routeInformationParser,
+    //   routerDelegate: _routerDelegate
 
-      //
-      home: APITest(),
-      // initialRoute: 'Calculator',
-      // onGenerateRoute: generateRoutes
+    //
+    // home: APITest(),
+    // initialRoute: 'Calculator',
+    // onGenerateRoute: generateRoutes
 
-      // Backdrop(
-      //   frontLayer: StatsDashboard(),
-      //   backLayer: ComponentSelectionList(),
-      //   frontTitle: Text('CALCULATOR',
-      //       style: Theme.of(context).primaryTextTheme.headline6),
-      //   backTitle:
-      //       Text('BUILD', style: Theme.of(context).primaryTextTheme.headline6),
-      // ),
-    );
+    // Backdrop(
+    //   frontLayer: StatsDashboard(),
+    //   backLayer: ComponentSelectionList(),
+    //   frontTitle: Text('CALCULATOR',
+    //       style: Theme.of(context).primaryTextTheme.headline6),
+    //   backTitle:
+    //       Text('BUILD', style: Theme.of(context).primaryTextTheme.headline6),
+    // ),
+    // );
   }
 }
 
