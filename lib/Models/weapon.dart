@@ -5,29 +5,326 @@ import 'package:collection/collection.dart';
 
 import 'package:star_citizen_app/Models/ship_item.dart';
 
+
 class Weapon {
-  final ShipItem shipItem;
-  final Ammunition ammunition;
-  final List<FireMode> fireMode;
-  Weapon(
-      {required this.shipItem,
-      required this.ammunition,
-      required this.fireMode});
+  final String className;
+  final String type;
+  final String subType;
+  final String size;
+  final String grade;
+  final String manufacturer;
+  final String classification;
+  final String description;
+  final double health;
+  final double lifetime;
+  final double physicalResistance;
+  final double energyResistance;
+  final double distortionResistance;
+  final double thermalResistance;
+  final double biochemicalResistance;
+  final double stunResistance;
+  final double powerBase;
+  final double powerDraw;
+  final double powerDrawRequestTime;
+  final double overclockThresholdMin;
+  final double overclockThresholdMax;
+  final double overpowerPerformance;
+  final double overclockPerformance;
+  final double powerToEM;
+  final double decayRateOfEM;
+  final double temperatureToIR;
+  final double overpowerHeat;
+  final double overclockThresholdMinHeat;
+  final double overclockThresholdMaxHeat;
+  final double thermalEnergyBase;
+  final double thermalEnergyDraw;
+  final double thermalConductivity;
+  final double specificHeatCapacity;
+  final double thermalMass;
+  final double surfaceArea;
+  final double startCoolingTemperature;
+  final double maxCoolingRate;
+  final double maxTemperature;
+  final double overheatTemperature;
+  final double recoveryTemperature;
+  final double minTemperature;
+  final double misfireMinTemperature;
+  final double misfireMaxTemperature;
+  final double decayRate;
+  final double maximum;
+  final double overloadRatio;
+  final double recoveryRatio;
+  final double recoveryTime;
+  final String name;
+  final double roundsPerMinute;
+  final double ammoPerShot;
+  final double pelletsPerShot;
+  final double heatPerShot;
+  final double min;
+  final double max;
+  final double firstAttack;
+  final double attack;
+  final double decay;
+  final double speed;
+  final double range;
+  final double ammoSize;
+  final double capacity;
+  final double physical;
+  final double energy;
+  final double distortion;
+  final double overPowerFireRateMultiplier;
+  final double overPowerDamageMultiplier;
+  final double overPowerPellets;
+  final double overPowerHeatGenerationMultiplier;
+  final double overClockFireRateMultiplier;
+  final double overClockDamageMultiplier;
+  final double overClockPellets;
+  final double overClockHeatGenerationMultiplier;
+  final double overHeatFireRateMultiplier;
+  final double overHeatDamageMultiplier;
+  final double overHeatPellets;
+  final double overHeatHeatGenerationMultiplier;
+  Weapon({
+    required this.className,
+    required this.type,
+    required this.subType,
+    required this.size,
+    required this.grade,
+    required this.manufacturer,
+    required this.classification,
+    required this.description,
+    required this.health,
+    required this.lifetime,
+    required this.physicalResistance,
+    required this.energyResistance,
+    required this.distortionResistance,
+    required this.thermalResistance,
+    required this.biochemicalResistance,
+    required this.stunResistance,
+    required this.powerBase,
+    required this.powerDraw,
+    required this.powerDrawRequestTime,
+    required this.overclockThresholdMin,
+    required this.overclockThresholdMax,
+    required this.overpowerPerformance,
+    required this.overclockPerformance,
+    required this.powerToEM,
+    required this.decayRateOfEM,
+    required this.temperatureToIR,
+    required this.overpowerHeat,
+    required this.overclockThresholdMinHeat,
+    required this.overclockThresholdMaxHeat,
+    required this.thermalEnergyBase,
+    required this.thermalEnergyDraw,
+    required this.thermalConductivity,
+    required this.specificHeatCapacity,
+    required this.thermalMass,
+    required this.surfaceArea,
+    required this.startCoolingTemperature,
+    required this.maxCoolingRate,
+    required this.maxTemperature,
+    required this.overheatTemperature,
+    required this.recoveryTemperature,
+    required this.minTemperature,
+    required this.misfireMinTemperature,
+    required this.misfireMaxTemperature,
+    required this.decayRate,
+    required this.maximum,
+    required this.overloadRatio,
+    required this.recoveryRatio,
+    required this.recoveryTime,
+    required this.name,
+    required this.roundsPerMinute,
+    required this.ammoPerShot,
+    required this.pelletsPerShot,
+    required this.heatPerShot,
+    required this.min,
+    required this.max,
+    required this.firstAttack,
+    required this.attack,
+    required this.decay,
+    required this.speed,
+    required this.range,
+    required this.ammoSize,
+    required this.capacity,
+    required this.physical,
+    required this.energy,
+    required this.distortion,
+    required this.overPowerFireRateMultiplier,
+    required this.overPowerDamageMultiplier,
+    required this.overPowerPellets,
+    required this.overPowerHeatGenerationMultiplier,
+    required this.overClockFireRateMultiplier,
+    required this.overClockDamageMultiplier,
+    required this.overClockPellets,
+    required this.overClockHeatGenerationMultiplier,
+    required this.overHeatFireRateMultiplier,
+    required this.overHeatDamageMultiplier,
+    required this.overHeatPellets,
+    required this.overHeatHeatGenerationMultiplier,
+  });
 
   Map<String, dynamic> toMap() {
     return {
-      'shipItem': shipItem.toMap(),
-      'ammunition': ammunition.toMap(),
-      'fireMode': fireMode.map((x) => x.toMap()).toList(),
+      'className': className,
+      'type': type,
+      'subType': subType,
+      'size': size,
+      'grade': grade,
+      'manufacturer': manufacturer,
+      'classification': classification,
+      'description': description,
+      'health': health,
+      'lifetime': lifetime,
+      'physicalResistance': physicalResistance,
+      'energyResistance': energyResistance,
+      'distortionResistance': distortionResistance,
+      'thermalResistance': thermalResistance,
+      'biochemicalResistance': biochemicalResistance,
+      'stunResistance': stunResistance,
+      'powerBase': powerBase,
+      'powerDraw': powerDraw,
+      'powerDrawRequestTime': powerDrawRequestTime,
+      'overclockThresholdMin': overclockThresholdMin,
+      'overclockThresholdMax': overclockThresholdMax,
+      'overpowerPerformance': overpowerPerformance,
+      'overclockPerformance': overclockPerformance,
+      'powerToEM': powerToEM,
+      'decayRateOfEM': decayRateOfEM,
+      'temperatureToIR': temperatureToIR,
+      'overpowerHeat': overpowerHeat,
+      'overclockThresholdMinHeat': overclockThresholdMinHeat,
+      'overclockThresholdMaxHeat': overclockThresholdMaxHeat,
+      'thermalEnergyBase': thermalEnergyBase,
+      'thermalEnergyDraw': thermalEnergyDraw,
+      'thermalConductivity': thermalConductivity,
+      'specificHeatCapacity': specificHeatCapacity,
+      'thermalMass': thermalMass,
+      'surfaceArea': surfaceArea,
+      'startCoolingTemperature': startCoolingTemperature,
+      'maxCoolingRate': maxCoolingRate,
+      'maxTemperature': maxTemperature,
+      'overheatTemperature': overheatTemperature,
+      'recoveryTemperature': recoveryTemperature,
+      'minTemperature': minTemperature,
+      'misfireMinTemperature': misfireMinTemperature,
+      'misfireMaxTemperature': misfireMaxTemperature,
+      'decayRate': decayRate,
+      'maximum': maximum,
+      'overloadRatio': overloadRatio,
+      'recoveryRatio': recoveryRatio,
+      'recoveryTime': recoveryTime,
+      'name': name,
+      'roundsPerMinute': roundsPerMinute,
+      'ammoPerShot': ammoPerShot,
+      'pelletsPerShot': pelletsPerShot,
+      'heatPerShot': heatPerShot,
+      'min': min,
+      'max': max,
+      'firstAttack': firstAttack,
+      'attack': attack,
+      'decay': decay,
+      'speed': speed,
+      'range': range,
+      'ammoSize': ammoSize,
+      'capacity': capacity,
+      'physical': physical,
+      'energy': energy,
+      'distortion': distortion,
+      'overPowerFireRateMultiplier': overPowerFireRateMultiplier,
+      'overPowerDamageMultiplier': overPowerDamageMultiplier,
+      'overPowerPellets': overPowerPellets,
+      'overPowerHeatGenerationMultiplier': overPowerHeatGenerationMultiplier,
+      'overClockFireRateMultiplier': overClockFireRateMultiplier,
+      'overClockDamageMultiplier': overClockDamageMultiplier,
+      'overClockPellets': overClockPellets,
+      'overClockHeatGenerationMultiplier': overClockHeatGenerationMultiplier,
+      'overHeatFireRateMultiplier': overHeatFireRateMultiplier,
+      'overHeatDamageMultiplier': overHeatDamageMultiplier,
+      'overHeatPellets': overHeatPellets,
+      'overHeatHeatGenerationMultiplier': overHeatHeatGenerationMultiplier,
     };
   }
 
   factory Weapon.fromMap(Map<String, dynamic> map) {
     return Weapon(
-      shipItem: ShipItem.fromMap(map['stdItem']),
-      ammunition: Ammunition.fromMap(map['stdItem']['Ammunition']),
-      fireMode: List<FireMode>.from(
-          map['stdItem']['Modes']?.map((x) => FireMode.fromMap(x))),
+      className: map['className'],
+      type: map['type'],
+      subType: map['subType'],
+      size: map['size'],
+      grade: map['grade'],
+      manufacturer: map['manufacturer'],
+      classification: map['classification'],
+      description: map['description'],
+      health: map['health'],
+      lifetime: map['lifetime'],
+      physicalResistance: map['physicalResistance'],
+      energyResistance: map['energyResistance'],
+      distortionResistance: map['distortionResistance'],
+      thermalResistance: map['thermalResistance'],
+      biochemicalResistance: map['biochemicalResistance'],
+      stunResistance: map['stunResistance'],
+      powerBase: map['powerBase'],
+      powerDraw: map['powerDraw'],
+      powerDrawRequestTime: map['powerDrawRequestTime'],
+      overclockThresholdMin: map['overclockThresholdMin'],
+      overclockThresholdMax: map['overclockThresholdMax'],
+      overpowerPerformance: map['overpowerPerformance'],
+      overclockPerformance: map['overclockPerformance'],
+      powerToEM: map['powerToEM'],
+      decayRateOfEM: map['decayRateOfEM'],
+      temperatureToIR: map['temperatureToIR'],
+      overpowerHeat: map['overpowerHeat'],
+      overclockThresholdMinHeat: map['overclockThresholdMinHeat'],
+      overclockThresholdMaxHeat: map['overclockThresholdMaxHeat'],
+      thermalEnergyBase: map['thermalEnergyBase'],
+      thermalEnergyDraw: map['thermalEnergyDraw'],
+      thermalConductivity: map['thermalConductivity'],
+      specificHeatCapacity: map['specificHeatCapacity'],
+      thermalMass: map['thermalMass'],
+      surfaceArea: map['surfaceArea'],
+      startCoolingTemperature: map['startCoolingTemperature'],
+      maxCoolingRate: map['maxCoolingRate'],
+      maxTemperature: map['maxTemperature'],
+      overheatTemperature: map['overheatTemperature'],
+      recoveryTemperature: map['recoveryTemperature'],
+      minTemperature: map['minTemperature'],
+      misfireMinTemperature: map['misfireMinTemperature'],
+      misfireMaxTemperature: map['misfireMaxTemperature'],
+      decayRate: map['decayRate'],
+      maximum: map['maximum'],
+      overloadRatio: map['overloadRatio'],
+      recoveryRatio: map['recoveryRatio'],
+      recoveryTime: map['recoveryTime'],
+      name: map['name'],
+      roundsPerMinute: map['roundsPerMinute'],
+      ammoPerShot: map['ammoPerShot'],
+      pelletsPerShot: map['pelletsPerShot'],
+      heatPerShot: map['heatPerShot'],
+      min: map['min'],
+      max: map['max'],
+      firstAttack: map['firstAttack'],
+      attack: map['attack'],
+      decay: map['decay'],
+      speed: map['speed'],
+      range: map['range'],
+      ammoSize: map['ammoSize'],
+      capacity: map['capacity'],
+      physical: map['physical'],
+      energy: map['energy'],
+      distortion: map['distortion'],
+      overPowerFireRateMultiplier: map['overPowerFireRateMultiplier'],
+      overPowerDamageMultiplier: map['overPowerDamageMultiplier'],
+      overPowerPellets: map['overPowerPellets'],
+      overPowerHeatGenerationMultiplier: map['overPowerHeatGenerationMultiplier'],
+      overClockFireRateMultiplier: map['overClockFireRateMultiplier'],
+      overClockDamageMultiplier: map['overClockDamageMultiplier'],
+      overClockPellets: map['overClockPellets'],
+      overClockHeatGenerationMultiplier: map['overClockHeatGenerationMultiplier'],
+      overHeatFireRateMultiplier: map['overHeatFireRateMultiplier'],
+      overHeatDamageMultiplier: map['overHeatDamageMultiplier'],
+      overHeatPellets: map['overHeatPellets'],
+      overHeatHeatGenerationMultiplier: map['overHeatHeatGenerationMultiplier'],
     );
   }
 
@@ -36,268 +333,300 @@ class Weapon {
   factory Weapon.fromJson(String source) => Weapon.fromMap(json.decode(source));
 }
 
-class FireMode {
-  final String name;
-  final double roundsPerMinute;
-  final double ammoPerShot;
-  final double pelletsPerShot;
-  final double heatPerShot;
-  final PelletSpread pelletSpread;
-  FireMode({
-    required this.name,
-    required this.roundsPerMinute,
-    required this.ammoPerShot,
-    required this.pelletsPerShot,
-    required this.heatPerShot,
-    required this.pelletSpread,
-  });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'roundsPerMinute': roundsPerMinute,
-      'ammoPerShot': ammoPerShot,
-      'pelletsPerShot': pelletsPerShot,
-      'heatPerShot': heatPerShot,
-      'pelletSpread': pelletSpread.toMap(),
-    };
-  }
+// class Weapon {
+//   final ShipItem shipItem;
+//   final Ammunition ammunition;
+//   final List<FireMode> fireMode;
+//   Weapon(
+//       {required this.shipItem,
+//       required this.ammunition,
+//       required this.fireMode});
 
-  factory FireMode.fromMap(Map<String, dynamic> map) {
-    return FireMode(
-      name: map['name'],
-      roundsPerMinute: map['roundsPerMinute'],
-      ammoPerShot: map['ammoPerShot'],
-      pelletsPerShot: map['pelletsPerShot'],
-      heatPerShot: map['heatPerShot'],
-      pelletSpread: PelletSpread.fromMap(map['pelletSpread']),
-    );
-  }
+//   Map<String, dynamic> toMap() {
+//     return {
+//       'shipItem': shipItem.toMap(),
+//       'ammunition': ammunition.toMap(),
+//       'fireMode': fireMode.map((x) => x.toMap()).toList(),
+//     };
+//   }
 
-  String toJson() => json.encode(toMap());
+//   factory Weapon.fromMap(Map<String, dynamic> map) {
+//     return Weapon(
+//       shipItem: ShipItem.fromMap(map['stdItem']),
+//       ammunition: Ammunition.fromMap(map['stdItem']['Ammunition']),
+//       fireMode: List<FireMode>.from(
+//           map['stdItem']['Modes']?.map((x) => FireMode.fromMap(x))),
+//     );
+//   }
 
-  factory FireMode.fromJson(String source) =>
-      FireMode.fromMap(json.decode(source));
-}
+//   String toJson() => json.encode(toMap());
 
-class PelletSpread {
-  final double min;
-  final double max;
-  final double firstAttack;
-  final double attack;
-  final double decay;
-  PelletSpread({
-    required this.min,
-    required this.max,
-    required this.firstAttack,
-    required this.attack,
-    required this.decay,
-  });
+//   factory Weapon.fromJson(String source) => Weapon.fromMap(json.decode(source));
+// }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'min': min,
-      'max': max,
-      'firstAttack': firstAttack,
-      'attack': attack,
-      'decay': decay,
-    };
-  }
+// class FireMode {
+//   final String name;
+//   final double roundsPerMinute;
+//   final double ammoPerShot;
+//   final double pelletsPerShot;
+//   final double heatPerShot;
+//   final PelletSpread pelletSpread;
+//   FireMode({
+//     required this.name,
+//     required this.roundsPerMinute,
+//     required this.ammoPerShot,
+//     required this.pelletsPerShot,
+//     required this.heatPerShot,
+//     required this.pelletSpread,
+//   });
 
-  factory PelletSpread.fromMap(Map<String, dynamic> map) {
-    return PelletSpread(
-      min: map['min'],
-      max: map['max'],
-      firstAttack: map['firstAttack'],
-      attack: map['attack'],
-      decay: map['decay'],
-    );
-  }
+//   Map<String, dynamic> toMap() {
+//     return {
+//       'name': name,
+//       'roundsPerMinute': roundsPerMinute,
+//       'ammoPerShot': ammoPerShot,
+//       'pelletsPerShot': pelletsPerShot,
+//       'heatPerShot': heatPerShot,
+//       'pelletSpread': pelletSpread.toMap(),
+//     };
+//   }
 
-  String toJson() => json.encode(toMap());
+//   factory FireMode.fromMap(Map<String, dynamic> map) {
+//     return FireMode(
+//       name: map['name'],
+//       roundsPerMinute: map['roundsPerMinute'],
+//       ammoPerShot: map['ammoPerShot'],
+//       pelletsPerShot: map['pelletsPerShot'],
+//       heatPerShot: map['heatPerShot'],
+//       pelletSpread: PelletSpread.fromMap(map['pelletSpread']),
+//     );
+//   }
 
-  factory PelletSpread.fromJson(String source) =>
-      PelletSpread.fromMap(json.decode(source));
-}
+//   String toJson() => json.encode(toMap());
 
-class Ammunition {
-  final double speed;
-  final double range;
-  final double size;
-  final double capacity;
-  final ImpactDamage impactDamage;
-  Ammunition({
-    required this.speed,
-    required this.range,
-    required this.size,
-    required this.capacity,
-    required this.impactDamage,
-  });
+//   factory FireMode.fromJson(String source) =>
+//       FireMode.fromMap(json.decode(source));
+// }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'speed': speed,
-      'range': range,
-      'size': size,
-      'capacity': capacity,
-    };
-  }
+// class PelletSpread {
+//   final double min;
+//   final double max;
+//   final double firstAttack;
+//   final double attack;
+//   final double decay;
+//   PelletSpread({
+//     required this.min,
+//     required this.max,
+//     required this.firstAttack,
+//     required this.attack,
+//     required this.decay,
+//   });
 
-  factory Ammunition.fromMap(Map<String, dynamic> map) {
-    return Ammunition(
-      speed: map['Speed'] ?? 0,
-      range: map['Range'] ?? 0,
-      size: map['Size'] ?? 0,
-      capacity: map['Capacity'] ?? 0,
-      impactDamage: ImpactDamage.fromMap(map['ImpactDamage']),
-    );
-  }
+//   Map<String, dynamic> toMap() {
+//     return {
+//       'min': min,
+//       'max': max,
+//       'firstAttack': firstAttack,
+//       'attack': attack,
+//       'decay': decay,
+//     };
+//   }
 
-  String toJson() => json.encode(toMap());
+//   factory PelletSpread.fromMap(Map<String, dynamic> map) {
+//     return PelletSpread(
+//       min: map['min'],
+//       max: map['max'],
+//       firstAttack: map['firstAttack'],
+//       attack: map['attack'],
+//       decay: map['decay'],
+//     );
+//   }
 
-  factory Ammunition.fromJson(String source) =>
-      Ammunition.fromMap(json.decode(source));
-}
+//   String toJson() => json.encode(toMap());
 
-class ImpactDamage {
-  final double physical;
-  final double energy;
-  final double distortion;
-  ImpactDamage({
-    required this.physical,
-    required this.energy,
-    required this.distortion,
-  });
+//   factory PelletSpread.fromJson(String source) =>
+//       PelletSpread.fromMap(json.decode(source));
+// }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'physical': physical,
-      'energy': energy,
-      'distortion': distortion,
-    };
-  }
+// class Ammunition {
+//   final double speed;
+//   final double range;
+//   final double size;
+//   final double capacity;
+//   final ImpactDamage impactDamage;
+//   Ammunition({
+//     required this.speed,
+//     required this.range,
+//     required this.size,
+//     required this.capacity,
+//     required this.impactDamage,
+//   });
 
-  factory ImpactDamage.fromMap(Map<String, dynamic> map) {
-    return ImpactDamage(
-      physical: map['Physical'] ?? 0,
-      energy: map['Energy'] ?? 0,
-      distortion: map['Distortion'] ?? 0,
-    );
-  }
+//   Map<String, dynamic> toMap() {
+//     return {
+//       'speed': speed,
+//       'range': range,
+//       'size': size,
+//       'capacity': capacity,
+//     };
+//   }
 
-  String toJson() => json.encode(toMap());
+//   factory Ammunition.fromMap(Map<String, dynamic> map) {
+//     return Ammunition(
+//       speed: map['Speed'] ?? 0,
+//       range: map['Range'] ?? 0,
+//       size: map['Size'] ?? 0,
+//       capacity: map['Capacity'] ?? 0,
+//       impactDamage: ImpactDamage.fromMap(map['ImpactDamage']),
+//     );
+//   }
 
-  factory ImpactDamage.fromJson(String source) =>
-      ImpactDamage.fromMap(json.decode(source));
-}
+//   String toJson() => json.encode(toMap());
 
-class OverPowerStats {
-  final double fireRateMultiplier;
-  final double damageMultiplier;
-  final double pellets;
-  final double heatGenerationMultiplier;
-  OverPowerStats({
-    required this.fireRateMultiplier,
-    required this.damageMultiplier,
-    required this.pellets,
-    required this.heatGenerationMultiplier,
-  });
+//   factory Ammunition.fromJson(String source) =>
+//       Ammunition.fromMap(json.decode(source));
+// }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'fireRateMultiplier': fireRateMultiplier,
-      'damageMultiplier': damageMultiplier,
-      'pellets': pellets,
-      'heatGenerationMultiplier': heatGenerationMultiplier,
-    };
-  }
+// class ImpactDamage {
+//   final double physical;
+//   final double energy;
+//   final double distortion;
+//   ImpactDamage({
+//     required this.physical,
+//     required this.energy,
+//     required this.distortion,
+//   });
 
-  factory OverPowerStats.fromMap(Map<String, dynamic> map) {
-    return OverPowerStats(
-      fireRateMultiplier: map['fireRateMultiplier'],
-      damageMultiplier: map['damageMultiplier'],
-      pellets: map['pellets'],
-      heatGenerationMultiplier: map['heatGenerationMultiplier'],
-    );
-  }
+//   Map<String, dynamic> toMap() {
+//     return {
+//       'physical': physical,
+//       'energy': energy,
+//       'distortion': distortion,
+//     };
+//   }
 
-  String toJson() => json.encode(toMap());
+//   factory ImpactDamage.fromMap(Map<String, dynamic> map) {
+//     return ImpactDamage(
+//       physical: map['Physical'] ?? 0,
+//       energy: map['Energy'] ?? 0,
+//       distortion: map['Distortion'] ?? 0,
+//     );
+//   }
 
-  factory OverPowerStats.fromJson(String source) =>
-      OverPowerStats.fromMap(json.decode(source));
-}
+//   String toJson() => json.encode(toMap());
 
-class OverClockStats {
-  final double fireRateMultiplier;
-  final double damageMultiplier;
-  final double pellets;
-  final double heatGenerationMultiplier;
-  OverClockStats({
-    required this.fireRateMultiplier,
-    required this.damageMultiplier,
-    required this.pellets,
-    required this.heatGenerationMultiplier,
-  });
+//   factory ImpactDamage.fromJson(String source) =>
+//       ImpactDamage.fromMap(json.decode(source));
+// }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'fireRateMultiplier': fireRateMultiplier,
-      'damageMultiplier': damageMultiplier,
-      'pellets': pellets,
-      'heatGenerationMultiplier': heatGenerationMultiplier,
-    };
-  }
+// class OverPowerStats {
+//   final double fireRateMultiplier;
+//   final double damageMultiplier;
+//   final double pellets;
+//   final double heatGenerationMultiplier;
+//   OverPowerStats({
+//     required this.fireRateMultiplier,
+//     required this.damageMultiplier,
+//     required this.pellets,
+//     required this.heatGenerationMultiplier,
+//   });
 
-  factory OverClockStats.fromMap(Map<String, dynamic> map) {
-    return OverClockStats(
-      fireRateMultiplier: map['fireRateMultiplier'],
-      damageMultiplier: map['damageMultiplier'],
-      pellets: map['pellets'],
-      heatGenerationMultiplier: map['heatGenerationMultiplier'],
-    );
-  }
+//   Map<String, dynamic> toMap() {
+//     return {
+//       'fireRateMultiplier': fireRateMultiplier,
+//       'damageMultiplier': damageMultiplier,
+//       'pellets': pellets,
+//       'heatGenerationMultiplier': heatGenerationMultiplier,
+//     };
+//   }
 
-  String toJson() => json.encode(toMap());
+//   factory OverPowerStats.fromMap(Map<String, dynamic> map) {
+//     return OverPowerStats(
+//       fireRateMultiplier: map['fireRateMultiplier'],
+//       damageMultiplier: map['damageMultiplier'],
+//       pellets: map['pellets'],
+//       heatGenerationMultiplier: map['heatGenerationMultiplier'],
+//     );
+//   }
 
-  factory OverClockStats.fromJson(String source) =>
-      OverClockStats.fromMap(json.decode(source));
-}
+//   String toJson() => json.encode(toMap());
 
-class HeatStats {
-  final double fireRateMultiplier;
-  final double damageMultiplier;
-  final double pellets;
-  final double heatGenerationMultiplier;
-  HeatStats({
-    required this.fireRateMultiplier,
-    required this.damageMultiplier,
-    required this.pellets,
-    required this.heatGenerationMultiplier,
-  });
+//   factory OverPowerStats.fromJson(String source) =>
+//       OverPowerStats.fromMap(json.decode(source));
+// }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'fireRateMultiplier': fireRateMultiplier,
-      'damageMultiplier': damageMultiplier,
-      'pellets': pellets,
-      'heatGenerationMultiplier': heatGenerationMultiplier,
-    };
-  }
+// class OverClockStats {
+//   final double fireRateMultiplier;
+//   final double damageMultiplier;
+//   final double pellets;
+//   final double heatGenerationMultiplier;
+//   OverClockStats({
+//     required this.fireRateMultiplier,
+//     required this.damageMultiplier,
+//     required this.pellets,
+//     required this.heatGenerationMultiplier,
+//   });
 
-  factory HeatStats.fromMap(Map<String, dynamic> map) {
-    return HeatStats(
-      fireRateMultiplier: map['fireRateMultiplier'],
-      damageMultiplier: map['damageMultiplier'],
-      pellets: map['pellets'],
-      heatGenerationMultiplier: map['heatGenerationMultiplier'],
-    );
-  }
+//   Map<String, dynamic> toMap() {
+//     return {
+//       'fireRateMultiplier': fireRateMultiplier,
+//       'damageMultiplier': damageMultiplier,
+//       'pellets': pellets,
+//       'heatGenerationMultiplier': heatGenerationMultiplier,
+//     };
+//   }
 
-  String toJson() => json.encode(toMap());
+//   factory OverClockStats.fromMap(Map<String, dynamic> map) {
+//     return OverClockStats(
+//       fireRateMultiplier: map['fireRateMultiplier'],
+//       damageMultiplier: map['damageMultiplier'],
+//       pellets: map['pellets'],
+//       heatGenerationMultiplier: map['heatGenerationMultiplier'],
+//     );
+//   }
 
-  factory HeatStats.fromJson(String source) =>
-      HeatStats.fromMap(json.decode(source));
-}
+//   String toJson() => json.encode(toMap());
+
+//   factory OverClockStats.fromJson(String source) =>
+//       OverClockStats.fromMap(json.decode(source));
+// }
+
+// class HeatStats {
+//   final double fireRateMultiplier;
+//   final double damageMultiplier;
+//   final double pellets;
+//   final double heatGenerationMultiplier;
+//   HeatStats({
+//     required this.fireRateMultiplier,
+//     required this.damageMultiplier,
+//     required this.pellets,
+//     required this.heatGenerationMultiplier,
+//   });
+
+//   Map<String, dynamic> toMap() {
+//     return {
+//       'fireRateMultiplier': fireRateMultiplier,
+//       'damageMultiplier': damageMultiplier,
+//       'pellets': pellets,
+//       'heatGenerationMultiplier': heatGenerationMultiplier,
+//     };
+//   }
+
+//   factory HeatStats.fromMap(Map<String, dynamic> map) {
+//     return HeatStats(
+//       fireRateMultiplier: map['fireRateMultiplier'],
+//       damageMultiplier: map['damageMultiplier'],
+//       pellets: map['pellets'],
+//       heatGenerationMultiplier: map['heatGenerationMultiplier'],
+//     );
+//   }
+
+//   String toJson() => json.encode(toMap());
+
+//   factory HeatStats.fromJson(String source) =>
+//       HeatStats.fromMap(json.decode(source));
+// }
 
 // class Weapon {
 //   final String className;

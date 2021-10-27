@@ -48,6 +48,8 @@ dependencies:
   measured_size: ^1.0.0
   path_provider: ^2.0.2
   firebase_core: ^1.4.0
+  cloud_firestore: ^2.5.4
+  json_annotation: ^4.1.0
   
 
 dev_dependencies:

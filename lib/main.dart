@@ -45,29 +45,28 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    return MyApp();
-    // FutureBuilder(
-    //   // Initialize FlutterFire:
-    //   future: _initialization,
-    //   builder: (context, snapshot) {
-    //     // Check for errors
-    //     if (snapshot.hasError) {
-    //       return Center(
-    //         child: Text('Something went weong'),
-    //       );
-    //     }
+    return FutureBuilder(
+      // Initialize FlutterFire:
+      future: _initialization,
+      builder: (context, snapshot) {
+        // Check for errors
+        if (snapshot.hasError) {
+          return Center(
+            child: Text('Something went weong'),
+          );
+        }
 
-    //     // Once complete, show your application
-    //     if (snapshot.connectionState == ConnectionState.done) {
-    //       return MyApp();
-    //     }
+        // Once complete, show your application
+        if (snapshot.connectionState == ConnectionState.done) {
+          return MyApp();
+        }
 
-    //     // Otherwise, show something whilst waiting for initialization to complete
-    //     return Center(
-    //       child: CircularProgressIndicator(),
-    //     );
-    //   },
-    // );
+        // Otherwise, show something whilst waiting for initialization to complete
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
   }
 }
 

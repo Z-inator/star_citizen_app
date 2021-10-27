@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:html';
 
 import 'package:star_citizen_app/Models/entity_models/entity_distortion.dart';
 import 'package:star_citizen_app/Models/entity_models/entity_durability.dart';
