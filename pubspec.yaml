@@ -32,34 +32,24 @@ dependencies:
   lint: ^1.5.3
 
   # Working with other documents
-  http: ^0.13.3
-  xml: ^5.1.2
 
   # Provider for State management
-  provider: ^5.0.0
+  provider: ^6.0.1
 
   # Additional Material Icons
-  material_design_icons_flutter: 4.0.5955
+  material_design_icons_flutter: ^5.0.6295
 
   # Data Table
   table_sticky_headers: ^2.0.0
-  syncfusion_flutter_datagrid: ^19.2.48-beta
-  horizontal_data_table: ^3.4.2
-  measured_size: ^1.0.0
-  path_provider: ^2.0.2
   firebase_core: ^1.4.0
   cloud_firestore: ^2.5.4
-  json_annotation: ^4.1.0
+
   
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  
-  # JSON Serialization
-  json_serializable: ^4.1.4
-  build_runner: ^2.0.6
 
 # The following section is specific to Flutter.
 flutter:

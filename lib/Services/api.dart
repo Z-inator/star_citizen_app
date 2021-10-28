@@ -4,11 +4,8 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:xml/xml.dart' as xml;
 import 'package:star_citizen_app/Models/ship.dart';
 import 'package:star_citizen_app/Models/weapon.dart';
-import 'package:path_provider/path_provider.dart';
 
 /*
 Uploader I am working on:

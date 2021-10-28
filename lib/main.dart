@@ -51,9 +51,8 @@ class _AppState extends State<App> {
       builder: (context, snapshot) {
         // Check for errors
         if (snapshot.hasError) {
-          return Center(
-            child: Text('Something went weong'),
-          );
+          log(snapshot.error.toString());
+          return CircularProgressIndicator();
         }
 
         // Once complete, show your application
@@ -78,10 +77,10 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  PageRouterDelegate _routerDelegate = PageRouterDelegate();
+  // PageRouterDelegate _routerDelegate = PageRouterDelegate();
 
-  PageRouteInformationParser _routeInformationParser =
-      PageRouteInformationParser();
+  // PageRouteInformationParser _routeInformationParser =
+  //     PageRouteInformationParser();
 
   @override
   Widget build(BuildContext context) {

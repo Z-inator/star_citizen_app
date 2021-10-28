@@ -2,11 +2,10 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:measured_size/measured_size.dart';
 import 'package:provider/provider.dart';
 import 'package:star_citizen_app/Models/weapon.dart';
 import 'package:star_citizen_app/Services/providers/data_table_provider.dart';
-import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+
 
 import 'package:star_citizen_app/Screens/widgets/data_table/data_tables.dart';
 import 'package:star_citizen_app/Services/providers/content_provider.dart';
