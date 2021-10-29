@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "597960385771",
+    "project_id": "starcitizenapp",
+    "storage_bucket": "starcitizenapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:597960385771:android:b8a5137ef7e923a2c44aae",
+        "android_client_info": {
+          "package_name": "com.example.star_citizen_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "597960385771-ekfim8sau55mdn929r74e2s38gg4j8ap.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChrhgVBzVSLgYeCQFa9b1H2P2v8d8jdJk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "597960385771-ekfim8sau55mdn929r74e2s38gg4j8ap.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
