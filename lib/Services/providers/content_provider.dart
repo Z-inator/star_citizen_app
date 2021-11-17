@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:star_citizen_app/Models/weapon.dart';
 import 'package:star_citizen_app/Screens/backdrop.dart';
+import 'package:star_citizen_app/Screens/data_screen.dart';
+import 'package:star_citizen_app/Screens/widgets/coming_soon.dart';
 import 'package:star_citizen_app/Screens/widgets/component_selection.dart';
 import 'package:star_citizen_app/Screens/widgets/stats_dashboard.dart';
 
@@ -50,10 +54,22 @@ class ContentProvider extends ChangeNotifier {
     'About',
   ];
 
+  final List<Widget> pages = [
+    Backdrop(),
+    ComingSoon(),
+    ComingSoon(),
+    ComingSoon(),
+    DataScreen(data: getWeapons())
+  ];
+
   void changePage(int newPage) {
     currentPage = newPage;
     pageName = drawerList[newPage];
     notifyListeners();
+  }
+
+  Widget getCurrentPage() {
+    return pages[currentPage];
   }
 
   void changePTULive(bool value) {
@@ -61,3 +77,5 @@ class ContentProvider extends ChangeNotifier {
     notifyListeners();
   }
 }
+
+

@@ -6,39 +6,31 @@ import 'package:provider/provider.dart';
 import 'package:star_citizen_app/Models/weapon.dart';
 import 'package:star_citizen_app/Services/providers/data_table_provider.dart';
 
-
 import 'package:star_citizen_app/Screens/widgets/data_table/data_tables.dart';
 import 'package:star_citizen_app/Services/providers/content_provider.dart';
 import 'package:star_citizen_app/constants.dart';
 
 class DataScreen extends StatelessWidget {
-  const DataScreen({Key? key}) : super(key: key);
-
-  Future<QuerySnapshot<Weapon>> getWeapons() {
-    return FirebaseFirestore.instance.collection('Weapons').withConverter(fromFirestore: (snapshot, _) => Weapon.fromMap(snapshot.data()!), toFirestore: (Weapon weapon, _) => weapon.toMap()).get();
-  }
+  final List<dynamic> data;
+  const DataScreen({Key? key, required this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: getWeapons(),
-      builder: (context, AsyncSnapshot<QuerySnapshot<Weapon>> snapshot) {
-        return Container(
-        padding: EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            FilterButtons(),
-            // Expanded(
-            //     child: ScrollableTable(
-            //   componentItems: data,
-            // ))
-            Expanded(child: ComponentDataTable(componentItems: snapshot.data!.docs))
-          ],
-        ),
-      );
-      },
-      
+    return Container(
+          padding: EdgeInsets.all(10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              FilterButtons(),
+              // Expanded(
+              //     child: ScrollableTable(
+              //   componentItems: data,
+              // ))
+              Expanded(
+                  child:
+                      ComponentDataTable(componentItems: data))
+            ],
+          ),
     );
   }
 }
@@ -67,11 +59,7 @@ class FilterButtons extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.max,
             children: [
-              OutlinedButton(
-                onPressed: () {
-
-                }, 
-                child: Text('Compare Selected')),
+              OutlinedButton(onPressed: () {}, child: Text('Compare Selected')),
               OutlinedButton(onPressed: () {}, child: Text('Size Filter')),
               OutlinedButton(onPressed: () {}, child: Text('Reset Filter')),
             ],
@@ -306,8 +294,6 @@ class _ComponentCheckBoxState extends State<ComponentCheckBox> {
 //     );
 //   }
 // }
-
-
 
 class TestData {
   final String name;

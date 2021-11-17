@@ -94,132 +94,8 @@ class BackdropTitle extends AnimatedWidget {
   }
 }
 
-class Backdrop extends StatefulWidget {
-  Backdrop({
-    Key? key,
-    required this.frontLayer,
-    required this.backLayer,
-    // required this.frontTitle,
-    // required this.backTitle
-  }) : super(key: key);
-
-  final Widget frontLayer;
-  final Widget backLayer;
-  // final String frontTitle;
-  // final String backTitle;
-
-  @override
-  _BackdropState createState() => _BackdropState();
-}
-
-class _BackdropState extends State<Backdrop>
-    with SingleTickerProviderStateMixin {
-  final GlobalKey backdropKey = GlobalKey(debugLabel: 'Backdrop');
-  late AnimationController controller;
-
-  @override
-  void initState() {
-    controller = AnimationController(
-        duration: Duration(milliseconds: 300), value: 1.0, vsync: this);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  // bool get frontLayerVisible {
-  //   final AnimationStatus status = controller.status;
-  //   return status == AnimationStatus.completed ||
-  //       status == AnimationStatus.forward;
-  // }
-
-  // void toggleBackdropLayerVisibility() async {
-  //   await controller.fling(
-  //       velocity: isExpanded.value ? -kFlingVelocity : kFlingVelocity);
-  //   isExpanded.value = !isExpanded.value;
-  // }
-
-  Widget buildStack(BuildContext context, BoxConstraints constraints) {
-    double layerTileHeight = 45.0;
-    final Size layerSize = constraints.biggest;
-    final double layerTop = layerSize.height - layerTileHeight;
-
-    Animation<RelativeRect> layerAnimation = RelativeRectTween(
-            begin: RelativeRect.fromLTRB(layerSize.width * 0.75, layerTop, 0.0,
-                layerTop - layerSize.height),
-            end: RelativeRect.fromLTRB(0.0, 0.0, 0.0, 0.0))
-        .animate(controller.view);
-
-    // AnimationController animation = AnimationController(
-    //     vsync: this, duration: Duration(milliseconds: 300), value: 1.0);
-
-    double testHeight = layerTop / layerSize.height;
-
-    Animation<Offset> slideAnimation =
-        Tween<Offset>(begin: Offset(0.75, testHeight), end: Offset(0, 0))
-            .animate(controller.view);
-
-    return Stack(
-      key: backdropKey,
-      children: <Widget>[
-        widget.backLayer,
-        // AnimatedBuilder(
-        //   animation: animation,
-        //   builder: (context, child) {
-        //     return Container(
-        //       height: animation.value * (),
-        //     )
-        //   }
-        // ),
-        SlideTransition(
-          position: slideAnimation,
-          child: FrontLayer(child: widget.frontLayer),
-        ),
-        // PositionedTransition(
-        //   rect: layerAnimation,
-        //   child: FrontLayer(
-        //     child: widget.frontLayer,
-        //   ),
-        // ),
-      ],
-    );
-  }
-
-  PreferredSizeWidget buildCalculatorAppBar(BuildContext context) {
-    BackdropProvider backDropProvider =
-        Provider.of<BackdropProvider>(context, listen: false);
-    return AppBar(
-      title: BackdropTitle(
-        listenable: controller.view,
-        onPress: backDropProvider.toggleBackdropLayerVisibility,
-        frontTitle: 'Calculator',
-        backTitle: 'Build',
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-        create: (context) =>
-            BackdropProvider(controller: controller, velocity: kFlingVelocity),
-        builder: (context, child) {
-          return Scaffold(
-            backgroundColor: Theme.of(context).colorScheme.background,
-            appBar: buildCalculatorAppBar(context),
-            body: LayoutBuilder(
-              builder: buildStack,
-            ),
-          );
-        });
-  }
-}
-
-class NewBackdrop extends StatelessWidget {
-  NewBackdrop({Key? key}) : super(key: key);
+class Backdrop extends StatelessWidget {
+  Backdrop({Key? key}) : super(key: key);
 
   late AnimationController controller;
 
@@ -275,3 +151,130 @@ class NewBackdrop extends StatelessWidget {
     return LayoutBuilder(builder: buildStack);
   }
 }
+
+
+// class Backdrop extends StatefulWidget {
+//   Backdrop({
+//     Key? key,
+//     required this.frontLayer,
+//     required this.backLayer,
+//     // required this.frontTitle,
+//     // required this.backTitle
+//   }) : super(key: key);
+
+//   final Widget frontLayer;
+//   final Widget backLayer;
+//   // final String frontTitle;
+//   // final String backTitle;
+
+//   @override
+//   _BackdropState createState() => _BackdropState();
+// }
+
+// class _BackdropState extends State<Backdrop>
+//     with SingleTickerProviderStateMixin {
+//   final GlobalKey backdropKey = GlobalKey(debugLabel: 'Backdrop');
+//   late AnimationController controller;
+
+//   @override
+//   void initState() {
+//     controller = AnimationController(
+//         duration: Duration(milliseconds: 300), value: 1.0, vsync: this);
+//     super.initState();
+//   }
+
+//   @override
+//   void dispose() {
+//     controller.dispose();
+//     super.dispose();
+//   }
+
+//   // bool get frontLayerVisible {
+//   //   final AnimationStatus status = controller.status;
+//   //   return status == AnimationStatus.completed ||
+//   //       status == AnimationStatus.forward;
+//   // }
+
+//   // void toggleBackdropLayerVisibility() async {
+//   //   await controller.fling(
+//   //       velocity: isExpanded.value ? -kFlingVelocity : kFlingVelocity);
+//   //   isExpanded.value = !isExpanded.value;
+//   // }
+
+//   Widget buildStack(BuildContext context, BoxConstraints constraints) {
+//     double layerTileHeight = 45.0;
+//     final Size layerSize = constraints.biggest;
+//     final double layerTop = layerSize.height - layerTileHeight;
+
+//     Animation<RelativeRect> layerAnimation = RelativeRectTween(
+//             begin: RelativeRect.fromLTRB(layerSize.width * 0.75, layerTop, 0.0,
+//                 layerTop - layerSize.height),
+//             end: RelativeRect.fromLTRB(0.0, 0.0, 0.0, 0.0))
+//         .animate(controller.view);
+
+//     // AnimationController animation = AnimationController(
+//     //     vsync: this, duration: Duration(milliseconds: 300), value: 1.0);
+
+//     double testHeight = layerTop / layerSize.height;
+
+//     Animation<Offset> slideAnimation =
+//         Tween<Offset>(begin: Offset(0.75, testHeight), end: Offset(0, 0))
+//             .animate(controller.view);
+
+//     return Stack(
+//       key: backdropKey,
+//       children: <Widget>[
+//         widget.backLayer,
+//         // AnimatedBuilder(
+//         //   animation: animation,
+//         //   builder: (context, child) {
+//         //     return Container(
+//         //       height: animation.value * (),
+//         //     )
+//         //   }
+//         // ),
+//         SlideTransition(
+//           position: slideAnimation,
+//           child: FrontLayer(child: widget.frontLayer),
+//         ),
+//         // PositionedTransition(
+//         //   rect: layerAnimation,
+//         //   child: FrontLayer(
+//         //     child: widget.frontLayer,
+//         //   ),
+//         // ),
+//       ],
+//     );
+//   }
+
+//   PreferredSizeWidget buildCalculatorAppBar(BuildContext context) {
+//     BackdropProvider backDropProvider =
+//         Provider.of<BackdropProvider>(context, listen: false);
+//     return AppBar(
+//       title: BackdropTitle(
+//         listenable: controller.view,
+//         onPress: backDropProvider.toggleBackdropLayerVisibility,
+//         frontTitle: 'Calculator',
+//         backTitle: 'Build',
+//       ),
+//     );
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return ChangeNotifierProvider(
+//         create: (context) =>
+//             BackdropProvider(controller: controller, velocity: kFlingVelocity),
+//         builder: (context, child) {
+//           return Scaffold(
+//             backgroundColor: Theme.of(context).colorScheme.background,
+//             appBar: buildCalculatorAppBar(context),
+//             body: LayoutBuilder(
+//               builder: buildStack,
+//             ),
+//           );
+//         });
+//   }
+// }
+
+

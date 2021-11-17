@@ -1,6 +1,10 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:star_citizen_app/Models/power_plant.dart';
+import 'package:star_citizen_app/Models/shield.dart';
 import 'package:star_citizen_app/Models/weapon.dart';
 import 'package:star_citizen_app/Screens/backdrop.dart';
 import 'package:star_citizen_app/Screens/data_screen.dart';
@@ -57,7 +61,9 @@ class _AppState extends State<App> {
 
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
-          return MyApp();
+          return MultiProvider(
+              providers: [Provider<List<Weapon>>.value(value: getWeapons())],
+              child: MyApp());
         }
 
         // Otherwise, show something whilst waiting for initialization to complete
@@ -67,6 +73,37 @@ class _AppState extends State<App> {
       },
     );
   }
+}
+
+Future getWeapons() async {
+  CollectionReference<Weapon> weaponReference = FirebaseFirestore.instance
+      .collection('Weapons')
+      .withConverter(
+          fromFirestore: (snapshot, _) => Weapon.fromMap(snapshot.data()!),
+          toFirestore: (Weapon weapon, _) => weapon.toMap());
+  List<QueryDocumentSnapshot<Weapon>> weapons = await
+      weaponReference.snapshots().get().then((snapshot) => snapshot.docs);
+  return weapons;
+}
+
+Future<List> getShields() {
+  return FirebaseFirestore.instance
+      .collection('Shields')
+      .withConverter(
+          fromFirestore: (snapshot, _) => Shield.fromMap(snapshot.data()!),
+          toFirestore: (Shield shield, _) => shield.toMap())
+      .get()
+      .then((value) => value.docs.toList());
+}
+
+Future<List> getPowerPlants() {
+  return FirebaseFirestore.instance
+      .collection('Power Plants')
+      .withConverter(
+          fromFirestore: (snapshot, _) => PowerPlant.fromMap(snapshot.data()!),
+          toFirestore: (PowerPlant powerPlant, _) => powerPlant.toMap())
+      .get()
+      .then((value) => value.docs.toList());
 }
 
 class MyApp extends StatefulWidget {

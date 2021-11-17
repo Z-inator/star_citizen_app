@@ -64,11 +64,7 @@ class _MobileFrameworkState extends State<MobileFramework>
                       ),
               ),
               body:
-                  // ComponentDataTable(
-                  //         componentItems: testData),
-                  contentState.pageName == 'Calculator'
-                      ? NewBackdrop()
-                      : DataScreen(),
+                  contentState.getCurrentPage(),
               endDrawer: NavigationDrawer(),
             ),
           );
@@ -76,14 +72,9 @@ class _MobileFrameworkState extends State<MobileFramework>
   }
 }
 
-class NavigationDrawer extends StatefulWidget {
+class NavigationDrawer extends StatelessWidget {
   NavigationDrawer({Key? key}) : super(key: key);
 
-  @override
-  _NavigationDrawerState createState() => _NavigationDrawerState();
-}
-
-class _NavigationDrawerState extends State<NavigationDrawer> {
   Widget buildMenu(BuildContext context) {
     ContentProvider contentState = Provider.of<ContentProvider>(context);
     return ListView.builder(
