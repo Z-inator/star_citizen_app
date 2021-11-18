@@ -59,7 +59,7 @@ class ContentProvider extends ChangeNotifier {
     ComingSoon(),
     ComingSoon(),
     ComingSoon(),
-    DataScreen(data: getWeapons())
+    DataScreen()
   ];
 
   void changePage(int newPage) {

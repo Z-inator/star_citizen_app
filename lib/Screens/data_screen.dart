@@ -11,8 +11,11 @@ import 'package:star_citizen_app/Services/providers/content_provider.dart';
 import 'package:star_citizen_app/constants.dart';
 
 class DataScreen extends StatelessWidget {
-  final List<dynamic> data;
-  const DataScreen({Key? key, required this.data}) : super(key: key);
+  // final List<dynamic> data;
+  const DataScreen({Key? key, 
+  // required this.data
+  })
+   : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +31,7 @@ class DataScreen extends StatelessWidget {
               // ))
               Expanded(
                   child:
-                      ComponentDataTable(componentItems: data))
+                      ComponentDataTable())
             ],
           ),
     );
@@ -71,7 +74,7 @@ class FilterButtons extends StatelessWidget {
 class ComponentDataTable extends StatelessWidget {
   List<dynamic> componentItems = [];
 
-  ComponentDataTable({Key? key, required this.componentItems})
+  ComponentDataTable({Key? key, })
       : super(key: key);
 
   late List<String> componentList;

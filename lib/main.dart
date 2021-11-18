@@ -61,9 +61,12 @@ class _AppState extends State<App> {
 
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
-          return MultiProvider(
-              providers: [Provider<List<Weapon>>.value(value: getWeapons())],
-              child: MyApp());
+          return MultiProvider(providers: [
+            FutureProvider<List<QueryDocumentSnapshot<Weapon>>>.value(
+              value: getWeapons(),
+              initialData: [],
+            )
+          ], child: MyApp());
         }
 
         // Otherwise, show something whilst waiting for initialization to complete
@@ -75,14 +78,14 @@ class _AppState extends State<App> {
   }
 }
 
-Future getWeapons() async {
+Future<List<QueryDocumentSnapshot<Weapon>>> getWeapons() async {
   CollectionReference<Weapon> weaponReference = FirebaseFirestore.instance
       .collection('Weapons')
       .withConverter(
           fromFirestore: (snapshot, _) => Weapon.fromMap(snapshot.data()!),
           toFirestore: (Weapon weapon, _) => weapon.toMap());
-  List<QueryDocumentSnapshot<Weapon>> weapons = await
-      weaponReference.snapshots().get().then((snapshot) => snapshot.docs);
+  List<QueryDocumentSnapshot<Weapon>> weapons =
+      await weaponReference.get().then((snapshot) => snapshot.docs);
   return weapons;
 }
 
@@ -121,6 +124,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    log(Provider.of<List<QueryDocumentSnapshot<Weapon>>>(context)
+        .first
+        .toString());
     return MaterialApp(
         title: 'Flutter Demo', theme: buildAppTheme(), home: MobileFramework());
 
